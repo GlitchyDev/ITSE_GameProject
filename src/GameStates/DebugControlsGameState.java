@@ -27,7 +27,9 @@ public class DebugControlsGameState extends GameStateBase {
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
-        controller.poll();
+        if(controller.hasController()) {
+            controller.poll();
+        }
     }
 
     @Override
@@ -48,34 +50,34 @@ public class DebugControlsGameState extends GameStateBase {
             }
         }
 
+        if(controller.hasController()) {
+            // Render Controller Button Information
+            int i = 0;
+            for (String s : controller.toString().split("\n")) {
+                gc.setFill(Color.BLACK);
+                gc.fillText(s, 20, 30 + i * 10);
+                i++;
+            }
 
-        // Render Controller Button Information
-        int i = 0;
-        for(String s :controller.toString().split("\n"))
-        {
-            gc.setFill(Color.BLACK);
-            gc.fillText(s,20, 30 + i * 10);
-            i++;
+            // Render the Controller Sticks
+            gc.setFill(Color.BLUE);
+            gc.fillRect(200, 200, 10, 10);
+            gc.setStroke(Color.GOLD);
+            gc.strokeLine(205, 205, 205 + controller.getLeftStickX() * 20, 205 + controller.getLeftStickY() * 20);
+            gc.setFill(Color.AQUA);
+            gc.fillRect(202 + controller.getLeftStickX() * 20, 202 + controller.getLeftStickY() * 20, 6, 6);
+            gc.setStroke(Color.RED);
+            gc.strokeRect(180, 180, 50, 50);
+            //
+            gc.setFill(Color.BLUE);
+            gc.fillRect(250, 200, 10, 10);
+            gc.setStroke(Color.GOLD);
+            gc.strokeLine(255, 205, 255 + controller.getRightStickX() * 20, 205 + controller.getRightStickY() * 20);
+            gc.setFill(Color.AQUA);
+            gc.fillRect(252 + controller.getRightStickX() * 20, 202 + controller.getRightStickY() * 20, 6, 6);
+            gc.setStroke(Color.RED);
+            gc.strokeRect(230, 180, 50, 50);
         }
-
-        // Render the Controller Sticks
-        gc.setFill(Color.BLUE);
-        gc.fillRect(200,200,10,10);
-        gc.setStroke(Color.GOLD);
-        gc.strokeLine(205,205,205 + controller.getLeftStickX() * 20,205 +controller.getLeftStickY() * 20);
-        gc.setFill(Color.AQUA);
-        gc.fillRect(202 + controller.getLeftStickX() * 20,202 +controller.getLeftStickY() * 20,6,6);
-        gc.setStroke(Color.RED);
-        gc.strokeRect(180,180,50,50);
-        //
-        gc.setFill(Color.BLUE);
-        gc.fillRect(250,200,10,10);
-        gc.setStroke(Color.GOLD);
-        gc.strokeLine(255,205,255 + controller.getRightStickX() * 20,205 +controller.getRightStickY() * 20);
-        gc.setFill(Color.AQUA);
-        gc.fillRect(252 + controller.getRightStickX() * 20,202 + controller.getRightStickY() * 20,6,6);
-        gc.setStroke(Color.RED);
-        gc.strokeRect(230,180,50,50);
 
         // Render the FPS and Logic and Render Percentages
         gc.setFill(Color.BLACK);

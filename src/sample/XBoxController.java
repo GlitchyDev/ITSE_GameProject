@@ -15,6 +15,10 @@ public class XBoxController {
     private Controller controllerDevice;
     private int id;
 
+    public boolean hasController()
+    {
+        return controllerDevice != null;
+    }
     public XBoxController(Controller controllerDevice, int id)
     {
         this.controllerDevice = controllerDevice;
