@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="jinput">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../archive/dist/jinput.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jinput.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

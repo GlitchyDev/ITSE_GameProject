@@ -78,21 +78,36 @@ public class Viewport {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
-
         ArrayList<Chunk> chunkList = new ArrayList<>();
-        ChunkID upperLeft = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2), world.getChunkNumfromCordNum(centerY + viewHeightY/2));
-        ChunkID lowerRight = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2), world.getChunkNumfromCordNum(centerY - viewHeightY/2));
+        ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2), world.getChunkNumfromCordNum(centerY + viewHeightY/2));
+        ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2), world.getChunkNumfromCordNum(centerY - viewHeightY/2));
 
         System.out.println();
-        for(int x = lowerRight.getChunkX(); x <= upperLeft.getChunkX(); x++)
+        for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
         {
-            for(int y = lowerRight.getChunkY(); y <= upperLeft.getChunkY(); y++)
+            for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
             {
-                System.out.println("Find Chunk " + x + "," + y);
+                System.out.println("Found Chunk " + x + "," + y);
                 chunkList.add(world.getChunkFromChunkXY(x,y));
             }
         }
 
+        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX][viewHeightY];
+        for(Chunk c: chunkList)
+        {
+            world.addBlocksInsideChunk(c,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY + viewHeightY/2);
+        }
+
+        world.viewBlocks(viewableBlocks);
+
+        for(int x = 0; x < viewableBlocks.length; x++)
+        {
+            for(int y = 0; y < viewableBlocks[x].length; y++)
+            {
+                System.out.println(x + "," + y);
+                viewableBlocks[x][y].renderBlock(canvas,gc,x,y);
+            }
+        }
 
 
         gc.setFill(Color.BLACK);

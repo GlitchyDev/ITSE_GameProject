@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/jinput.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/World.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/World.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Viewport.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Viewport.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main$1.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jinput.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jinput.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Environment/World.java" afterPath="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Viewport.java" afterPath="$PROJECT_DIR$/src/GameInfo/Viewport.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/Main.java" afterPath="$PROJECT_DIR$/src/sample/Main.java" />
+    </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -59,11 +71,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="World.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="World.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/World.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="36" column="18" lean-forward="false" selection-start-line="36" selection-start-column="18" selection-end-line="36" selection-end-column="18" />
+            <state relative-caret-position="105">
+              <caret line="92" column="16" lean-forward="true" selection-start-line="92" selection-start-column="16" selection-end-line="92" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -74,8 +86,8 @@
       <file leaf-file-name="Chunk.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="363">
-              <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+            <state relative-caret-position="397">
+              <caret line="32" column="9" lean-forward="false" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -86,8 +98,8 @@
       <file leaf-file-name="Viewport.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-187">
-              <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+            <state relative-caret-position="298">
+              <caret line="97" column="149" lean-forward="false" selection-start-line="97" selection-start-column="149" selection-end-line="97" selection-end-column="149" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -98,13 +110,23 @@
       <file leaf-file-name="TestWorldGameState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameStates/TestWorldGameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1122">
+            <state relative-caret-position="978">
               <caret line="74" column="35" lean-forward="false" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2085#2086#0" expanded="true" />
                 <element signature="e#2127#2128#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -134,6 +156,9 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
       <projects_view />
@@ -162,7 +187,6 @@
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/BlockBase.java" />
         <option value="$PROJECT_DIR$/src/sample/XBoxController.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Entities/TestEntity.java" />
-        <option value="$PROJECT_DIR$/src/sample/Main.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/Chunk.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Chunk.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/ChunkID.java" />
@@ -170,18 +194,20 @@
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java" />
         <option value="$PROJECT_DIR$/src/GameStates/TestWorldGameState.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Entities/EntityBase.java" />
-        <option value="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Viewport.java" />
+        <option value="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-20" />
-    <option name="y" value="36" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="268" />
+    <option name="y" value="-21" />
     <option name="width" value="1362" />
     <option name="height" value="744" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
@@ -210,6 +236,11 @@
             <path>
               <item name="ITSE_GameProject" type="b2602c69:ProjectViewProjectNode" />
               <item name="ITSE_GameProject" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ITSE_GameProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ITSE_GameProject" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ITSE_GameProject" type="b2602c69:ProjectViewProjectNode" />
@@ -274,7 +305,7 @@
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ITSE_GameProject - Copy" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jinput.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15980025" />
     <property name="project.structure.side.proportion" value="0.19705883" />
@@ -284,15 +315,15 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets\Sprites\TestSprites" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\libs" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\src\JXInputLib" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -582,8 +613,7 @@
     <option name="totallyTimeSpent" value="1302000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -593,8 +623,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23519737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23519737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -938,21 +968,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-253">
-          <caret line="75" column="31" lean-forward="true" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/lang/Thread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="736" column="0" lean-forward="false" selection-start-line="736" selection-start-column="0" selection-end-line="736" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameInfo/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
@@ -977,9 +992,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/lang/Thread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="760" column="28" lean-forward="true" selection-start-line="760" selection-start-column="28" selection-end-line="760" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="32" column="9" lean-forward="false" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="97" column="149" lean-forward="false" selection-start-line="97" selection-start-column="149" selection-end-line="97" selection-end-column="149" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/World.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="92" column="16" lean-forward="true" selection-start-line="92" selection-start-column="16" selection-end-line="92" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameStates/TestWorldGameState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
+        <state relative-caret-position="978">
           <caret line="74" column="35" lean-forward="false" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -989,33 +1042,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-187">
-          <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="36" column="13" lean-forward="false" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/World.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="36" column="18" lean-forward="false" selection-start-line="36" selection-start-column="18" selection-end-line="36" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="76" column="10" lean-forward="false" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1030,7 +1061,6 @@
             <option name="proportions">
               <list>
                 <option value="0.19705883" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
