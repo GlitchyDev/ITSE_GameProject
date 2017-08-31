@@ -73,9 +73,8 @@ public class Main extends Application {
         loadAssets();
 
 
-        DebugControlsGameState debugState = new DebugControlsGameState(X,sprites);
-        //TestWorldGameState debugState = new TestWorldGameState(X);
-        //xboxController.poll();
+        //DebugControlsGameState debugState = new DebugControlsGameState(X,sprites);
+        TestWorldGameState debugState = new TestWorldGameState(X);
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 debugState.runLogic(canvas,gc);

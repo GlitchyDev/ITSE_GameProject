@@ -7,6 +7,7 @@ import GameInfo.Player;
 import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import sample.XBoxController;
 
 /**
@@ -35,8 +36,8 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
-        x.poll();
 
+        x.poll();
         switch(x.getDirectionalPad())
         {
             case NORTH:
@@ -73,5 +74,10 @@ public class TestWorldGameState extends GameStateBase {
     @Override
     protected void doRender(Canvas canvas, GraphicsContext gc) {
         viewport.render(canvas,gc);
+
+        gc.setFill(Color.BLACK);
+        gc.fillText("FPS: " + lastFPS,250,50);
+        gc.fillText("LogicPercentage: " + lastLogicFramePercentage,250,60);
+        gc.fillText("RenderPercentage: " + lastRenderFramePercentage,250,70);
     }
 }
