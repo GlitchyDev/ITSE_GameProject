@@ -38,6 +38,10 @@ public class TestWorldGameState extends GameStateBase {
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
 
         x.poll();
+        if(x.getLeftStickPress())
+        {
+            client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,(int)-x.getLeftStickX(),(int)-x.getLeftStickY());
+        }
         switch(x.getDirectionalPad())
         {
             case NORTH:

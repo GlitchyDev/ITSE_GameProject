@@ -23,8 +23,8 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // In blocks
-    private int viewWidthX = 7;
-    private int viewHeightY = 7;
+    private int viewWidthX = 15;
+    private int viewHeightY = 15;
     private Client client;
     private World world;
 
@@ -78,11 +78,6 @@ public class Viewport {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
-        gc.setFill(Color.BLACK);
-        gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
-        gc.setFill(Color.BLACK);
-        gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
-
         //ArrayList<Chunk> chunkList = new ArrayList<>();
         ArrayList<EntityBase> entities = new ArrayList<>();
         BlockBase[][] viewableBlocks = new BlockBase[viewWidthX][viewHeightY];
@@ -92,33 +87,36 @@ public class Viewport {
         ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2), world.getChunkNumfromCordNum(centerY - viewHeightY/2));
 
 
-        world.viewBlocks(viewableBlocks);
         for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
         {
             for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
             {
-                System.out.println("Added Chunk " + x + "," + y);
+                //System.out.println("Added Chunk " + x + "," + y);
                 entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
                 world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY - viewHeightY/2);
-
-                //System.out.println("Chunk added X: " + x + " Y: " + y);
             }
         }
-
-
-
+        //world.viewBlocks(viewableBlocks);
 
         for(int x = 0; x < viewableBlocks.length; x++)
         {
             for(int y = 0; y < viewableBlocks[x].length; y++)
             {
-                viewableBlocks[x][y].renderBlock(canvas,gc,x,y);
+                if(viewableBlocks[x][y] != null) {
+                    viewableBlocks[x][y].renderBlock(canvas, gc, x, y);
+                }
             }
         }
         for(EntityBase entity: entities)
         {
             entity.renderEntity(canvas,gc,centerX + viewWidthX/2 - entity.getX(), centerY + viewHeightY/2 - entity.getY());
         }
+
+
+        gc.setFill(Color.BLACK);
+        gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
+        gc.setFill(Color.BLACK);
+        gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
 
 
 

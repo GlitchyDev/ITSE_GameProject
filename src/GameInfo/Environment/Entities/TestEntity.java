@@ -17,7 +17,9 @@ public class TestEntity extends EntityBase {
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y) {
         gc.setFill(Color.PINK);
-        gc.fillRect(x * World.getUnitRatio(), y * World.getUnitRatio(), World.getUnitRatio(), World.getUnitRatio());
+        gc.setStroke(Color.BLACK);
+        gc.strokeRect(x * World.getUnitRatio(),y * World.getUnitRatio(),World.getUnitRatio(),World.getUnitRatio());
+        gc.fillRect(x * World.getUnitRatio() + 1, y * World.getUnitRatio() + 1, World.getUnitRatio() - 2, World.getUnitRatio() - 2);
 
 
     }

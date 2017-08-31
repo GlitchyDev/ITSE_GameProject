@@ -39,7 +39,7 @@ public class Main extends Application {
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(480, 320);
+        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 29);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);

@@ -17,7 +17,7 @@ import java.util.HashMap;
  * - Get Method to get 3
  */
 public class World {
-    private static int unitRatio = 27;
+    private static int unitRatio = 30;
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
 
@@ -37,7 +37,13 @@ public class World {
 
     public int getPosNumFromChunkNum(int z)
     {
-            return z * 100;
+        if(z == 0)
+        {
+            return 0;
+        }
+        else {
+            return z * World.getChunkSize();
+        }
     }
 
     public Chunk getChunkFromChunkXY(int x, int y)
@@ -73,43 +79,39 @@ public class World {
         }
         else
         {
-            return z/100;
+            if(isNeg)
+            {
+                return z / World.getChunkSize() + -1;
+            }
+            else {
+                return z / World.getChunkSize();
+            }
         }
 
     }
 
     public void addBlocksInsideChunk(Chunk chunk, int chunkX, int chunkY, BlockBase[][] blocks, int x1, int y1, int x2, int y2) {
 
+        /*
         System.out.println("Corner: X: " + chunkX + " Y: " + chunkY);
+        System.out.println("CornerCH: X: " + getPosNumFromChunkNum(chunkX) + " Y: " + getPosNumFromChunkNum(chunkY));
         System.out.println("1: X: " + x1 + " Y: " + y1);
         System.out.println("2: X: " + x2 + " Y: " + y2);
+        */
 
-
-        for(int x = chunkX; x < getPosNumFromChunkNum(chunkX) + World.getChunkSize(); x++)
+        for(int x = getPosNumFromChunkNum(chunkX); x <= getPosNumFromChunkNum(chunkX) + World.getChunkSize() - 1; x++)
         {
-            for(int y = chunkY; y < getPosNumFromChunkNum(chunkY) + World.getChunkSize(); y++)
+            for(int y = getPosNumFromChunkNum(chunkY); y <= getPosNumFromChunkNum(chunkY) + World.getChunkSize() - 1; y++)
             {
-                if(x <= x1 && x >= x2 && y <= y1 && y >= y2)
+                if(x1 >= x && x2 <= x)
                 {
-                    System.out.print("B");
-                    blocks[x1 - x][y1 - y] = chunk.getBlockBaseList()[x - chunkX][y - chunkY];
+                    if(y1 >= y && y2 <= y)
+                    {
+                        blocks[x1 - x][y1 - y] = chunk.getBlockBaseList()[x - getPosNumFromChunkNum(chunkX)][y - getPosNumFromChunkNum(chunkY)];
+                    }
                 }
             }
         }
-        System.out.println();
-        viewBlocks(blocks);
-        System.out.println();
-
-
-        /*
-        for (int x = x2; x >= upperLeftX && x <= upperLeftX + World.getChunkSize() && x <= x1; x++)
-        {
-            for (int y = y2; y >= upperLeftY && y <= upperLeftY + World.getChunkSize() && y <= y1; y++)
-            {
-                blocks[x1 - x][y1 - y] = chunk.getBlockBaseList()[x - upperLeftX][y - upperLeftY];
-            }
-        }
-        */
 
     }
 

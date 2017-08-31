@@ -35,6 +35,8 @@ public class XBoxController {
     {
         return normalizeDirectionInput(controllerDevice.getComponents()[1].getPollData());
     }
+    public boolean getLeftStickPress() {return controllerDevice.getComponents()[13].getPollData() == 1;}
+
     public double getRightStickY() {return normalizeDirectionInput(controllerDevice.getComponents()[2].getPollData());}
     public double getRightStickX() {return normalizeDirectionInput(controllerDevice.getComponents()[3].getPollData());}
     public DirectionalPadEnum getDirectionalPad() {
