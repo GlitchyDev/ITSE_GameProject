@@ -1,5 +1,6 @@
 package GameStates;
 
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -11,6 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
  * - Perform or recieve logic for that Gamestate
  */
 public abstract class GameStateBase {
+    public GlobalGameData globalGameData;
     // ---------[FPS Information]
     // The last Seconds FPS
     public int lastFPS;
@@ -25,13 +27,14 @@ public abstract class GameStateBase {
     // Testing
 
 
-    public GameStateBase()
+    public GameStateBase(GlobalGameData globalGameData)
     {
         lastFPS = 0;
         frameCount = 0;
         lastFPSUpdate = 0;
         lastLogicFramePercentage = 0;
         lastRenderFramePercentage = 0;
+        this.globalGameData = globalGameData;
         //
 
 

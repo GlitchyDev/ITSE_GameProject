@@ -118,9 +118,12 @@ public class Viewport {
         gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
 
-
-
-
+    }
+    public int getViewWidthX() {
+        return viewWidthX;
+    }
+    public int getViewHeightY() {
+        return viewHeightY;
     }
 
 

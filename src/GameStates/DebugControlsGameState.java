@@ -1,5 +1,6 @@
 package GameStates;
 
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -18,14 +19,13 @@ import java.util.Random;
  * 
  */
 public class DebugControlsGameState extends GameStateBase {
-    private HashMap<String, Image> sprites;
     private XBoxController controller;
     private Random random;
 
-    public DebugControlsGameState(XBoxController controller,HashMap<String,Image> sprites)
+    public DebugControlsGameState(GlobalGameData globalGameData)
     {
-        this.controller = controller;
-        this.sprites = sprites;
+        super(globalGameData);
+        this.controller = globalGameData.scanForControllers().get(0);
         random = new Random();
     }
 
@@ -49,7 +49,7 @@ public class DebugControlsGameState extends GameStateBase {
             for(int y = 0; y < 26; y++)
             {
                 int imagesize = 27;
-                gc.drawImage(sprites.get("Test"),x * imagesize,y * imagesize,imagesize,imagesize);
+                gc.drawImage(globalGameData.getSprite("Test"),x * imagesize,y * imagesize,imagesize,imagesize);
 
             }
         }

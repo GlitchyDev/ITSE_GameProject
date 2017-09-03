@@ -3,6 +3,7 @@ package GameStates;
 import GameInfo.Client;
 import GameInfo.Environment.Entities.TestEntity;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 import GameInfo.Player;
 import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
@@ -21,15 +22,16 @@ public class TestWorldGameState extends GameStateBase {
     private boolean moved;
 
 
-    public TestWorldGameState(XBoxController x)
+    public TestWorldGameState(GlobalGameData globalGameData)
     {
+        super(globalGameData);
         world = new World();
         TestEntity e = new TestEntity(5,5);
         world.getChunkFromChunkXY(0,0).getEntities().add(e);
         Player p = new Player(x,e);
         client = new Client(p);
         viewport = new Viewport(client,world);
-        this.x = x;
+        this.x = globalGameData.scanForControllers().get(0);
 
         moved = false;
     }
@@ -83,5 +85,9 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillText("FPS: " + lastFPS,250,50);
         gc.fillText("LogicPercentage: " + lastLogicFramePercentage,250,60);
         gc.fillText("RenderPercentage: " + lastRenderFramePercentage,250,70);
+    }
+
+    public Viewport getViewport() {
+        return viewport;
     }
 }

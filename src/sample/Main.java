@@ -1,6 +1,10 @@
 package sample;
 
+import GameInfo.Environment.World;
+import GameInfo.GameStateEnum;
+import GameInfo.GlobalGameData;
 import GameStates.DebugControlsGameState;
+import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -18,10 +22,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * This class is meant to
+ * - Host the Main Application
+ * - Run the Rendering
+ * - Initiate all the required parts
+ * - Scan for controllers
+ */
 public class Main extends Application {
-    private HashMap<String, Image> sprites;
-    private Controller xboxController;
-    private XBoxController X;
+    private GlobalGameData globalGameData;
 
 
 
@@ -29,38 +38,19 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         //new Thread(new ServerConnection()).start();
        // new Thread(new ClientConnection()).start();
-
         primaryStage.setTitle("Endless Days");
         primaryStage.setResizable(true);
 
 
-        primaryStage.setWidth(486);
-        primaryStage.setHeight(349);
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 29);
+        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 39);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
         // *****
-        primaryStage.show();
-        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
-        System.out.println("Controller #" + controllers.length);
-
-        for(Controller c: controllers)
-        {
-            System.out.println(c.getName() + " " + c.getType());
-            if(c.getType().equals(Controller.Type.GAMEPAD))
-            {
-                xboxController = c;
-                System.out.println("Found our Controller!");
-            }
-        }
-
-        X = new XBoxController(xboxController,1);
-
-
+        /*
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
             canvas.setWidth(newVal.intValue()-6);
         });
@@ -68,43 +58,33 @@ public class Main extends Application {
         primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
             canvas.setHeight(newVal.intValue()-29);
         });
+        */
 
-        sprites = new HashMap<>();
-        loadAssets();
+        /*
+        TestWorldGameState debugState = new TestWorldGameState(g, g.scanForControllers().get(0));
+        primaryStage.setWidth(debugState.getViewport().getViewWidthX() * World.getUnitRatio() + 6);
+        primaryStage.setHeight(debugState.getViewport().getViewHeightY() * World.getUnitRatio() + 39);
+        */
+
+        globalGameData = new GlobalGameData(GameStateEnum.MainMenu);
+
+        // Create the initial window size
+        primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getUnitRatio() + 6);
+        primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getUnitRatio() + 39);
+        primaryStage.show();
 
 
-        //DebugControlsGameState debugState = new DebugControlsGameState(X,sprites);
-        TestWorldGameState debugState = new TestWorldGameState(X);
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                debugState.runLogic(canvas,gc);
-                debugState.render(canvas,gc);
+                globalGameData.getGameState(globalGameData.getGameStateEnum().toString()).runLogic(canvas,gc);
+                globalGameData.getGameState(globalGameData.getGameStateEnum().toString()).render(canvas,gc);
             }
         }.start();
 
 
     }
 
-    public void loadAssets() {
 
-        System.out.println("Loading all Registered Folders");
-        System.out.println("Processing Sprites");
-        ArrayList<String> registeredFolders = new ArrayList<>(Arrays.asList(
-                "GameAssets/Sprites/TestSprites/"
-        ));
-        for (String currentFolder : registeredFolders) {
-            File startingFolder = new File(currentFolder);
-            for (File file : startingFolder.listFiles()) {
-                if (file.isFile()) {
-
-                    String temp = file.getName().substring(0, file.getName().length() - 4);
-                    sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
-                    System.out.println("  - " + temp);
-                }
-            }
-        }
-        System.out.println("Processing Complete!");
-    }
 
 
 
