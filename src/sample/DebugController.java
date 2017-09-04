@@ -10,6 +10,7 @@ public class DebugController extends XBoxController {
     public DebugController(Controller controllerDevice, int id) {
         super(controllerDevice, id);
         keyboard = (Keyboard) controllerDevice;
+        controllerType = ControllerType.KeyboardController;
     }
 
 
@@ -58,6 +59,23 @@ public class DebugController extends XBoxController {
         }
 
         return DirectionalPadEnum.NONE;
+    }
 
+    @Override
+    public boolean getBack() {
+        return keyboard.isKeyDown(Component.Identifier.Key.BACK);
+    }
+
+    @Override
+    public String toString()
+    {
+        String information = "Keyboard Controller #" + id + "\n";
+        information += "Up: " + keyboard.isKeyDown(Component.Identifier.Key.UP) + "\n";
+        information += "Down: " + keyboard.isKeyDown(Component.Identifier.Key.DOWN) + "\n";
+        information += "Left: " + keyboard.isKeyDown(Component.Identifier.Key.LEFT) + "\n";
+        information += "Right: " + keyboard.isKeyDown(Component.Identifier.Key.RIGHT) + "\n";
+        information += "Back: " + keyboard.isKeyDown(Component.Identifier.Key.BACK) + "\n";
+
+        return information;
     }
 }

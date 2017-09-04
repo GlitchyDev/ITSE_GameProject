@@ -19,7 +19,7 @@ public class MainMenuGameState extends GameStateBase {
         phaseStartTime = 0;
         phaseEnum = MainMenuPhaseEnum.MMGPE_Constructor;
 
-        controller = globalGameData.scanForControllers().get(0);
+        controller = globalGameData.getConnectedControllers().get(0);
 
 
     }
@@ -45,10 +45,10 @@ public class MainMenuGameState extends GameStateBase {
                 switch(controller.getDirectionalPad())
                 {
                     case NORTH:
-                        globalGameData.setGameStateEnum(GameStateEnum.TestWorld);
+                        globalGameData.switchGameState(GameStateEnum.TestWorld);
                         break;
                     case WEST:
-                        globalGameData.setGameStateEnum(GameStateEnum.DebugControls);
+                        globalGameData.switchGameState(GameStateEnum.DebugControls);
                         break;
                 }
                 break;
@@ -93,7 +93,16 @@ public class MainMenuGameState extends GameStateBase {
                 break;
         }
 
+    }
 
+
+    @Override
+    public void enterState(GameStateEnum previousState) {
+
+    }
+
+    @Override
+    public void exitState(GameStateEnum lastState) {
 
     }
 }

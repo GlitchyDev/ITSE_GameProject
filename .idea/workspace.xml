@@ -2,17 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sample/DebugController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/GameStates/Enums/MainMenuGamePhaseEnum.java" afterPath="$PROJECT_DIR$/src/GameStates/Enums/MainMenuPhaseEnum.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/GameStateBase.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/GameStateBase.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main$1.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/Main.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sample/ControllerType.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/DebugControlsGameState.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/DebugControlsGameState.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/TestWorldGameState$1.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/TestWorldGameState$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/TestWorldGameState.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameStates/TestWorldGameState.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/XBoxController.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/sample/XBoxController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/GlobalGameData.java" afterPath="$PROJECT_DIR$/src/GameInfo/GlobalGameData.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java" afterPath="$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameStates/GameStateBase.java" afterPath="$PROJECT_DIR$/src/GameStates/GameStateBase.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameStates/MainMenuGameState.java" afterPath="$PROJECT_DIR$/src/GameStates/MainMenuGameState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameStates/TestWorldGameState.java" afterPath="$PROJECT_DIR$/src/GameStates/TestWorldGameState.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/DebugController.java" afterPath="$PROJECT_DIR$/src/sample/DebugController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/Main.java" afterPath="$PROJECT_DIR$/src/sample/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sample/XBoxController.java" afterPath="$PROJECT_DIR$/src/sample/XBoxController.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -71,14 +74,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
+      <file leaf-file-name="GameStateBase.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameStates/GameStateBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
-              <caret line="62" column="66" lean-forward="false" selection-start-line="62" selection-start-column="66" selection-end-line="62" selection-end-column="66" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="612">
+              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -86,8 +87,22 @@
       <file leaf-file-name="TestWorldGameState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameStates/TestWorldGameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="34" column="55" lean-forward="false" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="55" />
+            <state relative-caret-position="155">
+              <caret line="90" column="52" lean-forward="true" selection-start-line="90" selection-start-column="52" selection-end-line="90" selection-end-column="52" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2619#2620#0" expanded="true" />
+                <element signature="e#2686#2687#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GlobalGameData.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/GameInfo/GlobalGameData.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="40" column="27" lean-forward="false" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,27 +110,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameStateBase.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameStates/GameStateBase.java">
+      <file leaf-file-name="DebugControlsGameState.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="61" column="53" lean-forward="false" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="53" />
-              <folding>
-                <element signature="e#2637#2638#0" expanded="true" />
-                <element signature="e#2702#2703#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DebugController.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/sample/DebugController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
-              <caret line="36" column="13" lean-forward="true" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="114">
+              <caret line="61" column="25" lean-forward="false" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -123,8 +123,8 @@
       <file leaf-file-name="MainMenuGameState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameStates/MainMenuGameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+            <state relative-caret-position="17">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -137,8 +137,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -152,6 +152,7 @@
       <find>System.out</find>
       <find>10</find>
       <find>100</find>
+      <find>scan</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -194,20 +195,21 @@
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Entities/EntityBase.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Entities/TestEntity.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
-        <option value="$PROJECT_DIR$/src/sample/XBoxController.java" />
         <option value="$PROJECT_DIR$/src/GameStates/Enums/MainMenuEnum.java" />
         <option value="$PROJECT_DIR$/src/GameStates/Enums/MainMenuGameStateEnum.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/GameStateEnum.java" />
-        <option value="$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Viewport.java" />
         <option value="$PROJECT_DIR$/src/GameStates/Enums/MainMenuGamePhaseEnum.java" />
         <option value="$PROJECT_DIR$/src/GameStates/Enums/MainMenuPhaseEnum.java" />
         <option value="$PROJECT_DIR$/src/sample/Main.java" />
-        <option value="$PROJECT_DIR$/src/GameStates/GameStateBase.java" />
-        <option value="$PROJECT_DIR$/src/GameInfo/GlobalGameData.java" />
-        <option value="$PROJECT_DIR$/src/GameStates/MainMenuGameState.java" />
-        <option value="$PROJECT_DIR$/src/GameStates/TestWorldGameState.java" />
+        <option value="$PROJECT_DIR$/src/sample/ControllerType.java" />
+        <option value="$PROJECT_DIR$/src/sample/XBoxController.java" />
         <option value="$PROJECT_DIR$/src/sample/DebugController.java" />
+        <option value="$PROJECT_DIR$/src/GameStates/GameStateBase.java" />
+        <option value="$PROJECT_DIR$/src/GameStates/TestWorldGameState.java" />
+        <option value="$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java" />
+        <option value="$PROJECT_DIR$/src/GameStates/MainMenuGameState.java" />
+        <option value="$PROJECT_DIR$/src/GameInfo/GlobalGameData.java" />
       </list>
     </option>
   </component>
@@ -245,7 +247,6 @@
     <panes>
       <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -293,6 +294,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -613,11 +615,20 @@
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="1302000" />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32423207" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -630,7 +641,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22321428" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32764506" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -702,26 +713,14 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4719#4720#0" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4786#4787#0" expanded="true" />
-            <element signature="e#4820#4821#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameStates/TestWorldGameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="901">
           <caret line="60" column="85" lean-forward="false" selection-start-line="60" selection-start-column="85" selection-end-line="60" selection-end-column="85" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#2619#2620#0" expanded="true" />
+            <element signature="e#2686#2687#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -730,7 +729,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
           <caret line="41" column="48" lean-forward="false" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -738,11 +736,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
           <caret line="41" column="43" lean-forward="false" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#614#615#0" expanded="false" />
-            <element signature="e#646#647#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -762,9 +755,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4719#4720#0" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4786#4787#0" expanded="true" />
             <element signature="e#4820#4821#0" expanded="true" />
           </folding>
         </state>
@@ -776,9 +766,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4719#4720#0" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4786#4787#0" expanded="true" />
             <element signature="e#4820#4821#0" expanded="true" />
           </folding>
         </state>
@@ -964,7 +951,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="49" column="26" lean-forward="true" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -972,11 +958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1020">
           <caret line="68" column="5" lean-forward="false" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#614#615#0" expanded="false" />
-            <element signature="e#646#647#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -990,7 +971,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
+        <state relative-caret-position="714">
           <caret line="62" column="66" lean-forward="false" selection-start-line="62" selection-start-column="66" selection-end-line="62" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1010,18 +991,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="148">
           <caret line="917" column="0" lean-forward="false" selection-start-line="917" selection-start-column="0" selection-end-line="917" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/XBoxController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="85" column="67" lean-forward="false" selection-start-line="85" selection-start-column="67" selection-end-line="85" selection-end-column="67" />
-          <folding>
-            <element signature="e#2758#2759#0" expanded="true" />
-            <element signature="e#2849#2850#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1036,61 +1005,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/GlobalGameData.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/ControllerType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="85" column="79" lean-forward="true" selection-start-line="85" selection-start-column="79" selection-end-line="85" selection-end-column="79" />
+        <state relative-caret-position="68">
+          <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/DebugController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="70" column="5" lean-forward="true" selection-start-line="70" selection-start-column="5" selection-end-line="70" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#5204#5205#0" expanded="true" />
-            <element signature="e#5247#5248#0" expanded="true" />
+            <element signature="e#1895#1896#0" expanded="true" />
+            <element signature="e#1967#1968#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameStates/MainMenuGameState.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/XBoxController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state relative-caret-position="298">
+          <caret line="116" column="33" lean-forward="false" selection-start-line="116" selection-start-column="33" selection-end-line="116" selection-end-column="33" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#2863#2864#0" expanded="true" />
+            <element signature="e#2954#2955#0" expanded="true" />
+            <element signature="e#3007#3008#0" expanded="true" />
+            <element signature="e#3044#3045#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameStates/DebugControlsGameState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="29" column="5" lean-forward="true" selection-start-line="29" selection-start-column="5" selection-end-line="29" selection-end-column="5" />
+        <state relative-caret-position="114">
+          <caret line="61" column="25" lean-forward="false" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameStates/GameStateBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="61" column="53" lean-forward="false" selection-start-line="61" selection-start-column="40" selection-end-line="61" selection-end-column="53" />
-          <folding>
-            <element signature="e#2637#2638#0" expanded="true" />
-            <element signature="e#2702#2703#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameStates/TestWorldGameState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="34" column="55" lean-forward="false" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="55" />
+        <state relative-caret-position="155">
+          <caret line="90" column="52" lean-forward="true" selection-start-line="90" selection-start-column="52" selection-end-line="90" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2619#2620#0" expanded="true" />
+            <element signature="e#2686#2687#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameStates/GameStateBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameStates/MainMenuGameState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/DebugController.java">
+    <entry file="file://$PROJECT_DIR$/src/GameInfo/GlobalGameData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="36" column="13" lean-forward="true" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+        <state relative-caret-position="105">
+          <caret line="40" column="27" lean-forward="false" selection-start-line="40" selection-start-column="27" selection-end-line="40" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -1,11 +1,8 @@
 package GameStates;
 
-import GameInfo.Client;
+import GameInfo.*;
 import GameInfo.Environment.Entities.TestEntity;
 import GameInfo.Environment.World;
-import GameInfo.GlobalGameData;
-import GameInfo.Player;
-import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -31,9 +28,6 @@ public class TestWorldGameState extends GameStateBase {
         Player p = new Player(x,e);
         client = new Client(p);
         viewport = new Viewport(client,world);
-
-        x = globalGameData.scanForControllers().get(0);
-
         moved = false;
     }
 
@@ -86,6 +80,17 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillText("FPS: " + lastFPS,250,50);
         gc.fillText("LogicPercentage: " + lastLogicFramePercentage,250,60);
         gc.fillText("RenderPercentage: " + lastRenderFramePercentage,250,70);
+    }
+
+    @Override
+    public void enterState(GameStateEnum previousState) {
+        x = globalGameData.getConnectedControllers().get(0);
+    }
+
+    @Override
+    public void exitState(GameStateEnum lastState) {
+        client.getPlayers().get(0).getPlayerCharacter().setX(5);
+        client.getPlayers().get(0).getPlayerCharacter().setY(5);
     }
 
     public Viewport getViewport() {

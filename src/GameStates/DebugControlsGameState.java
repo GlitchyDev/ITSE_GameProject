@@ -1,11 +1,13 @@
 package GameStates;
 
+import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import sample.ControllerType;
 import sample.XBoxController;
 
 import java.util.HashMap;
@@ -25,7 +27,6 @@ public class DebugControlsGameState extends GameStateBase {
     public DebugControlsGameState(GlobalGameData globalGameData)
     {
         super(globalGameData);
-        this.controller = globalGameData.scanForControllers().get(0);
         random = new Random();
     }
 
@@ -40,6 +41,7 @@ public class DebugControlsGameState extends GameStateBase {
     protected void doRender(Canvas canvas, GraphicsContext gc) {
 
         // Clear the Canvas
+        gc.setGlobalAlpha(1.0);
         gc.setFill(Color.GRAY);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
@@ -48,8 +50,8 @@ public class DebugControlsGameState extends GameStateBase {
         {
             for(int y = 0; y < 26; y++)
             {
-                int imagesize = 27;
-                gc.drawImage(globalGameData.getSprite("Test"),x * imagesize,y * imagesize,imagesize,imagesize);
+                int imageSize = 27;
+                gc.drawImage(globalGameData.getSprite("Test"),x * imageSize,y * imageSize,imageSize,imageSize);
 
             }
         }
@@ -63,24 +65,26 @@ public class DebugControlsGameState extends GameStateBase {
                 i++;
             }
 
-            // Render the Controller Sticks
-            gc.setFill(Color.BLUE);
-            gc.fillRect(200, 200, 10, 10);
-            gc.setStroke(Color.GOLD);
-            gc.strokeLine(205, 205, 205 + controller.getLeftStickX() * 20, 205 + controller.getLeftStickY() * 20);
-            gc.setFill(Color.AQUA);
-            gc.fillRect(202 + controller.getLeftStickX() * 20, 202 + controller.getLeftStickY() * 20, 6, 6);
-            gc.setStroke(Color.RED);
-            gc.strokeRect(180, 180, 50, 50);
-            //
-            gc.setFill(Color.BLUE);
-            gc.fillRect(250, 200, 10, 10);
-            gc.setStroke(Color.GOLD);
-            gc.strokeLine(255, 205, 255 + controller.getRightStickX() * 20, 205 + controller.getRightStickY() * 20);
-            gc.setFill(Color.AQUA);
-            gc.fillRect(252 + controller.getRightStickX() * 20, 202 + controller.getRightStickY() * 20, 6, 6);
-            gc.setStroke(Color.RED);
-            gc.strokeRect(230, 180, 50, 50);
+            if(controller.getControllerType() == ControllerType.XBoxController) {
+                // Render the Controller Sticks
+                gc.setFill(Color.BLUE);
+                gc.fillRect(200, 200, 10, 10);
+                gc.setStroke(Color.GOLD);
+                gc.strokeLine(205, 205, 205 + controller.getLeftStickX() * 20, 205 + controller.getLeftStickY() * 20);
+                gc.setFill(Color.AQUA);
+                gc.fillRect(202 + controller.getLeftStickX() * 20, 202 + controller.getLeftStickY() * 20, 6, 6);
+                gc.setStroke(Color.RED);
+                gc.strokeRect(180, 180, 50, 50);
+                //
+                gc.setFill(Color.BLUE);
+                gc.fillRect(250, 200, 10, 10);
+                gc.setStroke(Color.GOLD);
+                gc.strokeLine(255, 205, 255 + controller.getRightStickX() * 20, 205 + controller.getRightStickY() * 20);
+                gc.setFill(Color.AQUA);
+                gc.fillRect(252 + controller.getRightStickX() * 20, 202 + controller.getRightStickY() * 20, 6, 6);
+                gc.setStroke(Color.RED);
+                gc.strokeRect(230, 180, 50, 50);
+            }
         }
 
         // Render the FPS and Logic and Render Percentages
@@ -89,7 +93,15 @@ public class DebugControlsGameState extends GameStateBase {
         gc.fillText("LogicPercentage: " + lastLogicFramePercentage,250,20);
         gc.fillText("RenderPercentage: " + lastRenderFramePercentage,250,30);
 
+    }
 
+    @Override
+    public void enterState(GameStateEnum previousState) {
+        this.controller = globalGameData.getConnectedControllers().get(0);
+    }
+
+    @Override
+    public void exitState(GameStateEnum lastState) {
 
     }
 }

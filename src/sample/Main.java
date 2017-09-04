@@ -3,8 +3,6 @@ package sample;
 import GameInfo.Environment.World;
 import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
-import GameStates.DebugControlsGameState;
-import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -12,15 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * This class is meant to
@@ -79,8 +69,8 @@ public class Main extends Application {
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                globalGameData.getGameState(globalGameData.getGameStateEnum().toString()).runLogic(canvas,gc);
-                globalGameData.getGameState(globalGameData.getGameStateEnum().toString()).render(canvas,gc);
+                globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas,gc);
+                globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas,gc);
             }
         }.start();
 

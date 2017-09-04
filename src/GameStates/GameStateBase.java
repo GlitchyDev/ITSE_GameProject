@@ -1,5 +1,6 @@
 package GameStates;
 
+import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -80,6 +81,10 @@ public abstract class GameStateBase {
 
      */
     abstract protected void doRender(Canvas canvas, GraphicsContext gc);
+
+    abstract public void enterState(GameStateEnum previousState);
+
+    abstract public void exitState(GameStateEnum newState);
 
 
     public double calculateSecondTime(long time)

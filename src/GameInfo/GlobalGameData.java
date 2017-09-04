@@ -26,7 +26,7 @@ import java.util.HashMap;
 public class GlobalGameData {
     private HashMap<String, GameStateBase> gameStates;
     private HashMap<String, Image> sprites;
-    private GameStateEnum gameStateEnum;
+    private GameStateEnum currentGameState;
     private ArrayList<XBoxController> connectedControllers;
 
     public GlobalGameData(GameStateEnum startingState)
@@ -34,11 +34,11 @@ public class GlobalGameData {
         System.out.println("Global Gamestate: Creating Global GameState");
         gameStates = new HashMap<>();
         sprites = new HashMap<>();
-        this.gameStateEnum = startingState;
+        this.currentGameState = startingState;
         connectedControllers = new ArrayList<>();
 
-        createGameStates();
         connectedControllers.addAll(scanForControllers());
+        createGameStates();
         loadAssets();
     }
 
@@ -106,6 +106,7 @@ public class GlobalGameData {
         return xBoxControllers;
     }
 
+    /*
     private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
         // Find constructor (class is package private, so we can't access it directly)
         Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)
@@ -114,6 +115,14 @@ public class GlobalGameData {
         constructor.setAccessible(true);
         // Create object with default constructor
         return constructor.newInstance();
+    }
+    */
+
+    public void switchGameState(GameStateEnum newState)
+    {
+        gameStates.get(currentGameState.toString()).exitState(newState);
+        gameStates.get(newState.toString()).enterState(currentGameState);
+        currentGameState = newState;
     }
 
     // Getters and Setters
@@ -128,12 +137,12 @@ public class GlobalGameData {
         return sprites.get(sprite);
     }
 
-    public GameStateEnum getGameStateEnum() {
-        return gameStateEnum;
+    public GameStateEnum getCurrentGameState() {
+        return currentGameState;
     }
 
-    public void setGameStateEnum(GameStateEnum gameStateEnum) {
-        this.gameStateEnum = gameStateEnum;
+    public void setCurrentGameState(GameStateEnum currentGameState) {
+        this.currentGameState = currentGameState;
     }
 
     public ArrayList<XBoxController> getConnectedControllers()
