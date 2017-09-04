@@ -98,18 +98,17 @@ public class Viewport {
         }
         //world.viewBlocks(viewableBlocks);
 
-        for(int x = 0; x < viewableBlocks.length; x++)
-        {
-            for(int y = 0; y < viewableBlocks[x].length; y++)
-            {
-                if(viewableBlocks[x][y] != null) {
-                    viewableBlocks[x][y].renderBlock(canvas, gc, x, y);
+        for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
+            for (int x = 0; x < viewableBlocks.length; x++) {
+                for (int y = 0; y < viewableBlocks[x].length; y++) {
+                    if (viewableBlocks[x][y] != null) {
+                        viewableBlocks[x][y].renderBlock(canvas, gc, x, y, renderLayer);
+                    }
                 }
             }
-        }
-        for(EntityBase entity: entities)
-        {
-            entity.renderEntity(canvas,gc,centerX + viewWidthX/2 - entity.getX(), centerY + viewHeightY/2 - entity.getY());
+            for (EntityBase entity : entities) {
+                entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX(), centerY + viewHeightY / 2 - entity.getY(), renderLayer);
+            }
         }
 
 

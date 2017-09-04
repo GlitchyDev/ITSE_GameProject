@@ -1,5 +1,6 @@
 package GameInfo.Environment.Blocks;
 
+import GameInfo.Environment.Entities.EntityBase;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,23 +17,30 @@ public class WallFloorBlock extends BlockBase {
     public WallFloorBlock()
     {
         Random random = new Random();
-        if(random.nextInt(2) == 1)
-        {
-            blockType = BlockTypeEnum.TEST_FLOOR;
-        }
-        else
+        if(random.nextInt(3) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
         }
+        else
+        {
+            blockType = BlockTypeEnum.TEST_FLOOR;
+        }
     }
     @Override
-    public void renderBlock(Canvas canvas, GraphicsContext gc, int x, int y) {
-        if(blockType == BlockTypeEnum.TEST_WALL) {
-            gc.setFill(Color.GOLD);
+    public void renderBlock(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
+        if(renderLayer == 0) {
+            if (blockType == BlockTypeEnum.TEST_WALL) {
+                gc.setFill(Color.GOLD);
+            }
+            if (blockType == BlockTypeEnum.TEST_FLOOR) {
+                gc.setFill(Color.RED);
+            }
+            gc.fillRect(x * World.getUnitRatio(), y * World.getUnitRatio(), World.getUnitRatio(), World.getUnitRatio());
         }
-        if(blockType == BlockTypeEnum.TEST_FLOOR) {
-            gc.setFill(Color.RED);
-        }
-        gc.fillRect(x * World.getUnitRatio(), y * World.getUnitRatio(), World.getUnitRatio(), World.getUnitRatio());
+    }
+
+    @Override
+    public boolean checkAvailability(EntityBase entity) {
+        return blockType == BlockTypeEnum.TEST_FLOOR;
     }
 }

@@ -6,6 +6,7 @@ import GameStates.Enums.MainMenuPhaseEnum;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sample.ControllerType;
 import sample.XBoxController;
 
 public class MainMenuGameState extends GameStateBase {
@@ -85,9 +86,9 @@ public class MainMenuGameState extends GameStateBase {
                 gc.fillText("Press ^ for TestWorld", canvas.getWidth()/2.0 - 60,200);
                 gc.fillText("Press < for DebugControls", canvas.getWidth()/2.0 - 60,canvas.getHeight() - 200);
 
-                if(globalGameData.getConnectedControllers().size() == 0)
+                if(globalGameData.getConnectedControllers().get(0).getControllerType() == ControllerType.KeyboardController)
                 {
-                    gc.fillText("No Controller Connected", canvas.getWidth()/2.0 - 60,220);
+                    gc.fillText("Using Keyboard", canvas.getWidth()/2.0 - 60,225);
 
                 }
                 break;

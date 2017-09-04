@@ -1,6 +1,7 @@
 package GameStates;
 
 import GameInfo.*;
+import GameInfo.Environment.Entities.EntityBase;
 import GameInfo.Environment.Entities.TestEntity;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
@@ -43,26 +44,38 @@ public class TestWorldGameState extends GameStateBase {
         {
             case NORTH:
                 if(!moved) {
-                    client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,0,1);
-                    moved = true;
+                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
+                    if(world.getBlockFromCords(entity.getX(),entity.getY() + 1).checkAvailability(entity)) {
+                        entity.moveRelative(world, 0, 1);
+                        moved = true;
+                    }
                 }
                 break;
             case SOUTH:
                 if(!moved) {
-                    client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,0,-1);
-                    moved = true;
+                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
+                    if(world.getBlockFromCords(entity.getX(),entity.getY() - 1).checkAvailability(entity)) {
+                        entity.moveRelative(world, 0, -1);
+                        moved = true;
+                    }
                 }
                 break;
             case EAST:
                 if(!moved) {
-                    client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,-1,0);
-                    moved = true;
+                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
+                    if(world.getBlockFromCords(entity.getX() - 1,entity.getY()).checkAvailability(entity)) {
+                        entity.moveRelative(world, -1, 0);
+                        moved = true;
+                    }
                 }
                 break;
             case WEST:
                 if(!moved) {
-                    client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,1,0);
-                    moved = true;
+                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
+                    if(world.getBlockFromCords(entity.getX() + 1,entity.getY()).checkAvailability(entity)) {
+                        entity.moveRelative(world, 1, 0);
+                        moved = true;
+                    }
                 }
                 break;
             case NONE:

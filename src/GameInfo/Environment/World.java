@@ -59,6 +59,16 @@ public class World {
         return getChunkFromChunkXY(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
     }
 
+    public BlockBase getBlockFromCords(int x, int y)
+    {
+        int chunkX = getChunkNumfromCordNum(x);
+        int chunkY = getChunkNumfromCordNum(y);
+        int chunkStartX = getPosNumFromChunkNum(chunkX);
+        int chunkStartY = getPosNumFromChunkNum(chunkY);
+        Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
+        return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
+    }
+
     public int getChunkNumfromCordNum(int z)
     {
         boolean isNeg = false;
@@ -115,24 +125,6 @@ public class World {
 
     }
 
-    public void viewBlocks(BlockBase[][] blocks)
-    {
-        for(int x = 0; x < blocks.length; x++)
-        {
-            for(int y = 0; y < blocks[x].length; y++)
-            {
-                if(blocks[y][x] == null)
-                {
-                    System.out.print("NULL|");
-                }
-                else
-                {
-                    System.out.print("GOOD|");
-                }
-            }
-            System.out.println();
-        }
-    }
 
 
 

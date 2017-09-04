@@ -19,7 +19,7 @@ public abstract class EntityBase {
         this.y = y;
 }
 
-    public abstract void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y);
+    public abstract void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer);
 
     public void moveRelative(World world, int relativeX, int relativeY)
     {

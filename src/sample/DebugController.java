@@ -4,6 +4,11 @@ import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Keyboard;
 
+/**
+ * The Purpose of this class is
+ * - To Replace XBoxController, in the event we can not find valid controls ( AE: No conenected controller )
+ * - Replace each "Get" for XBox Controllers with a
+ */
 public class DebugController extends XBoxController {
     private Keyboard keyboard;
 
