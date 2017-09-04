@@ -38,17 +38,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         //new Thread(new ServerConnection()).start();
        // new Thread(new ClientConnection()).start();
-        primaryStage.setTitle("Endless Days");
-        primaryStage.setResizable(true);
 
 
-        Group root = new Group();
-        Scene theScene = new Scene(root);
-        primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 39);
-        root.getChildren().add(canvas);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        canvas.setCache(true);
         // *****
         /*
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -66,11 +57,23 @@ public class Main extends Application {
         primaryStage.setHeight(debugState.getViewport().getViewHeightY() * World.getUnitRatio() + 39);
         */
 
+        primaryStage.setTitle("Endless Days");
+        primaryStage.setResizable(true);
+
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu);
 
         // Create the initial window size
         primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getUnitRatio() + 6);
         primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getUnitRatio() + 39);
+
+        Group root = new Group();
+        Scene theScene = new Scene(root);
+        primaryStage.setScene(theScene);
+        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 39);
+        root.getChildren().add(canvas);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        canvas.setCache(true);
+
         primaryStage.show();
 
 

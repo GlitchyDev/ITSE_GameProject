@@ -7,6 +7,7 @@ import GameStates.TestWorldGameState;
 import javafx.scene.image.Image;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import sample.DebugController;
 import sample.XBoxController;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class GlobalGameData {
     private HashMap<String, GameStateBase> gameStates;
     private HashMap<String, Image> sprites;
     private GameStateEnum gameStateEnum;
+    private ArrayList<XBoxController> connectedControllers;
 
     public GlobalGameData(GameStateEnum startingState)
     {
@@ -33,8 +35,10 @@ public class GlobalGameData {
         gameStates = new HashMap<>();
         sprites = new HashMap<>();
         this.gameStateEnum = startingState;
+        connectedControllers = new ArrayList<>();
 
         createGameStates();
+        connectedControllers.addAll(scanForControllers());
         loadAssets();
     }
 
@@ -57,7 +61,6 @@ public class GlobalGameData {
             System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
             for (File file : startingFolder.listFiles()) {
                 if (file.isFile()) {
-
                     String temp = file.getName().substring(0, file.getName().length() - 4);
                     sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
                     System.out.println("  - " + temp);
@@ -87,6 +90,14 @@ public class GlobalGameData {
         if(xBoxControllers.size() == 0)
         {
             System.out.println("Scan Controllers: Acquired no Controllers, revert to Keyboard controls");
+            System.out.println("Scan Controllers: Creating DebugController to replace XBoxControls");
+            for(Controller controller: controllers)
+            {
+                if(controller.getType() == Controller.Type.KEYBOARD)
+                {
+                    xBoxControllers.add(new DebugController(controller,0));
+                }
+            }
         }
         else
         {
@@ -94,8 +105,6 @@ public class GlobalGameData {
         }
         return xBoxControllers;
     }
-
-
 
     private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
         // Find constructor (class is package private, so we can't access it directly)
@@ -125,5 +134,10 @@ public class GlobalGameData {
 
     public void setGameStateEnum(GameStateEnum gameStateEnum) {
         this.gameStateEnum = gameStateEnum;
+    }
+
+    public ArrayList<XBoxController> getConnectedControllers()
+    {
+        return connectedControllers;
     }
 }

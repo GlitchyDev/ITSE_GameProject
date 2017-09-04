@@ -12,18 +12,18 @@ import javafx.scene.canvas.GraphicsContext;
  * - Perform or recieve logic for that Gamestate
  */
 public abstract class GameStateBase {
-    public GlobalGameData globalGameData;
+    protected GlobalGameData globalGameData;
     // ---------[FPS Information]
     // The last Seconds FPS
-    public int lastFPS;
+    protected int lastFPS;
     // The amount of frames rendered this second
-    public int frameCount;
+    protected int frameCount;
     // The Milisecond time of the last frame update
-    public long lastFPSUpdate;
+    protected long lastFPSUpdate;
     // --------- [Logic Percentage]
-    public double lastLogicFramePercentage;
+    protected double lastLogicFramePercentage;
     // --------- [Render Percentage]
-    public double lastRenderFramePercentage;
+    protected double lastRenderFramePercentage;
     // Testing
 
 
@@ -35,11 +35,7 @@ public abstract class GameStateBase {
         lastLogicFramePercentage = 0;
         lastRenderFramePercentage = 0;
         this.globalGameData = globalGameData;
-        //
-
-
     }
-
 
     /**
      Runs the Inherited Logic for the Gamestate, and also calculates the percentage of the Frame it takes to do
@@ -68,7 +64,6 @@ public abstract class GameStateBase {
             lastFPS = frameCount;
             frameCount = 1;
             lastFPSUpdate = System.currentTimeMillis();
-
         }
         else {
             frameCount++;
@@ -80,11 +75,16 @@ public abstract class GameStateBase {
         lastRenderFramePercentage = (100L/16666666.6667) * (System.nanoTime() - startRenderTime);
     }
 
-
     /**
      * The Abstract overriden by classes that extend GameStateBase that runs the Logic
 
      */
     abstract protected void doRender(Canvas canvas, GraphicsContext gc);
+
+
+    public double calculateSecondTime(long time)
+    {
+        return (System.currentTimeMillis() - time)/1000.0;
+    }
 
 }

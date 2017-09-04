@@ -31,7 +31,8 @@ public class TestWorldGameState extends GameStateBase {
         Player p = new Player(x,e);
         client = new Client(p);
         viewport = new Viewport(client,world);
-        this.x = globalGameData.scanForControllers().get(0);
+
+        x = globalGameData.scanForControllers().get(0);
 
         moved = false;
     }
