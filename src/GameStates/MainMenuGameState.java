@@ -83,12 +83,12 @@ public class MainMenuGameState extends GameStateBase {
                 }
 
                 gc.setFill(Color.BLUE);
-                gc.fillText("Press ^ for TestWorld", canvas.getWidth()/2.0 - 60,200);
-                gc.fillText("Press < for DebugControls", canvas.getWidth()/2.0 - 60,canvas.getHeight() - 200);
+                gc.fillText("Press ^ for TestWorld", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 1);
+                gc.fillText("Press < for DebugControls", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 2);
 
                 if(globalGameData.getConnectedControllers().get(0).getControllerType() == ControllerType.KeyboardController)
                 {
-                    gc.fillText("Using Keyboard", canvas.getWidth()/2.0 - 60,225);
+                    gc.fillText("Using Keyboard", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 3);
 
                 }
                 break;
