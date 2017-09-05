@@ -116,7 +116,8 @@ public class Viewport {
         gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
         gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
-
+        gc.setFill(Color.BLACK);
+        gc.fillText("Chunk Pos: " + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX())) + ":" + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY())),300,30);
     }
     public int getViewWidthX() {
         return viewWidthX;

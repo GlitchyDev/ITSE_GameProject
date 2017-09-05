@@ -38,8 +38,8 @@ public class GlobalGameData {
         connectedControllers = new ArrayList<>();
 
         connectedControllers.addAll(scanForControllers());
-        createGameStates();
         loadAssets();
+        createGameStates();
     }
 
     private void createGameStates()

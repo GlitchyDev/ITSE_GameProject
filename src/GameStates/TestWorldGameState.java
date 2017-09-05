@@ -23,7 +23,7 @@ public class TestWorldGameState extends GameStateBase {
     public TestWorldGameState(GlobalGameData globalGameData)
     {
         super(globalGameData);
-        world = new World();
+        world = new World(globalGameData);
         TestEntity e = new TestEntity(5,5);
         world.getChunkFromChunkXY(0,0).getEntities().add(e);
         Player p = new Player(x,e);

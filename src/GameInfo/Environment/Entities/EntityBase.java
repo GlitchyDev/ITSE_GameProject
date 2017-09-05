@@ -32,7 +32,7 @@ public abstract class EntityBase {
         }
         else
         {
-            System.out.println("Switched Chunks!");
+            System.out.println("Switched Chunks! From " + world.getChunkNumfromCordNum(x) + "," + world.getChunkNumfromCordNum(y) + " to " + world.getChunkNumfromCordNum(x + relativeX) + "," + world.getChunkNumfromCordNum(y + relativeY));
             newChunk.getEntities().add(this);
             oldChunk.getEntities().remove(this);
             x += relativeX;

@@ -1,6 +1,7 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.GlobalGameData;
 import GameInfo.Viewport;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class World {
     private static int unitRatio = 30;
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
+    private GlobalGameData globalGameData;
 
     public static int getUnitRatio() {
         return unitRatio;
@@ -28,10 +30,11 @@ public class World {
         return chunkSize;
     }
 
-    public World()
+    public World(GlobalGameData globalGameData)
     {
         chunks = new HashMap<>();
-        chunks.put(0 + "," + 0,new Chunk());
+        this.globalGameData = globalGameData;
+        chunks.put(0 + "," + 0,new Chunk(globalGameData,this,0,0));
     }
 
 
@@ -42,7 +45,15 @@ public class World {
             return 0;
         }
         else {
-            return z * World.getChunkSize();
+            if(z >= 0)
+            {
+                return z * World.getChunkSize();
+            }
+            else
+            {
+                return z * World.getChunkSize() + 1;
+            }
+
         }
     }
 
@@ -50,7 +61,7 @@ public class World {
     {
         if(!chunks.containsKey(x + "," + y))
         {
-           chunks.put(x + "," + y, new Chunk());
+           chunks.put(x + "," + y, new Chunk(globalGameData, this, x, y));
         }
         return chunks.get(x + "," + y);
     }
@@ -63,10 +74,16 @@ public class World {
     {
         int chunkX = getChunkNumfromCordNum(x);
         int chunkY = getChunkNumfromCordNum(y);
+        System.out.println();
+        System.out.println("Chunk X " + chunkX + " Y" + chunkY);
+        System.out.println("Chunk Start X " + getPosNumFromChunkNum(chunkX) + " Y" + getPosNumFromChunkNum(chunkY));
+        System.out.println("Pos X " + x + " Y" + y);
         int chunkStartX = getPosNumFromChunkNum(chunkX);
         int chunkStartY = getPosNumFromChunkNum(chunkY);
         Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
+
         return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
+
     }
 
     public int getChunkNumfromCordNum(int z)

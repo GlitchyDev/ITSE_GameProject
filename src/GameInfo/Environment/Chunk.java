@@ -3,7 +3,9 @@ package GameInfo.Environment;
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.TestRockEntity;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
 
@@ -21,12 +23,12 @@ public class Chunk {
 
 
 
-    public Chunk(BlockBase[][] blockBaseList, ArrayList<EntityBase> entities)
+    public Chunk(GlobalGameData globalGameData, BlockBase[][] blockBaseList, ArrayList<EntityBase> entities, World world, int relativeChunkX, int relativeChunkY)
     {
         this.blockBaseList = blockBaseList;
         this.entities = entities;
     }
-    public Chunk()
+    public Chunk(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
         this.blockBaseList = new BlockBase[World.getChunkSize()][World.getChunkSize()];
         for(int x = 0; x < World.getChunkSize(); x++)
@@ -37,6 +39,7 @@ public class Chunk {
             }
         }
         this.entities = new ArrayList<>();
+        this.entities.add(new TestRockEntity(world.getChunkNumfromCordNum(relativeChunkX),world.getChunkNumfromCordNum(relativeChunkY),globalGameData.getSprite("Rock_Test")));
     }
     // Setters and Getters
     public BlockBase[][] getBlockBaseList() {
