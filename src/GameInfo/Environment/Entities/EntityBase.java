@@ -2,6 +2,7 @@ package GameInfo.Environment.Entities;
 
 import GameInfo.Environment.Chunk;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -19,7 +20,11 @@ public abstract class EntityBase {
         this.y = y;
 }
 
+    public abstract void tickEntity(GlobalGameData globalGameData, World world);
+
     public abstract void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer);
+
+
 
     public void moveRelative(World world, int relativeX, int relativeY)
     {

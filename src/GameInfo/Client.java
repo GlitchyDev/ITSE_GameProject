@@ -1,5 +1,7 @@
 package GameInfo;
 
+import GameInfo.Environment.World;
+
 import java.util.ArrayList;
 
 /**
@@ -20,6 +22,7 @@ public class Client {
         this.players = new ArrayList<>();
         this.players.add(p);
     }
+
 
 
     public boolean isLocalClient()

@@ -1,6 +1,7 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.Environment.Entities.EntityBase;
 import GameInfo.GlobalGameData;
 import GameInfo.Viewport;
 
@@ -85,6 +86,8 @@ public class World {
         return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
 
     }
+
+
 
     public int getChunkNumfromCordNum(int z)
     {

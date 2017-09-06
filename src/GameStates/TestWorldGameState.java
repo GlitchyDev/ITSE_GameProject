@@ -1,13 +1,13 @@
 package GameStates;
 
 import GameInfo.*;
-import GameInfo.Environment.Entities.EntityBase;
-import GameInfo.Environment.Entities.TestEntity;
+import GameInfo.Environment.Entities.PlayerEntityBase;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import sample.XBoxController;
+
+import java.util.ArrayList;
 
 /**
  * Created by Robert on 8/28/2017.
@@ -16,71 +16,22 @@ public class TestWorldGameState extends GameStateBase {
     private World world;
     private Viewport viewport;
     private Client client;
-    private XBoxController x;
-    private boolean moved;
+
 
 
     public TestWorldGameState(GlobalGameData globalGameData)
     {
         super(globalGameData);
         world = new World(globalGameData);
-        TestEntity e = new TestEntity(5,5);
-        world.getChunkFromChunkXY(0,0).getEntities().add(e);
-        Player p = new Player(x,e);
-        client = new Client(p);
         viewport = new Viewport(client,world);
-        moved = false;
+
     }
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
-
-        x.poll();
-        if(x.getLeftStickPress())
+        for(Player p : client.getPlayers())
         {
-            client.getPlayers().get(0).getPlayerCharacter().moveRelative(world,(int)-x.getLeftStickX(),(int)-x.getLeftStickY());
-        }
-        switch(x.getDirectionalPad())
-        {
-            case NORTH:
-                if(!moved) {
-                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
-                    if(world.getBlockFromCords(entity.getX(),entity.getY() + 1).checkAvailability(entity)) {
-                        entity.moveRelative(world, 0, 1);
-                        moved = true;
-                    }
-                }
-                break;
-            case SOUTH:
-                if(!moved) {
-                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
-                    if(world.getBlockFromCords(entity.getX(),entity.getY() - 1).checkAvailability(entity)) {
-                        entity.moveRelative(world, 0, -1);
-                        moved = true;
-                    }
-                }
-                break;
-            case EAST:
-                if(!moved) {
-                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
-                    if(world.getBlockFromCords(entity.getX() - 1,entity.getY()).checkAvailability(entity)) {
-                        entity.moveRelative(world, -1, 0);
-                        moved = true;
-                    }
-                }
-                break;
-            case WEST:
-                if(!moved) {
-                    EntityBase entity = client.getPlayers().get(0).getPlayerCharacter();
-                    if(world.getBlockFromCords(entity.getX() + 1,entity.getY()).checkAvailability(entity)) {
-                        entity.moveRelative(world, 1, 0);
-                        moved = true;
-                    }
-                }
-                break;
-            case NONE:
-                moved = false;
-                break;
+            p.getPlayerCharacter().tickEntity(globalGameData,world);
         }
 
     }
@@ -97,7 +48,36 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     public void enterState(GameStateEnum previousState) {
-        x = globalGameData.getConnectedControllers().get(0);
+        System.out.println("Test World: Loading State");
+
+
+        // Add independant code that can inflict controller controls on the entity
+
+
+        Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
+        p1.setPlayerCharacter(new PlayerEntityBase(5,5,p1));
+        if(globalGameData.getConnectedControllers().size() > 1)
+        {
+            System.out.println("Test World: Detected Multiple Controllers! Creating Multiple Player Objects!");
+            Player p2 = new Player(globalGameData.getConnectedControllers().get(1),null);
+            p2.setPlayerCharacter(new PlayerEntityBase(5,5,p2));
+            ArrayList<Player> temp = new ArrayList<>();
+            temp.add(p1);
+            temp.add(p2);
+            world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
+            world.getChunkFromChunkXY(0,0).getEntities().add(p2.getPlayerCharacter());
+            client = new Client(temp);
+
+        }
+        else
+        {
+            world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
+            client = new Client(p1);
+        }
+
+        viewport = new Viewport(client,world);
+
+
     }
 
     @Override

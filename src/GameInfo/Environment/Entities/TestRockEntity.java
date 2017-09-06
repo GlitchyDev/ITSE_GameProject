@@ -15,6 +15,11 @@ public class TestRockEntity extends EntityBase {
     }
 
     @Override
+    public void tickEntity(GlobalGameData globalGameData, World world) {
+
+    }
+
+    @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
         if(renderLayer == 1) {
             gc.setGlobalAlpha(1.0);
