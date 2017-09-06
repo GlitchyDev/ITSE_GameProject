@@ -72,6 +72,15 @@ public class DebugController extends XBoxController {
     }
 
     @Override
+    public boolean getButtonB() {
+        return keyboard.isKeyDown(Component.Identifier.Key.LSHIFT);
+    }
+    public boolean getButtonA() {
+        return keyboard.isKeyDown(Component.Identifier.Key.LCONTROL);
+    }
+
+
+    @Override
     public String toString()
     {
         String information = "Keyboard Controller #" + id + "\n";

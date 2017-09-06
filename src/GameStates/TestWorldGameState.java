@@ -6,6 +6,7 @@ import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sample.XBoxController;
 
 import java.util.ArrayList;
 
@@ -54,23 +55,30 @@ public class TestWorldGameState extends GameStateBase {
         // Add independant code that can inflict controller controls on the entity
 
 
-        Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
-        p1.setPlayerCharacter(new PlayerEntityBase(5,5,p1));
+
+
         if(globalGameData.getConnectedControllers().size() > 1)
         {
             System.out.println("Test World: Detected Multiple Controllers! Creating Multiple Player Objects!");
-            Player p2 = new Player(globalGameData.getConnectedControllers().get(1),null);
-            p2.setPlayerCharacter(new PlayerEntityBase(5,5,p2));
-            ArrayList<Player> temp = new ArrayList<>();
-            temp.add(p1);
-            temp.add(p2);
-            world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
-            world.getChunkFromChunkXY(0,0).getEntities().add(p2.getPlayerCharacter());
-            client = new Client(temp);
+
+            int i = 0;
+            ArrayList<Player> players = new ArrayList<>();
+            for(XBoxController controller: globalGameData.getConnectedControllers())
+            {
+                Player p = new Player(globalGameData.getConnectedControllers().get(i),null);
+                p.setPlayerCharacter(new PlayerEntityBase(i + 5,i + 5,p));
+                i++;
+                players.add(p);
+                world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
+
+            }
+            client = new Client(players);
 
         }
         else
         {
+            Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
+            p1.setPlayerCharacter(new PlayerEntityBase(5,5,p1));
             world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }
