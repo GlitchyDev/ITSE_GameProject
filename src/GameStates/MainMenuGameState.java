@@ -89,7 +89,7 @@ public class MainMenuGameState extends GameStateBase {
                 if(globalGameData.getConnectedControllers().get(0).getControllerType() == ControllerType.KeyboardController)
                 {
                     gc.fillText("Using Keyboard", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 3);
-
+                    
                 }
                 break;
         }
