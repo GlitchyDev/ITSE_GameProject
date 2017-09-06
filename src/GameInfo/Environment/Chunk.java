@@ -39,7 +39,7 @@ public class Chunk {
             }
         }
         this.entities = new ArrayList<>();
-        this.entities.add(new TestRockEntity(world.getPosNumFromChunkNum(relativeChunkX),world.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
+        this.entities.add(new TestRockEntity(world.getPosNumFromChunkNum(relativeChunkX),world.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Rock_Test")));
     }
     // Setters and Getters
     public BlockBase[][] getBlockBaseList() {

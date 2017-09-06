@@ -11,18 +11,18 @@ public class TestRockEntity extends EntityBase {
     private Image sprite;
     public TestRockEntity(int x, int y, Image image) {
         super(x, y);
-        sprite = image;
+        sprite = TestRenderHelper.resample(image,10);
     }
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
-        if(renderLayer == 1)
-        {
+        if(renderLayer == 1) {
             gc.setGlobalAlpha(1.0);
 
 
+            //gc.drawImage(TestRenderHelper.resample(sprite,10),x * World.getUnitRatio(), y * World.getUnitRatio());
 
-            gc.drawImage(TestRenderHelper.resample(sprite,10),x * World.getUnitRatio(), y * World.getUnitRatio());
+            gc.drawImage(sprite,x * World.getUnitRatio(), y * World.getUnitRatio());
         }
     }
 }
