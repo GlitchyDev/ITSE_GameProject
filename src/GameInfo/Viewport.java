@@ -24,8 +24,8 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // How many block units should be rendered on screen
-    private int viewWidthX = 15;
-    private int viewHeightY = 15;
+    private int viewWidthX = 20;
+    private int viewHeightY = 20;
     // How many extra blocks should be rendered
     private int extraViewX = 10;
     private int extraViewY = 10;
@@ -85,24 +85,26 @@ public class Viewport {
 
         //ArrayList<Chunk> chunkList = new ArrayList<>();
         ArrayList<EntityBase> entities = new ArrayList<>();
-        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX][viewHeightY];
+        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2][viewHeightY + 1 - viewHeightY % 2];
 
 
-        ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX), world.getChunkNumfromCordNum((int)(centerY + viewHeightY/2 + extraViewY)));
-        ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX), world.getChunkNumfromCordNum((int)(centerY - viewHeightY/2 - extraViewY)));
+        ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), world.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
+        ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX ), world.getChunkNumfromCordNum( centerY - viewHeightY/2 - extraViewY));
 
 
         for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
         {
             for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
             {
-                //System.out.println("Added Chunk " + x + "," + y);
+
                 entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
-                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,(int)(centerX + viewWidthX/2),(int)(centerY + viewHeightY/2),(int)(centerX - viewWidthX/2),(int)(centerY - viewHeightY/2));
+                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY - viewHeightY/2);
             }
         }
         //world.viewBlocks(viewableBlocks);
 
+
+        // Reramp this to go from Top of screen down for each layer!
         for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
             for (int x = 0; x < viewableBlocks.length; x++) {
                 for (int y = 0; y < viewableBlocks[x].length; y++) {
@@ -112,17 +114,15 @@ public class Viewport {
                 }
             }
             for (EntityBase entity : entities) {
-                entity.renderEntity(canvas, gc, (int)(centerX + viewWidthX / 2 - entity.getX()), (int)(centerY + viewHeightY / 2 - entity.getY()), renderLayer);
+                entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX(), centerY + viewHeightY / 2 - entity.getY(), renderLayer);
             }
         }
 
 
         gc.setFill(Color.BLACK);
-        gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
+        gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),300,10);
         gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
-        gc.setFill(Color.BLACK);
-        gc.fillText("Chunk Pos: " + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX())) + ":" + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY())),300,30);
     }
 
 
@@ -179,10 +179,10 @@ public class Viewport {
      */
 
 
-    public double getViewWidthX() {
+    public int getViewWidthX() {
         return viewWidthX;
     }
-    public double getViewHeightY() {
+    public int getViewHeightY() {
         return viewHeightY;
     }
 

@@ -11,7 +11,7 @@ public class TestRockEntity extends EntityBase {
     private Image sprite;
     public TestRockEntity(int x, int y, Image image) {
         super(x, y);
-        sprite = TestRenderHelper.resample(image,10);
+        sprite = TestRenderHelper.resample(image,4);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class TestRockEntity extends EntityBase {
     }
 
     @Override
-    public void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
+    public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
             gc.setGlobalAlpha(1.0);
 

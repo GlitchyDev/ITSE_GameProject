@@ -27,7 +27,7 @@ public class WallFloorBlock extends BlockBase {
         }
     }
     @Override
-    public void renderBlock(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
+    public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
                 gc.setFill(Color.GOLD);

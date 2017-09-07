@@ -20,7 +20,7 @@ public abstract class BlockBase {
         blockType = BlockTypeEnum.TEST_FLOOR;
     }
 
-    public abstract void renderBlock(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer);
+    public abstract void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
 
 
     /**

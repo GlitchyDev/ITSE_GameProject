@@ -96,7 +96,7 @@ public class PlayerEntityBase extends EntityBase {
     }
 
     @Override
-    public void renderEntity(Canvas canvas, GraphicsContext gc, int x, int y, int renderLayer) {
+    public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if (renderLayer == 0) {
             gc.setFill(Color.PINK);
             gc.setStroke(Color.BLACK);

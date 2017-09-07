@@ -75,10 +75,6 @@ public class World {
     {
         int chunkX = getChunkNumfromCordNum(x);
         int chunkY = getChunkNumfromCordNum(y);
-        System.out.println();
-        System.out.println("Chunk X " + chunkX + " Y" + chunkY);
-        System.out.println("Chunk Start X " + getPosNumFromChunkNum(chunkX) + " Y" + getPosNumFromChunkNum(chunkY));
-        System.out.println("Pos X " + x + " Y" + y);
         int chunkStartX = getPosNumFromChunkNum(chunkX);
         int chunkStartY = getPosNumFromChunkNum(chunkY);
         Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
@@ -121,13 +117,6 @@ public class World {
     }
 
     public void addBlocksInsideChunk(Chunk chunk, int chunkX, int chunkY, BlockBase[][] blocks, int x1, int y1, int x2, int y2) {
-
-        /*
-        System.out.println("Corner: X: " + chunkX + " Y: " + chunkY);
-        System.out.println("CornerCH: X: " + getPosNumFromChunkNum(chunkX) + " Y: " + getPosNumFromChunkNum(chunkY));
-        System.out.println("1: X: " + x1 + " Y: " + y1);
-        System.out.println("2: X: " + x2 + " Y: " + y2);
-        */
 
         for(int x = getPosNumFromChunkNum(chunkX); x <= getPosNumFromChunkNum(chunkX) + World.getChunkSize() - 1; x++)
         {
