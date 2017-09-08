@@ -24,11 +24,16 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // How many block units should be rendered on screen
-    private int viewWidthX = 20;
-    private int viewHeightY = 20;
-    // How many extra blocks should be rendered
-    private int extraViewX = 10;
-    private int extraViewY = 10;
+    private int viewWidthX = 19;
+    private int viewHeightY = 19;
+    // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
+    private int extraViewX = 5;
+    private int extraViewY = 5;
+    // This affects how much "Smoothing" the screen has between movements
+    private double smoothingValueX = 0;
+    private double smoothingValueY = 0;
+    private final double smoothingAmouunt = 1.2;
+
     private Client client;
     private World world;
 
@@ -50,6 +55,8 @@ public class Viewport {
     {
         if(!client.isLocalClient())
         {
+            smoothingValueX += centerX - client.getPlayers().get(0).getPlayerCharacter().getX();
+            smoothingValueY += centerY - client.getPlayers().get(0).getPlayerCharacter().getY();
             centerX = client.getPlayers().get(0).getPlayerCharacter().getX();
             centerY = client.getPlayers().get(0).getPlayerCharacter().getY();
         }
@@ -62,8 +69,21 @@ public class Viewport {
                 averageX += p.getPlayerCharacter().getX();
                 averageY += p.getPlayerCharacter().getY();
             }
+
+            smoothingValueX += centerX - (centerX = averageX / client.getPlayers().size());
+            smoothingValueY += centerY - (centerY = averageY / client.getPlayers().size());
             centerX = averageX / client.getPlayers().size();
             centerY = averageY / client.getPlayers().size();
+        }
+        smoothingValueX = smoothingValueX / smoothingAmouunt;
+        smoothingValueY = smoothingValueY / smoothingAmouunt;
+        if(smoothingValueX < 0.01 && smoothingValueX > 0.01)
+        {
+            smoothingValueX = 0;
+        }
+        if(smoothingValueY < 0.01 && smoothingValueY > 0.01)
+        {
+            smoothingValueY = 0;
         }
     }
 
@@ -79,13 +99,13 @@ public class Viewport {
      */
     public void render(Canvas canvas, GraphicsContext gc)
     {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+       // gc.setFill(Color.WHITE);
+       // gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
         //ArrayList<Chunk> chunkList = new ArrayList<>();
         ArrayList<EntityBase> entities = new ArrayList<>();
-        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2][viewHeightY + 1 - viewHeightY % 2];
+        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2 + extraViewX * 2][viewHeightY + 1 - viewHeightY % 2 + extraViewY * 2];
 
 
         ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), world.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
@@ -98,7 +118,7 @@ public class Viewport {
             {
 
                 entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
-                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY - viewHeightY/2);
+                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
             }
         }
         //world.viewBlocks(viewableBlocks);
@@ -109,12 +129,13 @@ public class Viewport {
             for (int x = 0; x < viewableBlocks.length; x++) {
                 for (int y = 0; y < viewableBlocks[x].length; y++) {
                     if (viewableBlocks[x][y] != null) {
-                        viewableBlocks[x][y].renderBlock(canvas, gc, x, y, renderLayer);
+                        //System.out.println("X: " + x + "Y: " + y + " " + viewableBlocks.length);
+                        viewableBlocks[x][y].renderBlock(canvas, gc, x - extraViewX + smoothingValueX, y - extraViewY + smoothingValueY, renderLayer);
                     }
                 }
             }
             for (EntityBase entity : entities) {
-                entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX(), centerY + viewHeightY / 2 - entity.getY(), renderLayer);
+                entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX() + smoothingValueX, centerY + viewHeightY / 2 - entity.getY() + smoothingValueY, renderLayer);
             }
         }
 

@@ -31,15 +31,8 @@ public class Main extends Application {
 
 
         // *****
-        /*
-        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            canvas.setWidth(newVal.intValue()-6);
-        });
 
-        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            canvas.setHeight(newVal.intValue()-29);
-        });
-        */
+
 
         /*
         TestWorldGameState debugState = new TestWorldGameState(g, g.scanForControllers().get(0));
@@ -63,6 +56,7 @@ public class Main extends Application {
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
+
 
         primaryStage.show();
 
