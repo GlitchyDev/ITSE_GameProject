@@ -27,83 +27,86 @@ public class PlayerEntityBase extends EntityBase {
     @Override
     public void tickEntity(GlobalGameData globalGameData, World world) {
         player.getController().poll();
-        if(player.getController().getButtonB())
+        if(player.getController().getButtonY())
         {
-            switch(player.getController().getDirectionalPad())
-            {
-                case NORTH:
-                    moveRelative(world,0,1);
-                    break;
-                case SOUTH:
-                    moveRelative(world,0,-1);
-
-                    break;
-                case EAST:
-                    moveRelative(world,-1,0);
-
-                    break;
-                case WEST:
-                    moveRelative(world,1,0);
-
-                    break;
-                case NONE:
-                    break;
-            }
+            moveAbsolute(world, 2147483347,2147483347 );
         }
         else {
-            if (player.getController().getDirectionalPad() != directionPadInputCache) {
-                directionPadInputCache = player.getController().getDirectionalPad();
-                switch (directionPadInputCache) {
+            if (player.getController().getButtonB()) {
+                switch (player.getController().getDirectionalPad()) {
                     case NORTH:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x, y + 1).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x,y + 1).enterBlock(this);
-                                world.getBlockFromCords(x,y).exitBlock(this);
-                                moveRelative(world, 0, 1);
-                            }
-                        } else {
-                            world.getBlockFromCords(x,y).exitBlock(this);
-                            moveRelative(world, 0, 1);
-                        }
+                        moveRelative(world, 0, 1);
                         break;
                     case SOUTH:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x, y - 1).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x,y - 1).enterBlock(this);
-                                world.getBlockFromCords(x,y).exitBlock(this);
-                                moveRelative(world, 0, -1);
-                            }
-                        } else {
-                            world.getBlockFromCords(x,y).exitBlock(this);
-                            moveRelative(world, 0, -1);
-                        }
+                        moveRelative(world, 0, -1);
+
                         break;
                     case EAST:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x - 1, y).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x - 1,y).enterBlock(this);
-                                world.getBlockFromCords(x,y).exitBlock(this);
-                                moveRelative(world, -1, 0);
-                            }
-                        } else {
-                            world.getBlockFromCords(x,y).exitBlock(this);
-                            moveRelative(world, -1, 0);
-                        }
+                        moveRelative(world, -1, 0);
+
                         break;
                     case WEST:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x + 1, y).checkAvailability(world,this)) {
-                                world.getBlockFromCords(x + 1,y).enterBlock(this);
-                                world.getBlockFromCords(x,y).exitBlock(this);
-                                moveRelative(world, 1, 0);
-                            }
-                        } else {
-                            world.getBlockFromCords(x,y).exitBlock(this);
-                            moveRelative(world, 1, 0);
-                        }
+                        moveRelative(world, 1, 0);
+
                         break;
                     case NONE:
                         break;
+                }
+            } else {
+                if (player.getController().getDirectionalPad() != directionPadInputCache) {
+                    directionPadInputCache = player.getController().getDirectionalPad();
+                    switch (directionPadInputCache) {
+                        case NORTH:
+                            if (!player.getController().getButtonA()) {
+                                if (world.getBlockFromCords(x, y + 1).checkAvailability(world, this)) {
+                                    world.getBlockFromCords(x, y + 1).enterBlock(this);
+                                    world.getBlockFromCords(x, y).exitBlock(this);
+                                    moveRelative(world, 0, 1);
+                                }
+                            } else {
+                                world.getBlockFromCords(x, y).exitBlock(this);
+                                moveRelative(world, 0, 1);
+                            }
+                            break;
+                        case SOUTH:
+                            if (!player.getController().getButtonA()) {
+                                if (world.getBlockFromCords(x, y - 1).checkAvailability(world, this)) {
+                                    world.getBlockFromCords(x, y - 1).enterBlock(this);
+                                    world.getBlockFromCords(x, y).exitBlock(this);
+                                    moveRelative(world, 0, -1);
+                                }
+                            } else {
+                                world.getBlockFromCords(x, y).exitBlock(this);
+                                moveRelative(world, 0, -1);
+                            }
+                            break;
+                        case EAST:
+                            if (!player.getController().getButtonA()) {
+                                if (world.getBlockFromCords(x - 1, y).checkAvailability(world, this)) {
+                                    world.getBlockFromCords(x - 1, y).enterBlock(this);
+                                    world.getBlockFromCords(x, y).exitBlock(this);
+                                    moveRelative(world, -1, 0);
+                                }
+                            } else {
+                                world.getBlockFromCords(x, y).exitBlock(this);
+                                moveRelative(world, -1, 0);
+                            }
+                            break;
+                        case WEST:
+                            if (!player.getController().getButtonA()) {
+                                if (world.getBlockFromCords(x + 1, y).checkAvailability(world, this)) {
+                                    world.getBlockFromCords(x + 1, y).enterBlock(this);
+                                    world.getBlockFromCords(x, y).exitBlock(this);
+                                    moveRelative(world, 1, 0);
+                                }
+                            } else {
+                                world.getBlockFromCords(x, y).exitBlock(this);
+                                moveRelative(world, 1, 0);
+                            }
+                            break;
+                        case NONE:
+                            break;
+                    }
                 }
             }
         }
