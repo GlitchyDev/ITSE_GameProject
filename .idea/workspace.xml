@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Floor.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall_Modified.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall_Top.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/Blocks/WallFloorBlock.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/Blocks/WallFloorBlock.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/Chunk.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Environment/Chunk.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Viewport.class" afterPath="$PROJECT_DIR$/out/production/ITSE_GameProject/GameInfo/Viewport.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java" afterPath="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java" afterPath="$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Environment/World.java" afterPath="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameInfo/Viewport.java" afterPath="$PROJECT_DIR$/src/GameInfo/Viewport.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,6 +19,11 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/ITSE_GameProject$Main.coverage" NAME="Main Coverage Results" MODIFIED="1504893753239" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>sample.*</FILTER>
+    </SUITE>
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -73,7 +74,7 @@
       <file leaf-file-name="World.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/World.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
+            <state relative-caret-position="0">
               <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
               <folding />
             </state>
@@ -83,18 +84,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="576">
+            <state relative-caret-position="17">
               <caret line="66" column="44" lean-forward="false" selection-start-line="66" selection-start-column="44" selection-end-line="66" selection-end-column="45" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Viewport.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="134" column="101" lean-forward="false" selection-start-line="134" selection-start-column="101" selection-end-line="134" selection-end-column="101" />
               <folding />
             </state>
           </provider>
@@ -103,18 +94,18 @@
       <file leaf-file-name="TestEntity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Entities/TestEntity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="408">
+              <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WallFloorBlock.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WallFloorBlock.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="45" column="111" lean-forward="false" selection-start-line="45" selection-start-column="111" selection-end-line="45" selection-end-column="111" />
+            <state relative-caret-position="239">
+              <caret line="47" column="117" lean-forward="false" selection-start-line="47" selection-start-column="117" selection-end-line="47" selection-end-column="117" />
               <folding />
             </state>
           </provider>
@@ -200,8 +191,8 @@
         <option value="$PROJECT_DIR$/src/sample/Main.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/Chunk.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Environment/World.java" />
-        <option value="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java" />
         <option value="$PROJECT_DIR$/src/GameInfo/Viewport.java" />
+        <option value="$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java" />
       </list>
     </option>
   </component>
@@ -212,11 +203,11 @@
     </treeState>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1" />
-    <option name="y" value="-20" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-70" />
+    <option name="y" value="-12" />
     <option name="width" value="1366" />
-    <option name="height" value="728" />
+    <option name="height" value="764" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectReloadState">
@@ -237,7 +228,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -313,8 +306,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -339,16 +330,16 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets\Sprites\TestSprites" />
+      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets\Sprites\TestSprites" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets\Sounds" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
       <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\libs" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\GameAssets\Sprites\TestSprites" />
-      <recent name="C:\Users\Robert\Desktop\Java Projects\ITSE_GameProject\lib" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -647,7 +638,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -658,12 +649,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34129694" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.32980332" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28498295" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28498295" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32935154" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21800596" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22163388" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -727,7 +719,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/GameInfo/Viewport.java</url>
+          <line>128</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -736,13 +736,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1343">
@@ -1027,16 +1020,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/World.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
+        <state relative-caret-position="0">
           <caret line="21" column="37" lean-forward="false" selection-start-line="21" selection-start-column="37" selection-end-line="21" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="576">
-          <caret line="66" column="44" lean-forward="false" selection-start-line="66" selection-start-column="44" selection-end-line="66" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -1049,11 +1034,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Blocks/BlockBase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -1064,24 +1044,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Entities/TestEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="45" column="111" lean-forward="false" selection-start-line="45" selection-start-column="111" selection-end-line="45" selection-end-column="111" />
+        <state relative-caret-position="408">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameInfo/Viewport.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="134" column="101" lean-forward="false" selection-start-line="134" selection-start-column="101" selection-end-line="134" selection-end-column="101" />
+        <state relative-caret-position="357">
+          <caret line="155" column="32" lean-forward="false" selection-start-line="155" selection-start-column="32" selection-end-line="155" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="66" column="44" lean-forward="false" selection-start-line="66" selection-start-column="44" selection-end-line="66" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall_Top.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameAssets/Sprites/TestSprites/Test_Wall.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/GameInfo/Environment/Blocks/WallFloorBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="47" column="117" lean-forward="false" selection-start-line="47" selection-start-column="117" selection-end-line="47" selection-end-column="117" />
           <folding />
         </state>
       </provider>

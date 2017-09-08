@@ -17,6 +17,7 @@ import java.util.Random;
 public class WallFloorBlock extends BlockBase {
     private EntityBase entity;
     private Image sprite;
+    private Image secondarySprite;
 
     public WallFloorBlock(GlobalGameData globalGameData)
     {
@@ -24,7 +25,8 @@ public class WallFloorBlock extends BlockBase {
         if(random.nextInt(3) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
-            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall"),2);
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
+            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),2);
         }
         else
         {
@@ -43,7 +45,10 @@ public class WallFloorBlock extends BlockBase {
         }
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
-                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 16);
+                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) + 15);
+                gc.drawImage(secondarySprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 25);
+
+
             }
         }
         if(renderLayer == 2) {
