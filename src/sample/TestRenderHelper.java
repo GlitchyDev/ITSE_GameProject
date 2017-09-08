@@ -6,16 +6,18 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
-public class TestRenderHelper {
-    public static void renderHelp(GraphicsContext gc, Image i, int x, int y)
-    {
-        gc.setGlobalAlpha(1.0);
-        int imageWidth = (int) i.getWidth() * 2;
-        int imageHeight = (int) i.getHeight() * 2;
+import java.util.HashMap;
 
-    }
+public class TestRenderHelper {
+    public static HashMap<Image,Image> cachedSprites = new HashMap<>();
+
 
     public static Image resample(Image input, int scaleFactor) {
+
+        if(cachedSprites.containsKey(input))
+        {
+            return cachedSprites.get(input);
+        }
         final int W = (int) input.getWidth();
         final int H = (int) input.getHeight();
         final int S = scaleFactor;
@@ -39,6 +41,7 @@ public class TestRenderHelper {
             }
         }
 
+        cachedSprites.put(input,output);
         return output;
     }
 

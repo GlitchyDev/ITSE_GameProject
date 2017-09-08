@@ -11,6 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+import net.java.games.input.ControllerEvent;
+import net.java.games.input.ControllerListener;
 
 /**
  * This class is meant to
@@ -59,6 +63,8 @@ public class Main extends Application {
 
 
         primaryStage.show();
+
+
 
 
         new AnimationTimer() {

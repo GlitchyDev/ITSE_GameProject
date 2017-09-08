@@ -26,7 +26,7 @@ public class TestEntity extends EntityBase {
             gc.setFill(Color.PINK);
             gc.setStroke(Color.BLACK);
             gc.strokeRect(x * World.getUnitRatio(), y * World.getUnitRatio(), World.getUnitRatio(), World.getUnitRatio());
-            gc.fillRect(x * World.getUnitRatio() + 1, y * World.getUnitRatio() + 1, World.getUnitRatio() - 2, World.getUnitRatio() - 2);
+            gc.fillRect(x * World.getUnitRatio() + 3, y * World.getUnitRatio() + 3, World.getUnitRatio() - 6, World.getUnitRatio() - 6);
         }
 
     }

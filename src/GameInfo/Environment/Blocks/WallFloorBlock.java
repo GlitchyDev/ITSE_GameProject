@@ -22,7 +22,7 @@ public class WallFloorBlock extends BlockBase {
     public WallFloorBlock(GlobalGameData globalGameData)
     {
         Random random = new Random();
-        if(random.nextInt(3) == 1)
+        if(random.nextInt(4) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
             sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
@@ -45,8 +45,8 @@ public class WallFloorBlock extends BlockBase {
         }
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
-                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) + 15);
-                gc.drawImage(secondarySprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 25);
+                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) + 10);
+                gc.drawImage(secondarySprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 30);
 
 
             }
