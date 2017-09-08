@@ -24,15 +24,15 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // How many block units should be rendered on screen
-    private int viewWidthX = 19;
-    private int viewHeightY = 19;
+    private int viewWidthX = 13;
+    private int viewHeightY = 13;
     // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
     private int extraViewX = 5;
     private int extraViewY = 5;
     // This affects how much "Smoothing" the screen has between movements
     private double smoothingValueX = 0;
     private double smoothingValueY = 0;
-    private final double smoothingAmouunt = 1.2;
+    private final double smoothingAmouunt = 1.1;
 
     private Client client;
     private World world;
@@ -77,6 +77,7 @@ public class Viewport {
         }
         smoothingValueX = smoothingValueX / smoothingAmouunt;
         smoothingValueY = smoothingValueY / smoothingAmouunt;
+        /*
         if(smoothingValueX < 0.01 && smoothingValueX > 0.01)
         {
             smoothingValueX = 0;
@@ -85,6 +86,7 @@ public class Viewport {
         {
             smoothingValueY = 0;
         }
+        */
     }
 
 
@@ -99,8 +101,8 @@ public class Viewport {
      */
     public void render(Canvas canvas, GraphicsContext gc)
     {
-       // gc.setFill(Color.WHITE);
-       // gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
         //ArrayList<Chunk> chunkList = new ArrayList<>();

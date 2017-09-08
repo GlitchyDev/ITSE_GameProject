@@ -35,7 +35,7 @@ public class Chunk {
         {
             for(int y = 0; y < World.getChunkSize(); y++)
             {
-                blockBaseList[x][y] = new WallFloorBlock();
+                blockBaseList[x][y] = new WallFloorBlock(globalGameData);
             }
         }
         this.entities = new ArrayList<>();

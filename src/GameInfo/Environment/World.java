@@ -19,7 +19,7 @@ import java.util.HashMap;
  * - Get Method to get 3
  */
 public class World {
-    private static int unitRatio = 30;
+    private static int unitRatio = 40;
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
     private GlobalGameData globalGameData;

@@ -2,9 +2,12 @@ package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.EntityBase;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import sample.TestRenderHelper;
 
 import java.util.Random;
 
@@ -13,29 +16,35 @@ import java.util.Random;
  */
 public class WallFloorBlock extends BlockBase {
     private EntityBase entity;
+    private Image sprite;
 
-    public WallFloorBlock()
+    public WallFloorBlock(GlobalGameData globalGameData)
     {
         Random random = new Random();
         if(random.nextInt(3) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall"),2);
         }
         else
         {
             blockType = BlockTypeEnum.TEST_FLOOR;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor"),2);
+
         }
     }
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        if(renderLayer == 0) {
-            if (blockType == BlockTypeEnum.TEST_WALL) {
-                gc.setFill(Color.GOLD);
-            }
+        if(renderLayer == 0)
+        {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
-                gc.setFill(Color.RED);
+                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5));
             }
-            gc.fillRect((int)(x * World.getUnitRatio()), (int)(y * World.getUnitRatio()), World.getUnitRatio(), World.getUnitRatio());
+        }
+        if(renderLayer == 1) {
+            if (blockType == BlockTypeEnum.TEST_WALL) {
+                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 16);
+            }
         }
         if(renderLayer == 2) {
             if (entity == null) {
