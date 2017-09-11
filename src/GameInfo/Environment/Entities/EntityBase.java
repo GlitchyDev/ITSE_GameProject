@@ -18,7 +18,9 @@ public abstract class EntityBase {
     {
         this.x = x;
         this.y = y;
-}
+    }
+
+
 
     public abstract void tickEntity(GlobalGameData globalGameData, World world);
 

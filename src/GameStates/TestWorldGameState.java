@@ -66,7 +66,7 @@ public class TestWorldGameState extends GameStateBase {
             for(XBoxController controller: globalGameData.getConnectedControllers())
             {
                 Player p = new Player(globalGameData.getConnectedControllers().get(i),null);
-                p.setPlayerCharacter(new PlayerEntityBase(i + 5,i + 5,p));
+                p.setPlayerCharacter(new PlayerEntityBase(globalGameData,i + 5,i + 5,p));
                 i++;
                 players.add(p);
                 world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
@@ -78,7 +78,7 @@ public class TestWorldGameState extends GameStateBase {
         else
         {
             Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
-            p1.setPlayerCharacter(new PlayerEntityBase(5,5,p1));
+            p1.setPlayerCharacter(new PlayerEntityBase(globalGameData,5,5,p1));
             world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }

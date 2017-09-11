@@ -52,7 +52,8 @@ public class GlobalGameData {
     private void loadAssets() {
         System.out.println("Load Assets: Loading all Registered Folders");
         ArrayList<String> registeredFolders = new ArrayList<>(Arrays.asList(
-                "GameAssets/Sprites/TestSprites/"
+                "GameAssets/Sprites/TestSprites/",
+                "GameAssets/Sprites/Pro/"
         ));
         System.out.println("Load Assets: Processing Sprites");
         System.out.println("Load Assets: Added Sprites");

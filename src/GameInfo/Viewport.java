@@ -34,6 +34,7 @@ public class Viewport {
     private double smoothingValueY = 0;
     private final double smoothingAmouunt = 1.1;
 
+
     private Client client;
     private World world;
 
@@ -128,18 +129,28 @@ public class Viewport {
 
         // Reramp this to go from Top of screen down for each layer!
         for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
-            for (int x = 0; x < viewableBlocks.length; x++) {
-                for (int y = 0; y < viewableBlocks[x].length; y++) {
+            for (int y = 0; y < viewableBlocks[0].length; y++) {
+                 for (int x = 0; x < viewableBlocks.length; x++) {
                     if (viewableBlocks[x][y] != null) {
                         //System.out.println("X: " + x + "Y: " + y + " " + viewableBlocks.length);
                         viewableBlocks[x][y].renderBlock(canvas, gc, x - extraViewX + smoothingValueX, y - extraViewY + smoothingValueY, renderLayer);
                     }
+                     for (EntityBase entity : entities) {
+                         if(entity.getX() == (centerX + viewWidthX/2) - (x - extraViewX))
+                         {
+                             if(entity.getY() == (centerY + viewHeightY/2) - (y - extraViewY))
+                             {
+                                 entity.renderEntity(canvas, gc, (x - extraViewX) + smoothingValueX, (y - extraViewY) + smoothingValueY, renderLayer);
+
+
+
+                             }
+                         }
+                     }
                 }
             }
-            for (EntityBase entity : entities) {
-                entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX() + smoothingValueX, centerY + viewHeightY / 2 - entity.getY() + smoothingValueY, renderLayer);
-            }
         }
+
 
 
         gc.setFill(Color.BLACK);

@@ -9,18 +9,21 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import sample.TestRenderHelper;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Robert on 8/28/2017.
  */
 public class WallFloorBlock extends BlockBase {
-    private EntityBase entity;
+    private ArrayList<EntityBase> entities;
     private Image sprite;
     private Image secondarySprite;
 
     public WallFloorBlock(GlobalGameData globalGameData)
     {
+        entities = new ArrayList<>();
+
         Random random = new Random();
         if(random.nextInt(4) == 1)
         {
@@ -41,6 +44,11 @@ public class WallFloorBlock extends BlockBase {
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
                 gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5));
+                if(entities.size() > 0)
+                {
+                    gc.setFill(Color.BLUE);
+                    gc.fillRect((x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5), 5,5);
+                }
             }
         }
         if(renderLayer == 1) {
@@ -51,12 +59,7 @@ public class WallFloorBlock extends BlockBase {
 
             }
         }
-        if(renderLayer == 2) {
-            if (entity == null) {
-                //gc.setFill(Color.BLUE);
-                //gc.fillText("E", x * World.getUnitRatio(), y * World.getUnitRatio());
-            }
-        }
+
 
 
     }
@@ -64,17 +67,24 @@ public class WallFloorBlock extends BlockBase {
     @Override
     public boolean checkAvailability(World world, EntityBase entity) {
 
-        return blockType == BlockTypeEnum.TEST_FLOOR && this.entity == null;
+        if(entities.size() > 0)
+        {
+            for(EntityBase eb: entities)
+            {
+                // Add possible collision events here
+            }
+        }
+        return blockType == BlockTypeEnum.TEST_FLOOR && (entities.size() == 0|| entities.contains(entity));
 
     }
 
     @Override
     public void enterBlock(EntityBase entity) {
-        this.entity = entity;
+        entities.add(entity);
     }
 
     @Override
     public void exitBlock(EntityBase entity) {
-        this.entity = null;
+        entities.remove(entity);
     }
 }
