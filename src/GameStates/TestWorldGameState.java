@@ -1,7 +1,7 @@
 package GameStates;
 
 import GameInfo.*;
-import GameInfo.Environment.Entities.PlayerEntityBase;
+import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,7 +32,7 @@ public class TestWorldGameState extends GameStateBase {
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
         for(Player p : client.getPlayers())
         {
-            p.getPlayerCharacter().tickEntity(globalGameData,world);
+            p.getPlayerCharacter().tickEntity();
         }
 
     }
@@ -66,7 +66,7 @@ public class TestWorldGameState extends GameStateBase {
             for(XBoxController controller: globalGameData.getConnectedControllers())
             {
                 Player p = new Player(globalGameData.getConnectedControllers().get(i),null);
-                p.setPlayerCharacter(new PlayerEntityBase(globalGameData,i + 5,i + 5,p));
+                p.setPlayerCharacter(new Pro_Player(world,globalGameData,p,i + 5,i + 5));
                 i++;
                 players.add(p);
                 world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
@@ -78,7 +78,7 @@ public class TestWorldGameState extends GameStateBase {
         else
         {
             Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
-            p1.setPlayerCharacter(new PlayerEntityBase(globalGameData,5,5,p1));
+            p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,5,5));
             world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }

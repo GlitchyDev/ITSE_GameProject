@@ -1,11 +1,8 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
-import GameInfo.Environment.Entities.EntityBase;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

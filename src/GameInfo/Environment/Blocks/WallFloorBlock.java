@@ -1,6 +1,6 @@
 package GameInfo.Environment.Blocks;
 
-import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;

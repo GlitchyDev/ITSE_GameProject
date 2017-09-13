@@ -1,5 +1,6 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -9,14 +10,13 @@ import sample.TestRenderHelper;
 
 public class TestRockEntity extends EntityBase {
     private Image sprite;
-    public TestRockEntity(int x, int y, Image image) {
-        super(x, y);
-        sprite = TestRenderHelper.resample(image,4);
+    public TestRockEntity(World world, GlobalGameData globalGameData, int x, int y, Image image) {
+        super(world, globalGameData, x, y);
+        sprite = TestRenderHelper.resample(image,2);
     }
 
     @Override
-    public void tickEntity(GlobalGameData globalGameData, World world) {
-
+    public void tickEntity() {
     }
 
     @Override

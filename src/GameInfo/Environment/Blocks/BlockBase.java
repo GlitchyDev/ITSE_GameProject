@@ -1,11 +1,9 @@
 package GameInfo.Environment.Blocks;
 
-import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-
-import java.util.Random;
 
 /**
  * Created by Robert on 8/27/2017.

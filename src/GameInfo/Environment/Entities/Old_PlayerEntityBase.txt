@@ -1,5 +1,6 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
@@ -13,7 +14,8 @@ import sample.TestRenderHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlayerEntityBase extends EntityBase {
+
+public class Old_PlayerEntityBase {
     protected Player player;
     protected HashMap<String,Boolean> booleanInputCache;
     protected DirectionalPadEnum directionPadInputCache;
@@ -22,7 +24,7 @@ public class PlayerEntityBase extends EntityBase {
     protected Color color;
     protected ArrayList<Image> sprites;
 
-    public PlayerEntityBase(GlobalGameData globalGameData, int x, int y, Player player) {
+    public Old_PlayerEntityBase(GlobalGameData globalGameData, int x, int y, Player player) {
         super(x, y);
         this.player = player;
         booleanInputCache = new HashMap<>();
@@ -166,7 +168,6 @@ public class PlayerEntityBase extends EntityBase {
             }
 
             int cycle = 1000;
-
             if(System.currentTimeMillis() % cycle < cycle/4*1) {
                 gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
             }
@@ -203,3 +204,4 @@ public class PlayerEntityBase extends EntityBase {
 
 
 }
+

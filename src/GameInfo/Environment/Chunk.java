@@ -2,9 +2,8 @@ package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
-import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.TestRockEntity;
-import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class Chunk {
             }
         }
         this.entities = new ArrayList<>();
-        this.entities.add(new TestRockEntity(world.getPosNumFromChunkNum(relativeChunkX),world.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
+        this.entities.add(new TestRockEntity(world, globalGameData, world.getPosNumFromChunkNum(relativeChunkX),world.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
     }
     // Setters and Getters
     public BlockBase[][] getBlockBaseList() {

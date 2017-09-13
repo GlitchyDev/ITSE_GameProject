@@ -1,9 +1,8 @@
 package GameInfo;
 
 import GameInfo.Environment.Blocks.BlockBase;
-import GameInfo.Environment.Chunk;
 import GameInfo.Environment.ChunkID;
-import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

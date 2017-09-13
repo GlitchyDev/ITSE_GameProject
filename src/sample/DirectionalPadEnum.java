@@ -38,4 +38,9 @@ public enum DirectionalPadEnum {
                 return NONE;
         }
     }
+
+    public static boolean isDiagnal(DirectionalPadEnum direction)
+    {
+        return (direction == NORTH_EAST || direction == NORTH_WEST || direction == SOUTH_EAST || direction == SOUTH_WEST);
+    }
 }

@@ -1,6 +1,7 @@
-package GameInfo.Environment.Entities;
+package GameInfo.Environment.Entities.AbstractClasses;
 
 import GameInfo.Environment.Chunk;
+import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -11,24 +12,29 @@ import javafx.scene.canvas.GraphicsContext;
  * An EntityBase within the World, thats not a block
  */
 public abstract class EntityBase {
+    protected World world;
+    protected GlobalGameData globalGameData;
+    protected EntityType entityType;
     protected int x;
     protected int y;
 
-    public EntityBase(int x, int y)
+    public EntityBase(World world, GlobalGameData globalGameData, int x, int y)
     {
+        this.world = world;
+        this.globalGameData = globalGameData;
         this.x = x;
         this.y = y;
     }
 
 
 
-    public abstract void tickEntity(GlobalGameData globalGameData, World world);
+    public abstract void tickEntity();
 
     public abstract void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
 
 
 
-    public void moveRelative(World world, int relativeX, int relativeY)
+    public void moveRelative(int relativeX, int relativeY)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
@@ -47,7 +53,7 @@ public abstract class EntityBase {
 
     }
 
-    public void moveAbsolute(World world, int absoluteX, int absoluteY)
+    public void moveAbsolute(int absoluteX, int absoluteY)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(absoluteX, absoluteY);

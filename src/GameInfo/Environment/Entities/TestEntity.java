@@ -1,5 +1,6 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -11,12 +12,12 @@ import javafx.scene.paint.Color;
  */
 public class TestEntity extends EntityBase {
 
-    public TestEntity(int x, int y) {
-        super(x, y);
+    public TestEntity(World world, GlobalGameData globalGameData, int x, int y) {
+        super(world, globalGameData, x, y);
     }
 
     @Override
-    public void tickEntity(GlobalGameData globalGameData, World world) {
+    public void tickEntity() {
 
     }
 
