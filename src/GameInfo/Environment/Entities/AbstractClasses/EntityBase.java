@@ -71,6 +71,39 @@ public abstract class EntityBase {
         }
     }
 
+    public boolean advancedMoveRelative(int relativeX, int relativeY, boolean checkColisions, boolean generateEnterEvent, boolean generateExitEvent)
+    {
+        Chunk oldChunk = world.getChunkFromCordXY(x, y);
+        Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
+        if(oldChunk == newChunk)
+        {
+
+        }
+        else
+        {
+            newChunk.getEntities().add(this);
+            oldChunk.getEntities().remove(this);
+        }
+        if(checkColisions)
+        {
+            if(!(world.getBlockFromCords(x + relativeX, y + relativeY).checkAvailability(world, this)) )
+            {
+                return false;
+            }
+        }
+        if(generateExitEvent)
+        {
+            world.getBlockFromCords(x, y).exitBlock(this);
+        }
+        if(generateEnterEvent)
+        {
+            world.getBlockFromCords(x + relativeX, y + relativeY).enterBlock(this);
+        }
+        x += relativeX;
+        y += relativeY;
+        return true;
+    }
+
     public double distanceFromEntity(EntityBase entity)
     {
         return Math.hypot(x-entity.getX(), y-entity.getY());

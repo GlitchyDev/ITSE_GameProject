@@ -90,7 +90,8 @@ public class WallFloorBlock extends BlockBase {
         {
             for(EntityBase eb: entities)
             {
-                // Add possible collision events here
+                // Entity re-acting to colision events here
+                // Return here as well
             }
         }
         return blockType == BlockTypeEnum.TEST_FLOOR && (entities.size() == 0|| entities.contains(entity));

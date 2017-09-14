@@ -109,51 +109,31 @@ public class Pro_Player extends DamageableEntityBase {
             if (isMoving && System.currentTimeMillis() >= lastMovement + (long) (movementDelay * 1000) && !(controller.getTrigger() < -0.9)) {
                 switch (cachedDirection) {
                     case NORTH:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x, y + 1).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x, y + 1).enterBlock(this);
-                                world.getBlockFromCords(x, y).exitBlock(this);
-                                moveRelative(0, 1);
-                            }
-                        } else {
-                            world.getBlockFromCords(x, y).exitBlock(this);
+                        if (player.getController().getButtonA()) {
                             moveRelative(0, 1);
+                        } else {
+                            advancedMoveRelative(0,1,true,true,true);
                         }
                         break;
                     case SOUTH:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x, y - 1).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x, y - 1).enterBlock(this);
-                                world.getBlockFromCords(x, y).exitBlock(this);
-                                moveRelative(0, -1);
-                            }
-                        } else {
-                            world.getBlockFromCords(x, y).exitBlock(this);
+                        if (player.getController().getButtonA()) {
                             moveRelative(0, -1);
+                        } else {
+                            advancedMoveRelative(0,-1,true,true,true);
                         }
                         break;
                     case EAST:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x - 1, y).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x - 1, y).enterBlock(this);
-                                world.getBlockFromCords(x, y).exitBlock(this);
-                                moveRelative(-1, 0);
-                            }
-                        } else {
-                            world.getBlockFromCords(x, y).exitBlock(this);
+                        if (player.getController().getButtonA()) {
                             moveRelative(-1, 0);
+                        } else {
+                            advancedMoveRelative(-1,0,true,true,true);
                         }
                         break;
                     case WEST:
-                        if (!player.getController().getButtonA()) {
-                            if (world.getBlockFromCords(x + 1, y).checkAvailability(world, this)) {
-                                world.getBlockFromCords(x + 1, y).enterBlock(this);
-                                world.getBlockFromCords(x, y).exitBlock(this);
-                                moveRelative(1, 0);
-                            }
-                        } else {
-                            world.getBlockFromCords(x, y).exitBlock(this);
+                        if (player.getController().getButtonA()) {
                             moveRelative(1, 0);
+                        } else {
+                            advancedMoveRelative(1,0,true,true,true);
                         }
                         break;
                     case NONE:
