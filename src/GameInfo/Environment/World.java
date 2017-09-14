@@ -1,8 +1,10 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.Environment.Structures.StructureBase;
 import GameInfo.GlobalGameData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -19,6 +21,9 @@ public class World {
     private static int unitRatio = 40;
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
+    private ArrayList<StructureBase> structures;
+
+
     private GlobalGameData globalGameData;
 
     public static int getUnitRatio() {
@@ -31,8 +36,9 @@ public class World {
     public World(GlobalGameData globalGameData)
     {
         chunks = new HashMap<>();
+        structures = new ArrayList<>();
         this.globalGameData = globalGameData;
-        chunks.put(0 + "," + 0,new Chunk(globalGameData,this,0,0));
+
     }
 
 
@@ -60,6 +66,7 @@ public class World {
         if(!chunks.containsKey(x + "," + y))
         {
            chunks.put(x + "," + y, new Chunk(globalGameData, this, x, y));
+           chunks.get(x + "," + y).generateStructures(globalGameData, this, x, y);
         }
         return chunks.get(x + "," + y);
     }
@@ -77,9 +84,17 @@ public class World {
         Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
 
         return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
-
     }
 
+    public void setBlockFromCords(int x, int y, BlockBase block)
+    {
+        int chunkX = getChunkNumfromCordNum(x);
+        int chunkY = getChunkNumfromCordNum(y);
+        int chunkStartX = getPosNumFromChunkNum(chunkX);
+        int chunkStartY = getPosNumFromChunkNum(chunkY);
+        Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
+        chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY] = block;
+    }
 
 
     public int getChunkNumfromCordNum(int z)
@@ -131,6 +146,11 @@ public class World {
 
     }
 
+
+    public ArrayList<StructureBase> getStructures()
+    {
+        return structures;
+    }
 
 
 

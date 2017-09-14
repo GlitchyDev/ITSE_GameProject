@@ -24,8 +24,8 @@ public class WallFloorBlock extends BlockBase {
     {
         entities = new ArrayList<>();
 
-        Random random = new Random();
-        if(random.nextInt(4) == 1)
+
+        if(globalGameData.getRandom().nextInt(4) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
             sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
@@ -38,6 +38,25 @@ public class WallFloorBlock extends BlockBase {
 
         }
     }
+
+    public WallFloorBlock(GlobalGameData globalGameData, BlockTypeEnum type)
+    {
+        entities = new ArrayList<>();
+
+        if(type == BlockTypeEnum.TEST_WALL)
+        {
+            blockType = BlockTypeEnum.TEST_WALL;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
+            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),2);
+        }
+        else
+        {
+            blockType = BlockTypeEnum.TEST_FLOOR;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor"),2);
+
+        }
+    }
+
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0)

@@ -15,6 +15,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  *  The purpose of this Class is to store all Global GameData used by GameStates such as
@@ -28,6 +29,7 @@ public class GlobalGameData {
     private HashMap<String, Image> sprites;
     private GameStateEnum currentGameState;
     private ArrayList<XBoxController> connectedControllers;
+    private Random random;
 
     public GlobalGameData(GameStateEnum startingState)
     {
@@ -35,6 +37,7 @@ public class GlobalGameData {
         gameStates = new HashMap<>();
         sprites = new HashMap<>();
         this.currentGameState = startingState;
+        random = new Random();
         connectedControllers = new ArrayList<>();
 
         connectedControllers.addAll(scanForControllers());
@@ -150,4 +153,6 @@ public class GlobalGameData {
     {
         return connectedControllers;
     }
+
+    public Random getRandom() {return random;}
 }

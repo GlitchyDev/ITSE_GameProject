@@ -71,6 +71,15 @@ public abstract class EntityBase {
         }
     }
 
+    public double distanceFromEntity(EntityBase entity)
+    {
+        return Math.hypot(x-entity.getX(), y-entity.getY());
+    }
+    public double distanceFromLocation(int x, int y)
+    {
+        return Math.hypot(this.x-x, this.y-y);
+    }
+
     public int getX(){return x;}
     public int getY(){return y;}
     public void setX(int x){this.x = x;}

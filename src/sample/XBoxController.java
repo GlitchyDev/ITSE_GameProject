@@ -49,6 +49,11 @@ public class XBoxController {
         return isButtonPressed(controllerDevice.getComponents()[14].getPollData());
     }
 
+    public double getTrigger()
+    {
+        return normalizeDirectionInput(controllerDevice.getComponents()[4].getPollData());
+    }
+
     public DirectionalPadEnum getDirectionalPad() {
         return DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData());
     }

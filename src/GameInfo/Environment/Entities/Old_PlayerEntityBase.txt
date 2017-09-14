@@ -205,3 +205,115 @@ public class Old_PlayerEntityBase {
 
 }
 
+
+
+
+
+
+
+
+
+ @Override
+    public void tickEntity() {
+        controller.poll();
+
+        if (cachedDirection != controller.getDirectionalPad())
+        {
+            if(controller.getDirectionalPad() != DirectionalPadEnum.NONE)
+            {
+                primaryDirection = controller.getDirectionalPad();
+                holdDownStartTime = System.currentTimeMillis();
+                isHoldingDown = true;
+                holdDownCycleCount = 0;
+            }
+            else
+            {
+                isHoldingDown = false;
+            }
+            cachedDirection = controller.getDirectionalPad();
+        }
+        else
+        {
+            if(isHoldingDown)
+            {
+                if( (long)(holdDownCycleCount * holdDownCylcleLength) <= System.currentTimeMillis() - holdDownStartTime - (long)(holdDownCylcleLength * holdDownCycleCount * 1000))
+                {
+                    switch (cachedDirection) {
+                        case NORTH:
+                            moveRelative(0, 1);
+                            holdDownCycleCount++;
+                            break;
+                        case SOUTH:
+                            moveRelative(0, -1);
+                            holdDownCycleCount++;
+                            break;
+                        case EAST:
+                            moveRelative(-1, 0);
+                            holdDownCycleCount++;
+                            break;
+                        case WEST:
+                            moveRelative( 1, 0);
+                            holdDownCycleCount++;
+                            break;
+                        case NONE:
+                            break;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    @Override
+    public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
+        int id = 0;
+        switch(primaryDirection)
+        {
+            case NORTH:
+                id = 0;
+                break;
+            case EAST:
+                id = 3;
+                break;
+            case SOUTH:
+                id = 6;
+                break;
+            case WEST:
+                id = 9;
+                break;
+        }
+
+        if(isHoldingDown)
+        {
+            int cycle = 1000;
+            if(System.currentTimeMillis() % cycle < cycle/4*1) {
+                gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
+            }
+            else
+            {
+                if(System.currentTimeMillis() % cycle < cycle/4*2) {
+                    gc.drawImage(TestRenderHelper.resample(sprites.get(id + 1),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
+
+                }
+                else
+                {
+                    if(System.currentTimeMillis() % cycle < cycle/4*3) {
+                        gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
+
+                    }
+                    else
+                    {
+                        gc.drawImage(TestRenderHelper.resample(sprites.get(id + 2),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0),2),(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()) );
+        }
+    }
+

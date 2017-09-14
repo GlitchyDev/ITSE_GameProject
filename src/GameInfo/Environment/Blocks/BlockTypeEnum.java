@@ -6,4 +6,5 @@ package GameInfo.Environment.Blocks;
 public enum BlockTypeEnum {
     TEST_FLOOR,
     TEST_WALL,
+    DEBUG_BLOCk,
 }
