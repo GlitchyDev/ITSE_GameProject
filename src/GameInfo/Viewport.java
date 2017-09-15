@@ -20,6 +20,8 @@ import java.util.ArrayList;
  * - Render the viewport to the Screen, Blocks, Entitys, and ALL!
  */
 public class Viewport {
+    private Client client;
+    private World world;
     // Determines where the center of the screen
     private int centerX;
     private int centerY;
@@ -34,9 +36,8 @@ public class Viewport {
     private double smoothingValueY = 0;
     private final double smoothingAmouunt = 1.1;
 
+    private boolean firstFrame = true;
 
-    private Client client;
-    private World world;
 
 
     public Viewport(Client client, World world)
@@ -56,10 +57,17 @@ public class Viewport {
     {
         if(!client.isLocalClient())
         {
-            smoothingValueX += centerX - client.getPlayers().get(0).getPlayerCharacter().getX();
-            smoothingValueY += centerY - client.getPlayers().get(0).getPlayerCharacter().getY();
-            centerX = client.getPlayers().get(0).getPlayerCharacter().getX();
-            centerY = client.getPlayers().get(0).getPlayerCharacter().getY();
+            if(firstFrame)
+            {
+                firstFrame = false;
+            }
+            else {
+                smoothingValueX += centerX - client.getPlayers().get(0).getPlayerCharacter().getX();
+                smoothingValueY += centerY - client.getPlayers().get(0).getPlayerCharacter().getY();
+            }
+                centerX = client.getPlayers().get(0).getPlayerCharacter().getX();
+                centerY = client.getPlayers().get(0).getPlayerCharacter().getY();
+
         }
         else
         {
@@ -72,10 +80,17 @@ public class Viewport {
                 averageY += p.getPlayerCharacter().getY();
             }
 
-            smoothingValueX += centerX - ( averageX / client.getPlayers().size());
-            smoothingValueY += centerY - ( averageY / client.getPlayers().size());
-            centerX = averageX / client.getPlayers().size();
-            centerY = averageY / client.getPlayers().size();
+            if(firstFrame)
+            {
+                firstFrame = false;
+            }
+            else {
+                smoothingValueX += centerX - (averageX / client.getPlayers().size());
+                smoothingValueY += centerY - (averageY / client.getPlayers().size());
+            }
+                centerX = averageX / client.getPlayers().size();
+                centerY = averageY / client.getPlayers().size();
+
         }
 
 
@@ -114,8 +129,8 @@ public class Viewport {
         BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2 + extraViewX * 2][viewHeightY + 1 - viewHeightY % 2 + extraViewY * 2];
 
 
-        ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), world.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
-        ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX ), world.getChunkNumfromCordNum( centerY - viewHeightY/2 - extraViewY));
+        ChunkID upperLeftChunk = new ChunkID(World.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), World.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
+        ChunkID lowerRightChunk = new ChunkID(World.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX ), World.getChunkNumfromCordNum( centerY - viewHeightY/2 - extraViewY));
 
 
         for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)

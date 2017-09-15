@@ -136,6 +136,13 @@ public class GlobalGameData {
         return gameStates.get(state);
     }
 
+    public void resetWorld()
+    {
+        gameStates.put("TestWorld",new TestWorldGameState(this));
+        getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
+    }
+
+
     public Image getSprite(String sprite)
     {
         return sprites.get(sprite);

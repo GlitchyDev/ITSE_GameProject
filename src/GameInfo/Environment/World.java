@@ -38,11 +38,12 @@ public class World {
         chunks = new HashMap<>();
         structures = new ArrayList<>();
         this.globalGameData = globalGameData;
+        //getChunkFromChunkXY(0,0);
 
     }
 
 
-    public int getPosNumFromChunkNum(int z)
+    public static int getPosNumFromChunkNum(int z)
     {
         if(z == 0)
         {
@@ -97,7 +98,7 @@ public class World {
     }
 
 
-    public int getChunkNumfromCordNum(int z)
+    public static int getChunkNumfromCordNum(int z)
     {
         boolean isNeg = false;
         if(z < 0)

@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
+import GameStates.TestWorldGameState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -67,7 +68,18 @@ public class Pro_Player extends DamageableEntityBase {
     public void tickEntity() {
         controller.poll();
 
-        if (player.getController().getButtonB()) {
+        if(controller.getBack())
+        {
+            globalGameData.resetWorld();
+            return;
+        }
+
+        if(controller.getStart())
+        {
+            System.out.println("Poll of Structures in chunk " + world.getChunkFromCordXY(x,y).getStructures().size());
+            return;
+        }
+        if (controller.getButtonB()) {
             switch (player.getController().getDirectionalPad()) {
                 case NORTH:
                     moveRelative(0, 1);
@@ -112,28 +124,28 @@ public class Pro_Player extends DamageableEntityBase {
                         if (player.getController().getButtonA()) {
                             moveRelative(0, 1);
                         } else {
-                            advancedMoveRelative(0,1,true,true,true);
+                            advancedMoveRelative(0,1,true,true,true,true);
                         }
                         break;
                     case SOUTH:
                         if (player.getController().getButtonA()) {
                             moveRelative(0, -1);
                         } else {
-                            advancedMoveRelative(0,-1,true,true,true);
+                            advancedMoveRelative(0,-1,true,true,true,true);
                         }
                         break;
                     case EAST:
                         if (player.getController().getButtonA()) {
                             moveRelative(-1, 0);
                         } else {
-                            advancedMoveRelative(-1,0,true,true,true);
+                            advancedMoveRelative(-1,0,true,true,true,true);
                         }
                         break;
                     case WEST:
                         if (player.getController().getButtonA()) {
                             moveRelative(1, 0);
                         } else {
-                            advancedMoveRelative(1,0,true,true,true);
+                            advancedMoveRelative(1,0,true,true,true,true);
                         }
                         break;
                     case NONE:

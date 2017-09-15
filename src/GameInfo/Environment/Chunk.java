@@ -24,7 +24,6 @@ public class Chunk {
 
 
 
-
     public Chunk(GlobalGameData globalGameData, BlockBase[][] blockBaseList, ArrayList<EntityBase> entities, World world, int relativeChunkX, int relativeChunkY)
     {
         this.blockBaseList = blockBaseList;
@@ -46,7 +45,7 @@ public class Chunk {
 
 
         this.entities = new ArrayList<>();
-        this.entities.add(new TestRockEntity(world, globalGameData, world.getPosNumFromChunkNum(relativeChunkX),world.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
+        this.entities.add(new TestRockEntity(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX),World.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
 
         this.structures = new ArrayList<>();
 
@@ -54,20 +53,17 @@ public class Chunk {
 
     public void generateStructures(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
-        // This is where we attempt to generate Structures
-        // This is generating the test structure in 1/10 chunks
-        System.out.println("Building Structures for Chunk " + relativeChunkX + " " + relativeChunkY);
-        if(globalGameData.getRandom().nextInt(1) == 0)
-        {
-            System.out.println("Attempting Generation!");
+
+        // Number of Structures attempting to spawn in this chunk
+        for(int i = 0; i < 200; i++) {
             // Here you can see for the X cords I do random.nextInt(World.getChunkSize() - 5)
             // This prevents the structure from picking a location that is partially outside the chunk
-            TestRoomStructure s = new TestRoomStructure(world, globalGameData, world.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize()),world.getPosNumFromChunkNum(relativeChunkX) - 5 + globalGameData.getRandom().nextInt(World.getChunkSize() - 5) );
-            if(s.attemptBuildStructure())
-            {
+            TestRoomStructure s = new TestRoomStructure(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5));
+            if (s.attemptBuildStructure()) {
                 world.getStructures().add(s);
                 structures.add(s);
             }
+
         }
 
     }
@@ -81,6 +77,43 @@ public class Chunk {
      */
     public ArrayList<EntityBase> getEntities() {
         return entities;
+    }
+
+    public boolean isStructureAtRelative(int relativeX, int relativeY)
+    {
+        //System.out.println("Start Check!");
+        for(StructureBase structure: structures)
+        {
+            if(relativeX >= structure.getStructureX() && relativeX < structure.getStructureX() + structure.getStructureWidth())
+            {
+                if(relativeY >= structure.getStructureY() && relativeY < structure.getStructureY() + structure.getStructureHeight())
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public StructureBase getStructureAtPos(int relativeX, int relativeY)
+    {
+
+        for(StructureBase structure: structures)
+        {
+            if(relativeX >= structure.getStructureX() && relativeX < structure.getStructureX() + structure.getStructureWidth())
+            {
+                if(relativeY >= structure.getStructureY() && relativeY < structure.getStructureY() + structure.getStructureHeight())
+                {
+                    return structure;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<StructureBase> getStructures()
+    {
+        return structures;
     }
 
     

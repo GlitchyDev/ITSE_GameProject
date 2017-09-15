@@ -4,7 +4,6 @@ import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameStates.GameStateBase;
 
 import java.util.ArrayList;
 
@@ -35,6 +34,8 @@ public abstract class StructureBase {
         this.globalGameData = globalGameData;
         this.structureX = structureX;
         this.structureY = structureY;
+        affectedBlocks = new ArrayList<>();
+        affectedEntities = new ArrayList<>();
     }
 
     /**
@@ -46,28 +47,38 @@ public abstract class StructureBase {
      */
     public boolean attemptBuildStructure()
     {
-        ArrayList<StructureBase> structureBases = world.getStructures();
+        ArrayList<StructureBase> structureBases = world.getChunkFromCordXY(structureX,structureY).getStructures();
         // This checks if any previous structures already added to world ( THIS STRUCT SHOULDN"T BE INCLUDED YET )
+
+        boolean passed = true;
+        //System.out.println("Checking Structure " + structureX + " " + structureY);
         for(StructureBase struct: structureBases)
         {
-            if(structureX < struct.getStructureX() || structureX + structureWidth > struct.getStructureX() + struct.getStructureWidth())
-            {
-                if(structureY < struct.getStructureY() || structureY + structureHeight > struct.getStructureY() + struct.getStructureHeight())
-                {
-                    buildStructure();
-                    return true;
-
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            //System.out.println("Does Structure " + struct.getStructureX() + " " + struct.getStructureY() + " " + " overlap?");
+            if(doesOverlap(struct)) {
+                //System.out.println("It does! ");
+                passed = false;
+           }
         }
+
+        if(passed) {
+            //System.out.println("No overlaps! So we build!");
+            buildStructure();
+        }
+        return passed;
+
+
+    }
+
+    public boolean doesOverlap(StructureBase base)
+    {
+        //System.out.println(structureX + ">" + (base.getStructureX() + base.structureWidth) + " " + (structureX + structureWidth) + ">" + base.getStructureX());
+        if (structureX > base.getStructureX() + base.structureWidth || structureX + structureWidth < base.getStructureX())
+            return false;
+        //System.out.println(structureY + ">" + (base.getStructureY() + base.structureHeight) + " " + (structureY + structureHeight) + ">" + base.getStructureY());
+        if (structureY > base.getStructureY() + base.structureHeight || structureY + structureHeight < base.getStructureY())
+            return false;
+        //System.out.println("OVERLAP DETECTED!");
         return true;
     }
 
@@ -75,6 +86,10 @@ public abstract class StructureBase {
      * This method will create all Blocks and Entities that reside within that structure
      */
     public abstract void buildStructure();
+
+    public abstract StructureEventCollisionOverrideEnum checkCollision(int x, int y);
+    public abstract void enterEvent(int x, int y);
+    public abstract void exitEvent(int x, int y);
 
 
     public int getStructureWidth()

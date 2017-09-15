@@ -1,11 +1,10 @@
 package GameInfo.Environment.Structures;
 
-import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.DebugBlock;
-import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameStates.GameStateBase;
+import javafx.scene.paint.Color;
 
 public class TestRoomStructure extends StructureBase {
 
@@ -18,14 +17,34 @@ public class TestRoomStructure extends StructureBase {
 
     @Override
     public void buildStructure() {
-        System.out.println("Built Structure @ "+ + structureX + " " + structureY);
         for(int x = 0; x < structureWidth; x++)
         {
             for(int y = 0; y < structureHeight; y++)
             {
-                world.setBlockFromCords(structureX + x, structureY + y, new DebugBlock());
-
+                DebugBlock b = new DebugBlock();
+                world.setBlockFromCords(structureX + x, structureY + y, b);
+                affectedBlocks.add(b);
             }
         }
+    }
+
+    @Override
+    public StructureEventCollisionOverrideEnum checkCollision(int x, int y) {
+        return StructureEventCollisionOverrideEnum.CAN_MOVE;
+    }
+
+    @Override
+    public void enterEvent(int x, int y) {
+        Color c = Color.rgb((int)(Math.random() * 256),(int)(Math.random() * 256),(int)(Math.random() * 256));
+        for(BlockBase block: affectedBlocks)
+        {
+            ((DebugBlock)block).setColor(c);
+        }
+    }
+
+    @Override
+    public void exitEvent(int x, int y) {
+
+
     }
 }

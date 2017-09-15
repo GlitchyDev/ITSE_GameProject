@@ -26,7 +26,7 @@ public abstract class BlockBase {
      * @param entity Entity who is attempting to enter the space
      * @return If the entity is allowed to move to this space
      */
-    public abstract boolean checkAvailability(World world, EntityBase entity);
+    public abstract boolean checkCollision(World world, EntityBase entity);
 
     public abstract void enterBlock(EntityBase entity);
 

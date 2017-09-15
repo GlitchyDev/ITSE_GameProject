@@ -24,17 +24,22 @@ public class DebugBlock extends BlockBase {
     }
 
     @Override
-    public boolean checkAvailability(World world, EntityBase entity) {
+    public boolean checkCollision(World world, EntityBase entity) {
         return true;
     }
 
     @Override
     public void enterBlock(EntityBase entity) {
-        c = Color.rgb((int)(Math.random() * 256),(int)(Math.random() * 256),(int)(Math.random() * 256));
+
     }
 
     @Override
     public void exitBlock(EntityBase entity) {
 
+    }
+
+    public void setColor(Color color)
+    {
+        c = color;
     }
 }

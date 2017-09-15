@@ -84,7 +84,7 @@ public class WallFloorBlock extends BlockBase {
     }
 
     @Override
-    public boolean checkAvailability(World world, EntityBase entity) {
+    public boolean checkCollision(World world, EntityBase entity) {
 
         if(entities.size() > 0)
         {

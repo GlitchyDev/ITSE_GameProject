@@ -72,6 +72,11 @@ public class DebugController extends XBoxController {
     }
 
     @Override
+    public boolean getStart() {
+        return keyboard.isKeyDown(Component.Identifier.Key.INSERT);
+    }
+
+    @Override
     public boolean getButtonB() {
         return keyboard.isKeyDown(Component.Identifier.Key.LSHIFT);
     }

@@ -71,32 +71,63 @@ public abstract class EntityBase {
         }
     }
 
-    public boolean advancedMoveRelative(int relativeX, int relativeY, boolean checkColisions, boolean generateEnterEvent, boolean generateExitEvent)
+    public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
-        if(oldChunk == newChunk)
-        {
-
-        }
-        else
+        if(oldChunk != newChunk)
         {
             newChunk.getEntities().add(this);
             oldChunk.getEntities().remove(this);
         }
-        if(checkColisions)
+        if(doCheckColisions)
         {
-            if(!(world.getBlockFromCords(x + relativeX, y + relativeY).checkAvailability(world, this)) )
+            if(doStructureEvents)
             {
-                return false;
+                if(newChunk.isStructureAtRelative(x + relativeX, y + relativeY))
+                {
+                    switch(newChunk.getStructureAtPos(x + relativeX, y + relativeY).checkCollision(x + relativeX, y + relativeY))
+                    {
+                        case CAN_NOT_MOVE_DEFINATE:
+                            return false;
+                        case CAN_MOVE:
+                            if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
+                                return false;
+                            }
+                            break;
+                    }
+                }
+                else
+                {
+                    if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
+                        return false;
+                    }
+                }
+            }
+            else {
+                if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
+                    return false;
+                }
             }
         }
-        if(generateExitEvent)
+        if(doGenerateEnterEvent)
         {
+            if(doStructureEvents) {
+                //System.out.println("We should be finding shit!");
+                if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
+                    //System.out.println("We found shit!");
+                    newChunk.getStructureAtPos(x + relativeX, y + relativeY).enterEvent(x + relativeX, y + relativeY);
+                }
+            }
             world.getBlockFromCords(x, y).exitBlock(this);
         }
-        if(generateEnterEvent)
+        if(doGenerateExitEvent)
         {
+            if(doStructureEvents) {
+                if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
+                    newChunk.getStructureAtPos(x + relativeX, y + relativeY).exitEvent(x + relativeX, y + relativeY);
+                }
+            }
             world.getBlockFromCords(x + relativeX, y + relativeY).enterBlock(this);
         }
         x += relativeX;
