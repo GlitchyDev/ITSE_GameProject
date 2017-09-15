@@ -14,10 +14,15 @@ import java.util.Random;
 
 /**
  * Created by Robert on 8/28/2017.
+ * This class aims to
+ * - Simulate basic "Wall" "Floor" logic, and handles the random generation of both in the test map
  */
 public class WallFloorBlock extends BlockBase {
+    // Entities currently contained
     private ArrayList<EntityBase> entities;
+    // The assigned Sprite, Wall or Floor
     private Image sprite;
+    // For Wall, it requires a secondary sprite in order to work
     private Image secondarySprite;
 
     public WallFloorBlock(GlobalGameData globalGameData)

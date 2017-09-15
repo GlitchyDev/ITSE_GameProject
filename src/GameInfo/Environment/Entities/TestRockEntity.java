@@ -8,6 +8,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import sample.TestRenderHelper;
 
+/**
+ * This class aims to
+ * - Be a basic test of entities that spawn in a predetermined location
+ */
 public class TestRockEntity extends EntityBase {
     private Image sprite;
     public TestRockEntity(World world, GlobalGameData globalGameData, int x, int y, Image image) {
@@ -21,12 +25,8 @@ public class TestRockEntity extends EntityBase {
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        if(renderLayer == 1) {
+        if(renderLayer == 2) {
             gc.setGlobalAlpha(1.0);
-
-
-            //gc.drawImage(TestRenderHelper.resample(sprite,10),x * World.getUnitRatio(), y * World.getUnitRatio());
-
             gc.drawImage(sprite,x * World.getUnitRatio(), y * World.getUnitRatio());
         }
     }

@@ -19,11 +19,15 @@ public abstract class StructureBase {
     protected World world;
     protected GlobalGameData globalGameData;
 
+    // Blocks we wish to keep track of, usually the one spawned by this structure
     protected ArrayList<BlockBase> affectedBlocks;
+    // Entities we wish to keep track of, usually the ones spawned by this structure
     protected ArrayList<EntityBase> affectedEntities;
 
+    // How wide and high the structure is, must be specified before it attempts to build
     protected int structureWidth = 0;
     protected int structureHeight = 0;
+
     // The X and Y describe the Upper Lefthand corner of the Structure
     // Upper Left represents +x +y, so keep this in mind!
     protected int structureX = 0;
@@ -40,8 +44,8 @@ public abstract class StructureBase {
 
     /**
      * This method will
-     * A. If this Structure is overlapping a previously existing structure
-     * B. Will Trigger buildStructure, an abstract method overriden to add Blocks and Entities to the Structure
+     * A. If this Structure is overlapping a previously existing structure ( If not, it will fail! )
+     * B. ^ Will Trigger buildStructure, an abstract method overriden to add Blocks and Entities to the Structure
      * C. Return if all of that went well!
      * @return If the Structure Successfully Built!
      */
@@ -70,6 +74,12 @@ public abstract class StructureBase {
 
     }
 
+    /**
+     * Checks if this Structure overlaps a previously existing one
+     * ( Took 6 hours to implement #IWantDeath
+     * @param base
+     * @return If it overlaps
+     */
     public boolean doesOverlap(StructureBase base)
     {
         //System.out.println(structureX + ">" + (base.getStructureX() + base.structureWidth) + " " + (structureX + structureWidth) + ">" + base.getStructureX());
@@ -87,8 +97,25 @@ public abstract class StructureBase {
      */
     public abstract void buildStructure();
 
+    /**
+     * Depending on the Structure, you can use this to override Block Collision settings, making blocks behave differently or prevent entry
+     * @param x The X cords of the Event
+     * @param y The Y cords of the Event
+     * @return The Behavior we wish to implement, CHECK_BLOCK ( Still Check Block ), CAN_MOVE_DEFINITE ( Ignore Block Colision ), CAN_NOT_MOVE_DEFINITE ( No Colisions )
+     */
     public abstract StructureEventCollisionOverrideEnum checkCollision(int x, int y);
+
+    /**
+     * The Enter event for a block inside the structure
+     * @param x The X cords of the Event
+     * @param y The Y cords of the Event
+     */
     public abstract void enterEvent(int x, int y);
+    /**
+     * The Exit event for a block inside the structure
+     * @param x The X cords of the Event
+     * @param y The Y cords of the Event
+     */
     public abstract void exitEvent(int x, int y);
 
 

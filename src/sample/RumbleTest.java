@@ -7,7 +7,7 @@ import net.java.games.input.Version;
 
 public class RumbleTest {
 
-    /** Creates a new instance of RumbleTest */
+    /** Used to test if Rumble support is working */
     public RumbleTest() {
         ControllerEnvironment ca = ControllerEnvironment.getDefaultEnvironment();
         System.out.println("JInput version: " + Version.getVersion());

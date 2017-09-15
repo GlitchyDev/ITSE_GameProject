@@ -2,6 +2,7 @@ package GameInfo.Environment.Blocks;
 
 /**
  * Created by Robert on 8/28/2017.
+ * This Enum specifies which BlockType a Block is, so it can be identified and properly casted to
  */
 public enum BlockTypeEnum {
     TEST_FLOOR,

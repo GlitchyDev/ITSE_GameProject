@@ -8,6 +8,9 @@ import javafx.scene.image.WritableImage;
 
 import java.util.HashMap;
 
+/**
+ * This class intends to store the "Resampled" versions of sprites
+ */
 public class TestRenderHelper {
     public static HashMap<Image,Image> cachedSprites = new HashMap<>();
 

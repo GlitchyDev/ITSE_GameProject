@@ -11,14 +11,17 @@ import java.util.HashMap;
  * Created by Robert on 8/27/2017.
  * This class is designed to
  * - Host the "World" that gets rendered to the screen
- * - Ticks "Blocks"
+ * - Holds Chunks
+ * - Controls ChunkSize
+ * - Structures
  * - EntityBase
  * - Players
  *
- * - Get Method to get 3
  */
 public class World {
+    // How many pixels a standard square should take up
     private static int unitRatio = 40;
+    // How large a chunk should be ( 100 is ideal! )
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
     private ArrayList<StructureBase> structures;
@@ -43,6 +46,11 @@ public class World {
     }
 
 
+    /**
+     * Grabs the Starting Position of the Chunk Number specified
+     * @param z
+     * @return
+     */
     public static int getPosNumFromChunkNum(int z)
     {
         if(z == 0)
@@ -62,6 +70,12 @@ public class World {
         }
     }
 
+    /**
+     * Grabs a Chunk from its Relative Cords
+     * @param x
+     * @param y
+     * @return
+     */
     public Chunk getChunkFromChunkXY(int x, int y)
     {
         if(!chunks.containsKey(x + "," + y))
@@ -71,11 +85,25 @@ public class World {
         }
         return chunks.get(x + "," + y);
     }
+
+    /**
+     * For the Lazy, this method grabs the Chunk that occupies the specified Cords
+     * @param x
+     * @param y
+     * @return
+     */
     public Chunk getChunkFromCordXY(int x, int y)
     {
         return getChunkFromChunkXY(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
     }
 
+
+    /**
+     * Grabs the Block at a specified cords, sparing the hassle of tracking down the owning chunk
+     * @param x
+     * @param y
+     * @return
+     */
     public BlockBase getBlockFromCords(int x, int y)
     {
         int chunkX = getChunkNumfromCordNum(x);
@@ -87,6 +115,12 @@ public class World {
         return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
     }
 
+    /**
+     * Sets the Block at a specified cords, sparing the hassle of tracking down the owning chunk
+     * @param x
+     * @param y
+     * @param block
+     */
     public void setBlockFromCords(int x, int y, BlockBase block)
     {
         int chunkX = getChunkNumfromCordNum(x);
@@ -98,6 +132,11 @@ public class World {
     }
 
 
+    /**
+     * Gets the Chunks Relative Cord from a regular cord
+     * @param z
+     * @return
+     */
     public static int getChunkNumfromCordNum(int z)
     {
         boolean isNeg = false;
@@ -129,6 +168,18 @@ public class World {
 
     }
 
+    /**
+     * This adds all blocks inside the specified square to their relative positions in the 2D array
+     * - Best used for Pathfinding and Viewport Rendering
+     * @param chunk
+     * @param chunkX
+     * @param chunkY
+     * @param blocks
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     public void addBlocksInsideChunk(Chunk chunk, int chunkX, int chunkY, BlockBase[][] blocks, int x1, int y1, int x2, int y2) {
 
         for(int x = getPosNumFromChunkNum(chunkX); x <= getPosNumFromChunkNum(chunkX) + World.getChunkSize() - 1; x++)

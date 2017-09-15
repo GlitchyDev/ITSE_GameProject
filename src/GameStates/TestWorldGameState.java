@@ -11,6 +11,7 @@ import sample.XBoxController;
 import java.util.ArrayList;
 
 /**
+ * The "World of the Game", keepping track of the World, viewport, and the Client
  * Created by Robert on 8/28/2017.
  */
 public class TestWorldGameState extends GameStateBase {

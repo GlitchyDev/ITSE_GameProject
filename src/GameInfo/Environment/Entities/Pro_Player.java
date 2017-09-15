@@ -17,17 +17,28 @@ import sample.XBoxController;
 
 import java.util.ArrayList;
 
+/**
+ * This class aims to
+ * - Be the basic Player Character, Protagonist ( Shortened to Pro )
+ * - Implement Controls for the Player
+ */
 public class Pro_Player extends DamageableEntityBase {
+    // The Player assigned to this Entity
     private Player player;
+    // The Controller
     private XBoxController controller;
+    // The current Sprite storage system, probably will be changed
     private ArrayList<Image> sprites;
 
+    // The Previous Frame's direction
     private DirectionalPadEnum cachedDirection;
+    // The last Nondiagnal direction we have recieved, used to keep the sprite pointing in the right direction
     private DirectionalPadEnum primaryDirection;
 
 
     // This all controls the "Hold Down and move" logic
     private boolean isMoving = false;
+    // How long it takes for a movement to register
     private double movementDelay = 0.09;
     private long lastMovement = 0;
 
@@ -68,93 +79,93 @@ public class Pro_Player extends DamageableEntityBase {
     public void tickEntity() {
         controller.poll();
 
+        // Debug command "Reset World"
         if(controller.getBack())
         {
             globalGameData.resetWorld();
             return;
         }
 
+        // Debug Command "Poll Structures"
         if(controller.getStart())
         {
             System.out.println("Poll of Structures in chunk " + world.getChunkFromCordXY(x,y).getStructures().size());
-            return;
         }
+        // Debug Command "Fly through shit"
         if (controller.getButtonB()) {
             switch (player.getController().getDirectionalPad()) {
                 case NORTH:
                     moveRelative(0, 1);
-                    break;
+                    return;
                 case SOUTH:
                     moveRelative(0, -1);
-
-                    break;
+                    return;
                 case EAST:
                     moveRelative(-1, 0);
-
-                    break;
+                    return;
                 case WEST:
                     moveRelative(1, 0);
+                    return;
+                case NONE:
+                    return;
+            }
+        }
 
+        // If we have reached here, we are attempting to implement controls
+
+        if (!isMoving && cachedDirection == DirectionalPadEnum.NONE && controller.getDirectionalPad() != DirectionalPadEnum.NONE) {
+            isMoving = true;
+            lastMovement = System.currentTimeMillis();
+            cachedDirection = controller.getDirectionalPad();
+            primaryDirection = controller.getDirectionalPad();
+        } else {
+            if (controller.getDirectionalPad() == DirectionalPadEnum.NONE) {
+                cachedDirection = controller.getDirectionalPad();
+                isMoving = false;
+            } else {
+                if (cachedDirection != controller.getDirectionalPad() && !DirectionalPadEnum.isDiagnal(controller.getDirectionalPad())) {
+                    primaryDirection = controller.getDirectionalPad();
+                    isMoving = false;
+                }
+            }
+        }
+        if (isMoving && System.currentTimeMillis() >= lastMovement + (long) (movementDelay * 1000) && !(controller.getTrigger() < -0.9)) {
+            switch (cachedDirection) {
+                case NORTH:
+                    if (player.getController().getButtonA()) {
+                        moveRelative(0, 1);
+                    } else {
+                        advancedMoveRelative(0,1,true,true,true,true);
+                    }
+                    break;
+                case SOUTH:
+                    if (player.getController().getButtonA()) {
+                        moveRelative(0, -1);
+                    } else {
+                        advancedMoveRelative(0,-1,true,true,true,true);
+                    }
+                    break;
+                case EAST:
+                    if (player.getController().getButtonA()) {
+                        moveRelative(-1, 0);
+                    } else {
+                        advancedMoveRelative(-1,0,true,true,true,true);
+                    }
+                    break;
+                case WEST:
+                    if (player.getController().getButtonA()) {
+                        moveRelative(1, 0);
+                    } else {
+                        advancedMoveRelative(1,0,true,true,true,true);
+                    }
                     break;
                 case NONE:
                     break;
             }
-        } else
-        {
-
-            if (!isMoving && cachedDirection == DirectionalPadEnum.NONE && controller.getDirectionalPad() != DirectionalPadEnum.NONE) {
-                isMoving = true;
-                lastMovement = System.currentTimeMillis();
-                cachedDirection = controller.getDirectionalPad();
-                primaryDirection = controller.getDirectionalPad();
-            } else {
-                if (controller.getDirectionalPad() == DirectionalPadEnum.NONE) {
-                    cachedDirection = controller.getDirectionalPad();
-                    isMoving = false;
-                } else {
-                    if (cachedDirection != controller.getDirectionalPad() && !DirectionalPadEnum.isDiagnal(controller.getDirectionalPad())) {
-                        primaryDirection = controller.getDirectionalPad();
-                        isMoving = false;
-                    }
-                }
-            }
-            if (isMoving && System.currentTimeMillis() >= lastMovement + (long) (movementDelay * 1000) && !(controller.getTrigger() < -0.9)) {
-                switch (cachedDirection) {
-                    case NORTH:
-                        if (player.getController().getButtonA()) {
-                            moveRelative(0, 1);
-                        } else {
-                            advancedMoveRelative(0,1,true,true,true,true);
-                        }
-                        break;
-                    case SOUTH:
-                        if (player.getController().getButtonA()) {
-                            moveRelative(0, -1);
-                        } else {
-                            advancedMoveRelative(0,-1,true,true,true,true);
-                        }
-                        break;
-                    case EAST:
-                        if (player.getController().getButtonA()) {
-                            moveRelative(-1, 0);
-                        } else {
-                            advancedMoveRelative(-1,0,true,true,true,true);
-                        }
-                        break;
-                    case WEST:
-                        if (player.getController().getButtonA()) {
-                            moveRelative(1, 0);
-                        } else {
-                            advancedMoveRelative(1,0,true,true,true,true);
-                        }
-                        break;
-                    case NONE:
-                        break;
-                }
-                isMoving = false;
-            }
+            isMoving = false;
         }
     }
+
 
 
 

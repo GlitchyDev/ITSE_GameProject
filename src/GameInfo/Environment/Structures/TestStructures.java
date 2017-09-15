@@ -6,10 +6,10 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.paint.Color;
 
-public class TestRoomStructure extends StructureBase {
+public class TestStructures extends StructureBase {
 
 
-    public TestRoomStructure(World world, GlobalGameData globalGameData, int structureX, int structureY) {
+    public TestStructures(World world, GlobalGameData globalGameData, int structureX, int structureY) {
         super(world, globalGameData, structureX, structureY);
         structureWidth = 5;
         structureHeight = 5;
@@ -28,11 +28,13 @@ public class TestRoomStructure extends StructureBase {
         }
     }
 
+    // We don't care, just check the block for behavior
     @Override
     public StructureEventCollisionOverrideEnum checkCollision(int x, int y) {
-        return StructureEventCollisionOverrideEnum.CAN_MOVE;
+        return StructureEventCollisionOverrideEnum.CHECK_BLOCK_COLLISIONS;
     }
 
+    // This example says when someone moves to a block inside the Structure, change all the colors of all the TestBlocks randomly
     @Override
     public void enterEvent(int x, int y) {
         Color c = Color.rgb((int)(Math.random() * 256),(int)(Math.random() * 256),(int)(Math.random() * 256));

@@ -10,7 +10,7 @@ import java.util.UUID;
  *
  * The Purpose of this Class
  * - Represents a Controller connected to a computer AKA a person
- * - Holds reference to the players
+ * - Holds reference to the players Entity, UUID, and Controller
  */
 public class Player {
     private XBoxController controller;

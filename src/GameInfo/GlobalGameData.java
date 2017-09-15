@@ -111,6 +111,8 @@ public class GlobalGameData {
     }
 
     /*
+    If this is needed, this will allow for someone to "Rescan" for controllers! Use wisely!
+
     private static ControllerEnvironment createDefaultEnvironment() throws ReflectiveOperationException {
         // Find constructor (class is package private, so we can't access it directly)
         Constructor<ControllerEnvironment> constructor = (Constructor<ControllerEnvironment>)

@@ -35,7 +35,7 @@ public class Viewport {
     private double smoothingValueX = 0;
     private double smoothingValueY = 0;
     private final double smoothingAmouunt = 1.1;
-
+    // Used to except smoothing on the first frame
     private boolean firstFrame = true;
 
 
@@ -72,14 +72,12 @@ public class Viewport {
         else
         {
 
-            System.out.println("Its ok!");
             int averageX = 0;
             int averageY = 0;
             for (Player p : client.getPlayers()) {
                 averageX += p.getPlayerCharacter().getX();
                 averageY += p.getPlayerCharacter().getY();
             }
-
             if(firstFrame)
             {
                 firstFrame = false;
@@ -92,20 +90,8 @@ public class Viewport {
                 centerY = averageY / client.getPlayers().size();
 
         }
-
-
         smoothingValueX = smoothingValueX / smoothingAmouunt;
         smoothingValueY = smoothingValueY / smoothingAmouunt;
-        /*
-        if(smoothingValueX < 0.01 && smoothingValueX > 0.01)
-        {
-            smoothingValueX = 0;
-        }
-        if(smoothingValueY < 0.01 && smoothingValueY > 0.01)
-        {
-            smoothingValueY = 0;
-        }
-        */
     }
 
 
@@ -142,7 +128,6 @@ public class Viewport {
                 world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
             }
         }
-        //world.viewBlocks(viewableBlocks);
 
 
         // Reramp this to go from Top of screen down for each layer!
@@ -169,66 +154,13 @@ public class Viewport {
             }
         }
 
-
-
+        // Debug Test Information
         gc.setFill(Color.BLACK);
         gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),300,10);
         gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
     }
 
-
-    /**
-
-     public void oldRender(Canvas canvas, GraphicsContext gc)
-     {
-     gc.setFill(Color.WHITE);
-     gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
-     determineCenter();
-
-     //ArrayList<Chunk> chunkList = new ArrayList<>();
-     ArrayList<EntityBase> entities = new ArrayList<>();
-     BlockBase[][] viewableBlocks = new BlockBase[viewWidthX][viewHeightY];
-
-
-     ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2), world.getChunkNumfromCordNum(centerY + viewHeightY/2));
-     ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2), world.getChunkNumfromCordNum(centerY - viewHeightY/2));
-
-
-     for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
-     {
-     for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
-     {
-     //System.out.println("Added Chunk " + x + "," + y);
-     entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
-     world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY - viewHeightY/2);
-     }
-     }
-     //world.viewBlocks(viewableBlocks);
-
-     for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
-     for (int x = 0; x < viewableBlocks.length; x++) {
-     for (int y = 0; y < viewableBlocks[x].length; y++) {
-     if (viewableBlocks[x][y] != null) {
-     viewableBlocks[x][y].renderBlock(canvas, gc, x, y, renderLayer);
-     }
-     }
-     }
-     for (EntityBase entity : entities) {
-     entity.renderEntity(canvas, gc, centerX + viewWidthX / 2 - entity.getX(), centerY + viewHeightY / 2 - entity.getY(), renderLayer);
-     }
-     }
-
-
-     gc.setFill(Color.BLACK);
-     gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
-     gc.setFill(Color.BLACK);
-     gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
-     gc.setFill(Color.BLACK);
-     gc.fillText("Chunk Pos: " + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX())) + ":" + world.getPosNumFromChunkNum(world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY())),300,30);
-     }
-
-     */
 
 
     public int getViewWidthX() {

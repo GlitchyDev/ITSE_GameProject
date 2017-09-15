@@ -88,9 +88,9 @@ public abstract class EntityBase {
                 {
                     switch(newChunk.getStructureAtPos(x + relativeX, y + relativeY).checkCollision(x + relativeX, y + relativeY))
                     {
-                        case CAN_NOT_MOVE_DEFINATE:
+                        case CAN_NOT_MOVE_DEFINITE:
                             return false;
-                        case CAN_MOVE:
+                        case CHECK_BLOCK_COLLISIONS:
                             if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
                                 return false;
                             }

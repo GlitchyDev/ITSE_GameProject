@@ -7,22 +7,30 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 
+/**
+ * This Class is designed to
+ * - Demonstrate adding custom Block Types to the game!
+ */
 public class DebugBlock extends BlockBase {
-    private Color c = Color.BLUE;
+    private Color c;
 
+    // Every Block in its constructor needs to specify its BlockType along with any other logic it needs done
     public DebugBlock()
     {
         this.blockType = BlockTypeEnum.DEBUG_BLOCk;
+        c = Color.BLUE;
     }
 
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
+        // This is specifying this renders on the absolute lowest rendering level
         if(renderLayer == 0) {
             gc.setFill(c);
             gc.fillRect((int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5), World.getUnitRatio(), World.getUnitRatio());
         }
     }
 
+    // We always want players/enemies to be able to enter this block, therefore its marked as true
     @Override
     public boolean checkCollision(World world, EntityBase entity) {
         return true;
