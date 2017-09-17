@@ -26,7 +26,7 @@ public class DebugBlock extends BlockBase {
         // This is specifying this renders on the absolute lowest rendering level
         if(renderLayer == 0) {
             gc.setFill(c);
-            gc.fillRect((int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5), World.getUnitRatio(), World.getUnitRatio());
+            gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
         }
     }
 

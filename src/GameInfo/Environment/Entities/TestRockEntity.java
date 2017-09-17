@@ -27,7 +27,7 @@ public class TestRockEntity extends EntityBase {
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 2) {
             gc.setGlobalAlpha(1.0);
-            gc.drawImage(sprite,x * World.getUnitRatio(), y * World.getUnitRatio());
+            gc.drawImage(sprite,x * World.getScaledUpSquareSize(), y * World.getScaledUpSquareSize());
         }
     }
 }

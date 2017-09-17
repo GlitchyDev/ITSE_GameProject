@@ -33,13 +33,14 @@ public class WallFloorBlock extends BlockBase {
         if(globalGameData.getRandom().nextInt(4) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
-            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
-            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),2);
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),World.getScaleUpPercent());
+            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),World.getScaleUpPercent());
         }
         else
         {
             blockType = BlockTypeEnum.TEST_FLOOR;
-            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor"),2);
+
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor_" + (globalGameData.getRandom().nextInt(6) + 1)),World.getScaleUpPercent());
 
         }
     }
@@ -67,18 +68,18 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 0)
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
-                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5));
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5));
                 if(entities.size() > 0)
                 {
                     gc.setFill(Color.BLUE);
-                    gc.fillRect((x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5), 5,5);
+                    gc.fillRect((x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), 5,5);
                 }
             }
         }
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
-                gc.drawImage(sprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) + 10);
-                gc.drawImage(secondarySprite,(int)(x * World.getUnitRatio() + 0.5), (int)(y * World.getUnitRatio() + 0.5) - 30);
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) + World.getScaledUpSquareSize()/4);
+                gc.drawImage(secondarySprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize()/4*3);
 
 
             }

@@ -192,23 +192,23 @@ public class Pro_Player extends DamageableEntityBase {
             if (isMoving) {
                 int cycle = 250;
                 if (System.currentTimeMillis() % cycle < cycle / 4 * 1) {
-                    gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getUnitRatio() + 0.5), (int) (y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()));
+                    gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
                 } else {
                     if (System.currentTimeMillis() % cycle < cycle / 4 * 2) {
-                        gc.drawImage(TestRenderHelper.resample(sprites.get(id + 1), 2), (int) (x * World.getUnitRatio() + 0.5), (int) (y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()));
+                        gc.drawImage(TestRenderHelper.resample(sprites.get(id + 1), 2), (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
 
                     } else {
                         if (System.currentTimeMillis() % cycle < cycle / 4 * 3) {
-                            gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getUnitRatio() + 0.5), (int) (y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()));
+                            gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
 
                         } else {
-                            gc.drawImage(TestRenderHelper.resample(sprites.get(id + 2), 2), (int) (x * World.getUnitRatio() + 0.5), (int) (y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()));
+                            gc.drawImage(TestRenderHelper.resample(sprites.get(id + 2), 2), (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
 
                         }
                     }
                 }
             } else {
-                gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getUnitRatio() + 0.5), (int) (y * World.getUnitRatio() + 0.5) - (World.getUnitRatio() * 2 - sprites.get(0).getHeight()));
+                gc.drawImage(TestRenderHelper.resample(sprites.get(id + 0), 2), (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
             }
         }
     }

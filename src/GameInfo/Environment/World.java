@@ -20,7 +20,8 @@ import java.util.HashMap;
  */
 public class World {
     // How many pixels a standard square should take up
-    private static int unitRatio = 40;
+    private static int scaleUpPercent = 2;
+    private static int standardSquareSize = 20;
     // How large a chunk should be ( 100 is ideal! )
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
@@ -29,9 +30,13 @@ public class World {
 
     private GlobalGameData globalGameData;
 
-    public static int getUnitRatio() {
-        return unitRatio;
+    public static int getScaleUpPercent() {
+        return scaleUpPercent;
     }
+    public static int getScaledUpSquareSize() {
+        return scaleUpPercent * standardSquareSize;
+    }
+
     public static int getChunkSize() {
         return chunkSize;
     }

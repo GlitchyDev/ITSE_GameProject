@@ -46,8 +46,8 @@ public class Main extends Application {
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu);
 
         // Create the initial window size
-        primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getUnitRatio() + 6);
-        primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getUnitRatio() + 39);
+        primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getScaledUpSquareSize() + 6);
+        primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getScaledUpSquareSize() + 39);
 
         Group root = new Group();
         Scene theScene = new Scene(root);
