@@ -17,7 +17,7 @@ public class DebugBlock extends BlockBase {
     // Every Block in its constructor needs to specify its BlockType along with any other logic it needs done
     public DebugBlock()
     {
-        this.blockType = BlockTypeEnum.DEBUG_BLOCk;
+        this.blockType = BlockTypeEnum.DEBUG_BLOCK;
         c = Color.BLUE;
     }
 

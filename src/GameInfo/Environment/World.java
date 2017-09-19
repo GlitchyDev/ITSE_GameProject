@@ -1,6 +1,8 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.TestSkullEntity;
 import GameInfo.Environment.Structures.StructureBase;
 import GameInfo.GlobalGameData;
 
@@ -47,6 +49,8 @@ public class World {
         structures = new ArrayList<>();
         this.globalGameData = globalGameData;
         //getChunkFromChunkXY(0,0);
+
+        addEntityToWorld(new TestSkullEntity(this,globalGameData,5,5));
 
     }
 
@@ -201,6 +205,38 @@ public class World {
             }
         }
 
+    }
+
+    public void addEntityToWorld(EntityBase entityBase)
+    {
+       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).getEntities().add(entityBase);
+    }
+
+    public boolean isEntityAtPos(int x, int y)
+    {
+        Chunk chunk = getChunkFromCordXY(x,y);
+        for(EntityBase entity: chunk.getEntities())
+        {
+            if(entity.getX() == x && entity.getY() == y)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<EntityBase> getEntitiesAtPos(int x, int y)
+    {
+        Chunk chunk = getChunkFromCordXY(x,y);
+        ArrayList<EntityBase> entities = new ArrayList<>();
+        for(EntityBase entity: chunk.getEntities())
+        {
+            if(entity.getX() == x && entity.getY() == y)
+            {
+                entities.add(entity);
+            }
+        }
+        return entities;
     }
 
 

@@ -1,6 +1,7 @@
 package GameInfo.Environment.Entities;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -17,6 +18,7 @@ public class TestRockEntity extends EntityBase {
     public TestRockEntity(World world, GlobalGameData globalGameData, int x, int y, Image image) {
         super(world, globalGameData, x, y);
         sprite = TestRenderHelper.resample(image,2);
+        entityType = EntityType.ROCK;
     }
 
     @Override

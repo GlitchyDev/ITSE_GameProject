@@ -49,6 +49,8 @@ public class Chunk {
         this.entities = new ArrayList<>();
         this.entities.add(new TestRockEntity(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX),World.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
 
+
+
         this.structures = new ArrayList<>();
 
     }

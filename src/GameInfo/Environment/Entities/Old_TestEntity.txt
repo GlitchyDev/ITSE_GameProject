@@ -1,6 +1,7 @@
 package GameInfo.Environment.Entities;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -10,10 +11,11 @@ import javafx.scene.paint.Color;
 /**
  * Created by Robert on 8/28/2017.
  */
-public class TestEntity extends EntityBase {
+public class Old_TestEntity extends EntityBase {
 
-    public TestEntity(World world, GlobalGameData globalGameData, int x, int y) {
+    public Old_TestEntity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
+        entityType = EntityType.DEBUG;
     }
 
     @Override
