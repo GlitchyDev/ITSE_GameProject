@@ -7,18 +7,21 @@ package GameInfo.Environment.Blocks;
 public enum BlockTypeEnum {
     TEST_FLOOR,
     TEST_WALL,
-    DEBUG_BLOCK;
+    DEBUG_BLOCK,
+    PATHFINDING_DEBUG;
 
     public static boolean isWalkable(BlockTypeEnum type) {
         switch (type) {
             case TEST_FLOOR:
                 return true;
             case TEST_WALL:
-                return true;
+                return false;
             case DEBUG_BLOCK:
                 return true;
+            case PATHFINDING_DEBUG:
+                return true;
         }
-        return false;
+        return true;
     }
 
 }

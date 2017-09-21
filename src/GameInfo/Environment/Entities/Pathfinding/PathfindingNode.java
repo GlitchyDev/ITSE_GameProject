@@ -11,11 +11,17 @@ public class PathfindingNode {
 
     public PathfindingNode(PathfindingNode parentNode, int x, int y, int g, int targetX, int targetY)
     {
+        this.parentNode = parentNode;
         this.x = x;
         this.y = y;
         this.g = g;
-        h = g*(Math.abs(x-targetX) + Math.abs(y-targetY));
+        h = 10*(Math.abs(x-targetX) + Math.abs(y-targetY));
         f = g + h;
+    }
+
+    public PathfindingNode getParentNode()
+    {
+        return parentNode;
     }
 
     public boolean isPrimaryNode()
@@ -23,9 +29,11 @@ public class PathfindingNode {
         return parentNode == null;
     }
 
+    public void recalculateH(int targetX, int targetY)
+    {
 
-    public PathfindingNode getParentNode() {
-        return parentNode;
+        h = 14*(Math.abs(x-targetX) + Math.abs(y-targetY));
+        f = g + h;
     }
 
     public int getX() {
@@ -47,5 +55,4 @@ public class PathfindingNode {
     public int getF() {
         return f;
     }
-
 }

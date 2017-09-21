@@ -1,7 +1,16 @@
 package GameStates;
 
 import GameInfo.*;
+import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.DebugBlock;
+import GameInfo.Environment.Blocks.WallFloorBlock;
+import GameInfo.Environment.Chunk;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Enums.EntityType;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
+import GameInfo.Environment.Entities.Pathfinding.Position;
 import GameInfo.Environment.Entities.Pro_Player;
+import GameInfo.Environment.Entities.TestSkullEntity;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,6 +43,15 @@ public class TestWorldGameState extends GameStateBase {
         for(Player p : client.getPlayers())
         {
             p.getPlayerCharacter().tickEntity();
+            Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
+            for(EntityBase entity: c.getEntities())
+            {
+                if(entity.getEntityType() != EntityType.PLAYER)
+                {
+                    entity.tickEntity();
+                }
+            }
+
         }
 
     }
@@ -42,12 +60,12 @@ public class TestWorldGameState extends GameStateBase {
     protected void doRender(Canvas canvas, GraphicsContext gc) {
         viewport.render(canvas,gc);
 
-        /*
+
         gc.setFill(Color.BLACK);
-        gc.setGlobalAlpha(0.08);
+        gc.setGlobalAlpha(0.09);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         gc.setGlobalAlpha(1.0);
-        */
+
 
 
 
@@ -61,12 +79,6 @@ public class TestWorldGameState extends GameStateBase {
     @Override
     public void enterState(GameStateEnum previousState) {
         System.out.println("Test World: Loading State");
-
-
-        // Add independant code that can inflict controller controls on the entity
-
-
-
 
         if(globalGameData.getConnectedControllers().size() > 1)
         {
@@ -94,7 +106,12 @@ public class TestWorldGameState extends GameStateBase {
             client = new Client(p1);
         }
 
+        globalGameData.getConnectedPlayers().addAll(client.getPlayers());
         viewport = new Viewport(client,world);
+
+
+        TestSkullEntity skullEntity = new TestSkullEntity(world,globalGameData,0,5);
+        world.addEntityToWorld(skullEntity);
 
 
     }

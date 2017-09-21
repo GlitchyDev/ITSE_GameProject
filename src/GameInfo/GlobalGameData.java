@@ -29,6 +29,7 @@ public class GlobalGameData {
     private HashMap<String, Image> sprites;
     private GameStateEnum currentGameState;
     private ArrayList<XBoxController> connectedControllers;
+    private ArrayList<Player> connectedPlayers;
     private Random random;
 
     public GlobalGameData(GameStateEnum startingState)
@@ -39,6 +40,7 @@ public class GlobalGameData {
         this.currentGameState = startingState;
         random = new Random();
         connectedControllers = new ArrayList<>();
+        connectedPlayers = new ArrayList<>();
 
         connectedControllers.addAll(scanForControllers());
         loadAssets();
@@ -140,6 +142,7 @@ public class GlobalGameData {
 
     public void resetWorld()
     {
+        gameStates.remove("TestWorld");
         gameStates.put("TestWorld",new TestWorldGameState(this));
         getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
     }
@@ -164,4 +167,8 @@ public class GlobalGameData {
     }
 
     public Random getRandom() {return random;}
+
+    public ArrayList<Player> getConnectedPlayers() {
+        return connectedPlayers;
+    }
 }

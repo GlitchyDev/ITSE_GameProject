@@ -1,7 +1,13 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.DebugBlock;
+import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
+import GameInfo.Environment.Entities.Pathfinding.Position;
+import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.Entities.TestSkullEntity;
 import GameInfo.Environment.Structures.StructureBase;
 import GameInfo.GlobalGameData;
@@ -50,7 +56,6 @@ public class World {
         this.globalGameData = globalGameData;
         //getChunkFromChunkXY(0,0);
 
-        addEntityToWorld(new TestSkullEntity(this,globalGameData,5,5));
 
     }
 

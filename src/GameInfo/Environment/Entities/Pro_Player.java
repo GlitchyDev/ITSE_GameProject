@@ -1,9 +1,12 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
 import GameInfo.Environment.Entities.Enums.EntityType;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingNode;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
