@@ -26,8 +26,8 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // How many block units should be rendered on screen
-    private int viewWidthX = 15;
-    private int viewHeightY = 15;
+    private int viewWidthX = 13;
+    private int viewHeightY = 13;
     // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
     private int extraViewX = 5;
     private int extraViewY = 5;
