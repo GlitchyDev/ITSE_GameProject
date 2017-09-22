@@ -21,17 +21,15 @@ import java.util.ArrayList;
 
 public class TestSkullEntity extends DamageableEntityBase {
     private Image sprite;
+    private PathfindingNode firstNode;
+    private PathfindingNode currentNode;
     private Pro_Player targetPlayer;
     private long lastUpdate;
-    private ArrayList<Position> cachePositionList;
-    private int cacheNum;
-
+    private boolean continueSearch;
 
     public TestSkullEntity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
         sprite = TestRenderHelper.resample(globalGameData.getSprite("Skull"),2);
-        cachePositionList = new ArrayList<>();
-        cacheNum = 0;
     }
 
     @Override
@@ -48,35 +46,74 @@ public class TestSkullEntity extends DamageableEntityBase {
     public void tickEntity() {
         if(targetPlayer == null) {
             targetPlayer = (Pro_Player) globalGameData.getConnectedPlayers().get(0).getPlayerCharacter();
+            firstNode = new PathfindingNode(null, x, y, 0, targetPlayer.getX(), targetPlayer.getY());
+            currentNode = firstNode;
+            PathfindingDebugBlock debug = new PathfindingDebugBlock(currentNode);
+            PathfindingMap.openList.add(currentNode);
+            //debug.setColor(Color.GREEN);
             lastUpdate = System.currentTimeMillis();
+            world.setBlockFromCords(x,y,debug);
+            continueSearch = true;
         }
         else {
-            if (System.currentTimeMillis() > lastUpdate + 500) {
+            if (System.currentTimeMillis() > lastUpdate + 2000 && continueSearch) {
+                currentNode.recalculateH(targetPlayer.getX(),targetPlayer.getY());
                 lastUpdate = System.currentTimeMillis();
 
-                if(cachePositionList.size() == 0 || cacheNum >= 5)
+                PathfindingMap.openList.addAll(PathfindingMap.getConnectedTiles(world,currentNode,targetPlayer.getX(),targetPlayer.getY()));
+
+                int leastF = Integer.MAX_VALUE;
+                for(PathfindingNode node: PathfindingMap.openList)
                 {
-                    ArrayList<Position> positionList = PathfindingMap.findPathNonDiagnal(world,x,y,targetPlayer.getX(),targetPlayer.getY());
-                    cachePositionList.clear();
-
-                    for(int i = 0; i < positionList.size(); i++)
+                    node.recalculateH(targetPlayer.getX(),targetPlayer.getY());
+                    if(node.getF() < leastF)
                     {
-                        if(i <= 5)
-                        {
-                            cachePositionList.add(positionList.get(i));
-                        }
+                        currentNode = node;
+                        leastF = currentNode.getF();
                     }
-                    cacheNum = 0;
                 }
 
-                if(cachePositionList.size() != 0) {
-                    System.out.println("Moving Relative " + (cachePositionList.get(0).getX() - x) + " " + (cachePositionList.get(0).getY() - y));
-                    advancedMoveRelative(cachePositionList.get(0).getX() - x, cachePositionList.get(0).getY() - y,true,true,true,true);
-                    cacheNum++;
-                    cachePositionList.remove(cachePositionList.get(0));
+                PathfindingMap.openList.remove(currentNode);
+                PathfindingMap.closedList.add(currentNode);
+                PathfindingDebugBlock b1 = new PathfindingDebugBlock(currentNode);
+                world.setBlockFromCords(currentNode.getX(), currentNode.getY(), b1);
+
+                System.out.println();
+                System.out.println("Current Node " + currentNode.getX() + " " + currentNode.getY());
+                System.out.println("Target Player " +  targetPlayer.getX() + " " + targetPlayer.getY());
+                if(currentNode.getX() == targetPlayer.getX() && currentNode.getY() == targetPlayer.getY())
+                {
+                    System.out.println("You win!");
+                    continueSearch = false;
+                    PathfindingNode temp = currentNode;
+                    while(!temp.isPrimaryNode())
+                    {
+                        PathfindingDebugBlock b = (PathfindingDebugBlock) world.getBlockFromCords(temp.getX(),temp.getY());
+                        b.setColor(Color.BLACK);
+                        world.setBlockFromCords(temp.getX(), temp.getY(), b);
+                        temp = temp.getParentNode();
+                    }
+                    PathfindingDebugBlock b = (PathfindingDebugBlock) world.getBlockFromCords(temp.getX(),temp.getY());
+                    b.setColor(Color.BLACK);
+                    world.setBlockFromCords(temp.getX(), temp.getY(), b);
+
+                    return;
                 }
 
-
+                for (PathfindingNode node : PathfindingMap.openList) {
+                    PathfindingDebugBlock b = new PathfindingDebugBlock(node);
+                    b.setColor(Color.RED);
+                    world.setBlockFromCords(node.getX(), node.getY(), b);
+                }
+                for (PathfindingNode node : PathfindingMap.closedList) {
+                    PathfindingDebugBlock b = (PathfindingDebugBlock) world.getBlockFromCords(node.getX(),node.getY());
+                    b.setColor(Color.BLUE);
+                    if(node == currentNode)
+                    {
+                        b.setColor(Color.YELLOW);
+                    }
+                    world.setBlockFromCords(node.getX(), node.getY(), b);
+                }
 
 
 
