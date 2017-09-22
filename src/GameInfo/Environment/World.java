@@ -1,7 +1,16 @@
 package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
-import GameInfo.Viewport;
+import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.DebugBlock;
+import GameInfo.Environment.Blocks.WallFloorBlock;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
+import GameInfo.Environment.Entities.Pathfinding.Position;
+import GameInfo.Environment.Entities.Pro_Player;
+import GameInfo.Environment.Entities.TestSkullEntity;
+import GameInfo.Environment.Structures.StructureBase;
+import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,57 +19,139 @@ import java.util.HashMap;
  * Created by Robert on 8/27/2017.
  * This class is designed to
  * - Host the "World" that gets rendered to the screen
- * - Ticks "Blocks"
+ * - Holds Chunks
+ * - Controls ChunkSize
+ * - Structures
  * - EntityBase
  * - Players
  *
- * - Get Method to get 3
  */
 public class World {
-    private static int unitRatio = 27;
+    // How many pixels a standard square should take up
+    private static int scaleUpPercent = 2;
+    private static int standardSquareSize = 20;
+    // How large a chunk should be ( 100 is ideal! )
     private static int chunkSize = 100;
     private HashMap<String,Chunk> chunks;
+    private ArrayList<StructureBase> structures;
 
-    public static int getUnitRatio() {
-        return unitRatio;
+
+    private GlobalGameData globalGameData;
+
+    public static int getScaleUpPercent() {
+        return scaleUpPercent;
     }
+    public static int getScaledUpSquareSize() {
+        return scaleUpPercent * standardSquareSize;
+    }
+
     public static int getChunkSize() {
         return chunkSize;
     }
 
-    public World()
+    public World(GlobalGameData globalGameData)
     {
         chunks = new HashMap<>();
-        chunks.put(0 + "," + 0,new Chunk());
+        structures = new ArrayList<>();
+        this.globalGameData = globalGameData;
+        //getChunkFromChunkXY(0,0);
+
+
     }
 
 
-    public int getPosNumFromChunkNum(int z)
+    /**
+     * Grabs the Starting Position of the Chunk Number specified
+     * @param z
+     * @return
+     */
+    public static int getPosNumFromChunkNum(int z)
     {
         if(z == 0)
         {
             return 0;
         }
-        else
-        {
-            return z * 100;
+        else {
+            if(z >= 0)
+            {
+                return z * World.getChunkSize();
+            }
+            else
+            {
+                return z * World.getChunkSize() + 1;
+            }
+
         }
     }
 
+    /**
+     * Grabs a Chunk from its Relative Cords
+     * @param x
+     * @param y
+     * @return
+     */
     public Chunk getChunkFromChunkXY(int x, int y)
     {
         if(!chunks.containsKey(x + "," + y))
         {
-           chunks.put(x + "," + y, new Chunk());
+           chunks.put(x + "," + y, new Chunk(globalGameData, this, x, y));
+           chunks.get(x + "," + y).generateStructures(globalGameData, this, x, y);
         }
         return chunks.get(x + "," + y);
     }
+
+    /**
+     * For the Lazy, this method grabs the Chunk that occupies the specified Cords
+     * @param x
+     * @param y
+     * @return
+     */
     public Chunk getChunkFromCordXY(int x, int y)
     {
         return getChunkFromChunkXY(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
     }
 
-    public int getChunkNumfromCordNum(int z)
+
+    /**
+     * Grabs the Block at a specified cords, sparing the hassle of tracking down the owning chunk
+     * @param x
+     * @param y
+     * @return
+     */
+    public BlockBase getBlockFromCords(int x, int y)
+    {
+        int chunkX = getChunkNumfromCordNum(x);
+        int chunkY = getChunkNumfromCordNum(y);
+        int chunkStartX = getPosNumFromChunkNum(chunkX);
+        int chunkStartY = getPosNumFromChunkNum(chunkY);
+        Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
+
+        return chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY];
+    }
+
+    /**
+     * Sets the Block at a specified cords, sparing the hassle of tracking down the owning chunk
+     * @param x
+     * @param y
+     * @param block
+     */
+    public void setBlockFromCords(int x, int y, BlockBase block)
+    {
+        int chunkX = getChunkNumfromCordNum(x);
+        int chunkY = getChunkNumfromCordNum(y);
+        int chunkStartX = getPosNumFromChunkNum(chunkX);
+        int chunkStartY = getPosNumFromChunkNum(chunkY);
+        Chunk chunk = getChunkFromChunkXY(chunkX, chunkY);
+        chunk.getBlockBaseList()[x - chunkStartX][y - chunkStartY] = block;
+    }
+
+
+    /**
+     * Gets the Chunks Relative Cord from a regular cord
+     * @param z
+     * @return
+     */
+    public static int getChunkNumfromCordNum(int z)
     {
         boolean isNeg = false;
         if(z < 0)
@@ -80,54 +171,83 @@ public class World {
         }
         else
         {
-            return z/100;
-        }
-
-    }
-
-    public BlockBase[][] addBlocksInsideChunk(Chunk chunk, BlockBase[][] blocks, int x1, int y1, int x2, int y2) {
-        int upperLeftX = getPosNumFromChunkNum(getChunkNumfromCordNum(x1));
-        int upperLeftY = getPosNumFromChunkNum(getChunkNumfromCordNum(y1));
-        System.out.println("Upper Left for Chunk " + upperLeftX + "," + upperLeftY);
-        System.out.println("Upper Left for Search " + x1 + "," + y1);
-        System.out.println("Lower Right for Search " + x2 + "," + y2);
-
-
-
-        // X1 Y1 represent the position of upper left corner of the search, X2 Y2 The lower left
-        // UpperRightX represents the position upper Chunk corner, we need to limit our search to inside the chunk bounderies
-
-        for (int x = x1; x <= upperLeftX && x > upperLeftX - World.getChunkSize() && x > x2; x--)
-        {
-            System.out.println("Nothing is going through");
-            for (int y = y1; y <= upperLeftY && y > upperLeftY - World.getChunkSize() && y > y2; x--)
+            if(isNeg)
             {
-                // Assuming this is right, this means the blocked search is inside the search grid
-                blocks[x1 - x][y1 - y] = chunk.getBlockBaseList()[upperLeftX - x][upperLeftY - y];
+                return z / World.getChunkSize() + -1;
+            }
+            else {
+                return z / World.getChunkSize();
             }
         }
 
-
-        return blocks;
     }
 
-    public void viewBlocks(BlockBase[][] blocks)
+    /**
+     * This adds all blocks inside the specified square to their relative positions in the 2D array
+     * - Best used for Pathfinding and Viewport Rendering
+     * @param chunk
+     * @param chunkX
+     * @param chunkY
+     * @param blocks
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    public void addBlocksInsideChunk(Chunk chunk, int chunkX, int chunkY, BlockBase[][] blocks, int x1, int y1, int x2, int y2) {
+
+        for(int x = getPosNumFromChunkNum(chunkX); x <= getPosNumFromChunkNum(chunkX) + World.getChunkSize() - 1; x++)
+        {
+            for(int y = getPosNumFromChunkNum(chunkY); y <= getPosNumFromChunkNum(chunkY) + World.getChunkSize() - 1; y++)
+            {
+                if(x1 >= x && x2 <= x)
+                {
+                    if(y1 >= y && y2 <= y)
+                    {
+                        blocks[x1 - x][y1 - y] = chunk.getBlockBaseList()[x - getPosNumFromChunkNum(chunkX)][y - getPosNumFromChunkNum(chunkY)];
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void addEntityToWorld(EntityBase entityBase)
     {
-        for(int x = 0; x < blocks.length; x++)
+       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).getEntities().add(entityBase);
+    }
+
+    public boolean isEntityAtPos(int x, int y)
+    {
+        Chunk chunk = getChunkFromCordXY(x,y);
+        for(EntityBase entity: chunk.getEntities())
         {
-            for(int y = 0; y < blocks[x].length; y++)
+            if(entity.getX() == x && entity.getY() == y)
             {
-                if(blocks[x][y] == null)
-                {
-                    System.out.print("NULL|");
-                }
-                else
-                {
-                    System.out.print("GOOD|");
-                }
+                return true;
             }
-            System.out.println();
         }
+        return false;
+    }
+
+    public ArrayList<EntityBase> getEntitiesAtPos(int x, int y)
+    {
+        Chunk chunk = getChunkFromCordXY(x,y);
+        ArrayList<EntityBase> entities = new ArrayList<>();
+        for(EntityBase entity: chunk.getEntities())
+        {
+            if(entity.getX() == x && entity.getY() == y)
+            {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
+
+
+    public ArrayList<StructureBase> getStructures()
+    {
+        return structures;
     }
 
 

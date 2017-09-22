@@ -1,9 +1,9 @@
 package GameInfo;
 
 import GameInfo.Environment.Blocks.BlockBase;
-import GameInfo.Environment.Chunk;
 import GameInfo.Environment.ChunkID;
-import GameInfo.Environment.Entities.EntityBase;
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,13 +20,24 @@ import java.util.ArrayList;
  * - Render the viewport to the Screen, Blocks, Entitys, and ALL!
  */
 public class Viewport {
-    private int centerX;
-    private int centerY;
-    // In blocks
-    private int viewWidthX = 7;
-    private int viewHeightY = 7;
     private Client client;
     private World world;
+    // Determines where the center of the screen
+    private int centerX;
+    private int centerY;
+    // How many block units should be rendered on screen
+    private int viewWidthX = 13;
+    private int viewHeightY = 13;
+    // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
+    private int extraViewX = 5;
+    private int extraViewY = 5;
+    // This affects how much "Smoothing" the screen has between movements
+    private double smoothingValueX = 0;
+    private double smoothingValueY = 0;
+    private final double smoothingAmouunt = 1.1;
+    // Used to except smoothing on the first frame
+    private boolean firstFrame = true;
+
 
 
     public Viewport(Client client, World world)
@@ -44,24 +55,45 @@ public class Viewport {
      */
     public void determineCenter()
     {
-        if(client.isLocalClient())
+        if(!client.isLocalClient())
         {
-            centerX = client.getPlayers().get(0).getPlayerCharacter().getX();
-            centerY = client.getPlayers().get(0).getPlayerCharacter().getY();
+            if(firstFrame)
+            {
+                firstFrame = false;
+            }
+            else {
+                smoothingValueX += centerX - client.getPlayers().get(0).getPlayerCharacter().getX();
+                smoothingValueY += centerY - client.getPlayers().get(0).getPlayerCharacter().getY();
+            }
+                centerX = client.getPlayers().get(0).getPlayerCharacter().getX();
+                centerY = client.getPlayers().get(0).getPlayerCharacter().getY();
+
         }
         else
         {
+
             int averageX = 0;
             int averageY = 0;
-            for(Player p: client.getPlayers())
-            {
+            for (Player p : client.getPlayers()) {
                 averageX += p.getPlayerCharacter().getX();
                 averageY += p.getPlayerCharacter().getY();
             }
-            centerX = averageX / client.getPlayers().size();
-            centerY = averageY / client.getPlayers().size();
+            if(firstFrame)
+            {
+                firstFrame = false;
+            }
+            else {
+                smoothingValueX += centerX - (averageX / client.getPlayers().size());
+                smoothingValueY += centerY - (averageY / client.getPlayers().size());
+            }
+                centerX = averageX / client.getPlayers().size();
+                centerY = averageY / client.getPlayers().size();
+
         }
+        smoothingValueX = smoothingValueX / smoothingAmouunt;
+        smoothingValueY = smoothingValueY / smoothingAmouunt;
     }
+
 
     /**
      * The Viewport will attempt to render all Blocks and entities within its grasp
@@ -78,42 +110,64 @@ public class Viewport {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
-        ArrayList<Chunk> chunkList = new ArrayList<>();
-        ChunkID upperLeftChunk = new ChunkID(world.getChunkNumfromCordNum(centerX + viewWidthX/2), world.getChunkNumfromCordNum(centerY + viewHeightY/2));
-        ChunkID lowerRightChunk = new ChunkID(world.getChunkNumfromCordNum(centerX - viewWidthX/2), world.getChunkNumfromCordNum(centerY - viewHeightY/2));
+        //ArrayList<Chunk> chunkList = new ArrayList<>();
+        ArrayList<EntityBase> entities = new ArrayList<>();
+        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2 + extraViewX * 2][viewHeightY + 1 - viewHeightY % 2 + extraViewY * 2];
 
-        System.out.println();
+
+        ChunkID upperLeftChunk = new ChunkID(World.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), World.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
+        ChunkID lowerRightChunk = new ChunkID(World.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX ), World.getChunkNumfromCordNum( centerY - viewHeightY/2 - extraViewY));
+
+
         for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
         {
             for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
             {
-                System.out.println("Found Chunk " + x + "," + y);
-                chunkList.add(world.getChunkFromChunkXY(x,y));
-            }
-        }
 
-        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX][viewHeightY];
-        for(Chunk c: chunkList)
-        {
-            world.addBlocksInsideChunk(c,viewableBlocks,centerX + viewWidthX/2,centerY + viewHeightY/2,centerX - viewWidthX/2,centerY + viewHeightY/2);
-        }
-
-        world.viewBlocks(viewableBlocks);
-
-        for(int x = 0; x < viewableBlocks.length; x++)
-        {
-            for(int y = 0; y < viewableBlocks[x].length; y++)
-            {
-                System.out.println(x + "," + y);
-                viewableBlocks[x][y].renderBlock(canvas,gc,x,y);
+                entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
+                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
             }
         }
 
 
+        // Reramp this to go from Top of screen down for each layer!
+        for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
+            for (int y = 0; y < viewableBlocks[0].length; y++) {
+                for (int x = 0; x < viewableBlocks.length; x++) {
+                    if (viewableBlocks[x][y] != null) {
+                        //System.out.println("X: " + x + "Y: " + y + " " + viewableBlocks.length);
+                        viewableBlocks[x][y].renderBlock(canvas, gc, x - extraViewX + smoothingValueX, y - extraViewY + smoothingValueY, renderLayer);
+                    }
+                    for (EntityBase entity : entities) {
+                        if(entity.getX() == (centerX + viewWidthX/2) - (x - extraViewX))
+                        {
+                            if(entity.getY() == (centerY + viewHeightY/2) - (y - extraViewY))
+                            {
+                                entity.renderEntity(canvas, gc, (x - extraViewX) + smoothingValueX, (y - extraViewY) + smoothingValueY, renderLayer);
+
+
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Debug Test Information
         gc.setFill(Color.BLACK);
-        gc.fillText("Cord: " + centerX + ":" + centerY,300,10);
+        gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),300,10);
         gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),300,20);
+    }
+
+
+
+    public int getViewWidthX() {
+        return viewWidthX;
+    }
+    public int getViewHeightY() {
+        return viewHeightY;
     }
 
 

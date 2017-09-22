@@ -1,38 +1,116 @@
 package GameInfo.Environment.Blocks;
 
+import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import sample.TestRenderHelper;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by Robert on 8/28/2017.
+ * This class aims to
+ * - Simulate basic "Wall" "Floor" logic, and handles the random generation of both in the test map
  */
 public class WallFloorBlock extends BlockBase {
+    // Entities currently contained
+    private ArrayList<EntityBase> entities;
+    // The assigned Sprite, Wall or Floor
+    private Image sprite;
+    // For Wall, it requires a secondary sprite in order to work
+    private Image secondarySprite;
 
-
-    public WallFloorBlock()
+    public WallFloorBlock(GlobalGameData globalGameData)
     {
-        Random random = new Random();
-        if(random.nextInt(2) == 1)
+        entities = new ArrayList<>();
+
+
+        if(globalGameData.getRandom().nextInt(4) == 1)
         {
-            blockType = BlockTypeEnum.TEST_FLOOR;
+            blockType = BlockTypeEnum.TEST_WALL;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),World.getScaleUpPercent());
+            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),World.getScaleUpPercent());
         }
         else
         {
-            blockType = BlockTypeEnum.TEST_WALL;
+            blockType = BlockTypeEnum.TEST_FLOOR;
+
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor_" + (globalGameData.getRandom().nextInt(6) + 1)),World.getScaleUpPercent());
+
         }
     }
+
+    public WallFloorBlock(GlobalGameData globalGameData, BlockTypeEnum type)
+    {
+        entities = new ArrayList<>();
+
+        if(type == BlockTypeEnum.TEST_WALL)
+        {
+            blockType = BlockTypeEnum.TEST_WALL;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),2);
+            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),2);
+        }
+        else
+        {
+            blockType = BlockTypeEnum.TEST_FLOOR;
+            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor"),2);
+
+        }
+    }
+
     @Override
-    public void renderBlock(Canvas canvas, GraphicsContext gc, int x, int y) {
-        if(blockType == BlockTypeEnum.TEST_WALL) {
-            gc.setFill(Color.GOLD);
+    public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
+        if(renderLayer == 0)
+        {
+            if (blockType == BlockTypeEnum.TEST_FLOOR) {
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5));
+                if(entities.size() > 0)
+                {
+                    gc.setFill(Color.BLUE);
+                    gc.fillRect((x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), 5,5);
+                }
+            }
         }
-        if(blockType == BlockTypeEnum.TEST_FLOOR) {
-            gc.setFill(Color.RED);
+        if(renderLayer == 1) {
+            if (blockType == BlockTypeEnum.TEST_WALL) {
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) + World.getScaledUpSquareSize()/4);
+                gc.drawImage(secondarySprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize()/4*3);
+
+
+            }
         }
-        gc.fillRect(x * World.getUnitRatio(), y * World.getUnitRatio(), World.getUnitRatio(), World.getUnitRatio());
+
+
+
+    }
+
+    @Override
+    public boolean checkCollision(World world, EntityBase entity) {
+
+        if(entities.size() > 0)
+        {
+            for(EntityBase eb: entities)
+            {
+                // Entity re-acting to colision events here
+                // Return here as well
+            }
+        }
+        return blockType == BlockTypeEnum.TEST_FLOOR && (entities.size() == 0|| entities.contains(entity));
+
+    }
+
+    @Override
+    public void enterBlock(EntityBase entity) {
+        entities.add(entity);
+    }
+
+    @Override
+    public void exitBlock(EntityBase entity) {
+        entities.remove(entity);
     }
 }

@@ -2,6 +2,8 @@ package sample;
 
 import net.java.games.input.Controller;
 
+import java.util.HashMap;
+
 /**
  * Created by Robert on 8/24/2017.
  *
@@ -12,8 +14,9 @@ import net.java.games.input.Controller;
  *
  */
 public class XBoxController {
-    private Controller controllerDevice;
-    private int id;
+    protected Controller controllerDevice;
+    protected int id;
+    protected ControllerType controllerType;
 
     public boolean hasController()
     {
@@ -23,6 +26,7 @@ public class XBoxController {
     {
         this.controllerDevice = controllerDevice;
         this.id = id;
+        controllerType = ControllerType.XBoxController;
     }
 
     public void poll() {controllerDevice.poll();}
@@ -35,10 +39,63 @@ public class XBoxController {
     {
         return normalizeDirectionInput(controllerDevice.getComponents()[1].getPollData());
     }
+    public boolean getLeftStickPress() {
+        return isButtonPressed(controllerDevice.getComponents()[13].getPollData());
+    }
+
     public double getRightStickY() {return normalizeDirectionInput(controllerDevice.getComponents()[2].getPollData());}
     public double getRightStickX() {return normalizeDirectionInput(controllerDevice.getComponents()[3].getPollData());}
+    public boolean getRightStickPress() {
+        return isButtonPressed(controllerDevice.getComponents()[14].getPollData());
+    }
+
+    public double getTrigger()
+    {
+        return normalizeDirectionInput(controllerDevice.getComponents()[4].getPollData());
+    }
+
     public DirectionalPadEnum getDirectionalPad() {
         return DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData());
+    }
+
+    public boolean getButtonA()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[5].getPollData());
+    }
+    public boolean getButtonB()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[6].getPollData());
+    }
+    public boolean getButtonX()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[7].getPollData());
+    }
+    public boolean getButtonY()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[8].getPollData());
+    }
+
+    public boolean getLeftShoulder()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[9].getPollData());
+    }
+    public boolean getRightShoulder()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[10].getPollData());
+    }
+
+    public boolean getBack()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[11].getPollData());
+    }
+    public boolean getStart()
+    {
+        return isButtonPressed(controllerDevice.getComponents()[12 ].getPollData());
+    }
+
+    public ControllerType getControllerType()
+    {
+        return controllerType;
     }
 
 
@@ -46,11 +103,11 @@ public class XBoxController {
     public String toString()
     {
         String information = "XBox Controller #" + id + "\n";
-        information += "Left Stick Y " + normalizeDirectionInput(controllerDevice.getComponents()[0].getPollData()) + "\n";
-        information += "Left Stick X " + normalizeDirectionInput(controllerDevice.getComponents()[1].getPollData()) + "\n";
-        information += "Right Stick Y " + normalizeDirectionInput(controllerDevice.getComponents()[2].getPollData()) + "\n";
-        information += "Right Stick X " + normalizeDirectionInput(controllerDevice.getComponents()[3].getPollData()) + "\n";
-        information += "Right/Left Trigger " + normalizeDirectionInput(controllerDevice.getComponents()[4].getPollData()) + "\n";
+        information += "Left Stick Y: " + normalizeDirectionInput(controllerDevice.getComponents()[0].getPollData()) + "\n";
+        information += "Left Stick X: " + normalizeDirectionInput(controllerDevice.getComponents()[1].getPollData()) + "\n";
+        information += "Right Stick Y: " + normalizeDirectionInput(controllerDevice.getComponents()[2].getPollData()) + "\n";
+        information += "Right Stick X: " + normalizeDirectionInput(controllerDevice.getComponents()[3].getPollData()) + "\n";
+        information += "Right/Left Trigger: " + normalizeDirectionInput(controllerDevice.getComponents()[4].getPollData()) + "\n";
         information += "Button A: " + isButtonPressed(controllerDevice.getComponents()[5].getPollData()) + "\n";
         information += "Button B: " + isButtonPressed(controllerDevice.getComponents()[6].getPollData()) + "\n";
         information += "Button X: " + isButtonPressed(controllerDevice.getComponents()[7].getPollData()) + "\n";
@@ -61,10 +118,8 @@ public class XBoxController {
         information += "Start: " + isButtonPressed(controllerDevice.getComponents()[12].getPollData()) + "\n";
         information += "Left Stick Press: " + isButtonPressed(controllerDevice.getComponents()[13].getPollData()) + "\n";
         information += "Right Stick Press: " + isButtonPressed(controllerDevice.getComponents()[14].getPollData()) + "\n";
-        information += "Directional Pad " + DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData()) + "\n";
-        information += "Rumblers " + controllerDevice.getRumblers().length + "\n";
-
-
+        information += "Directional Pad: " + DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData()) + "\n";
+        information += "Rumblers: " + controllerDevice.getRumblers().length + "\n";
         return information;
     }
 
