@@ -2,6 +2,8 @@ package GameInfo.Environment.Entities.Pathfinding;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.PathfindingDebugBlock;
+import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 
 import java.util.ArrayList;
@@ -17,6 +19,11 @@ public class PathfindingMap
 {
     public static ArrayList<PathfindingNode> openList = new ArrayList<>();
     public static ArrayList<PathfindingNode> closedList = new ArrayList<>();
+<<<<<<< HEAD:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
+=======
+    private static PathfindingNode firstNode;
+
+>>>>>>> parent of df302a2... Added Changes to Charlie's Branch:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
 
     public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
     {
@@ -28,8 +35,21 @@ public class PathfindingMap
         PathfindingNode temp = node;
         while(!temp.isPrimaryNode())
         {
+<<<<<<< HEAD:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
             positionList.add(new Position(temp.getX(),temp.getY()));
             temp = temp.getParentNode();
+=======
+            if(n != null) {
+                positionList.add(new Position(n.getX(), n.getY()));
+                n = n.getParentNode();
+                temp++;
+            }
+            else
+            {
+                System.out.println("Broken node is " + temp );
+                break;
+            }
+>>>>>>> parent of df302a2... Added Changes to Charlie's Branch:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
         }
         Collections.reverse(positionList);
         openList.clear();
@@ -39,12 +59,20 @@ public class PathfindingMap
 
     public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode node, int xTarget, int yTarget)
     {
+<<<<<<< HEAD:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
         openList.remove(node);
         closedList.add(node);
 
         openList.addAll(getConnectedTiles(world,node,xTarget,yTarget));
 
         if(openList.size() != 0)
+=======
+        PathfindingMap.openList.addAll(PathfindingMap.getConnectedTiles(world,currentNode,xTarget,yTarget));
+        int leastF = Integer.MAX_VALUE;
+
+        PathfindingNode newNode = currentNode;
+        for(PathfindingNode node: PathfindingMap.openList)
+>>>>>>> parent of df302a2... Added Changes to Charlie's Branch:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
         {
             PathfindingNode temp = openList.get(0);
             int lowest = Integer.MAX_VALUE;
@@ -66,6 +94,26 @@ public class PathfindingMap
                 closedList.add(temp);
                 return proccessPathfindingNode(world,temp,xTarget,yTarget);
             }
+<<<<<<< HEAD:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
+=======
+        }
+
+        PathfindingMap.openList.remove(currentNode);
+        PathfindingMap.closedList.add(currentNode);
+
+        /*
+        PathfindingDebugBlock b1 = new PathfindingDebugBlock(currentNode);
+        world.setBlockFromCords(currentNode.getX(), currentNode.getY(), b1);
+        */
+
+        //System.out.println();
+       //System.out.println("Current Node " + currentNode.getX() + " " + currentNode.getY());
+       // System.out.println("Target Player " +  xTarget + " " + yTarget);
+        if(currentNode.getX() == xTarget && currentNode.getY() == yTarget)
+        {
+           // System.out.println("You win!");
+            return newNode;
+>>>>>>> parent of df302a2... Added Changes to Charlie's Branch:src/GameInfo/Environment/Entities/Pathfinding/PathfindingMap.java
         }
         else
         {
