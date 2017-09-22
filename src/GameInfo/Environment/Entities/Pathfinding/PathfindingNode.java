@@ -33,6 +33,14 @@ public class PathfindingNode {
     {
 
         h = 14*(Math.abs(x-targetX) + Math.abs(y-targetY));
+        if(Math.abs(x-targetX) == 0)
+        {
+            h -= 0.1;
+        }
+        if(Math.abs(y-targetY) == 0)
+        {
+            h -= 0.1;
+        }
         f = g + h;
     }
 

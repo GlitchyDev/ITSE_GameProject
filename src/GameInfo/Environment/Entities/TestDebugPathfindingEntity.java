@@ -1,25 +1,26 @@
 package GameInfo.Environment.Entities;
 
-import GameInfo.Environment.Blocks.DebugBlock;
-import GameInfo.Environment.Blocks.PathfindingDebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingNode;
+import GameInfo.Environment.Entities.Pathfinding.PathfindingHelper;
 import GameInfo.Environment.Entities.Pathfinding.Position;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameInfo.Player;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import sample.TestRenderHelper;
 
 import java.util.ArrayList;
 
-public class TestSkullEntity extends DamageableEntityBase {
+/**
+ * The purpose of this entity is to
+ * - Show how pathfinding works
+ * - Note the issues in Pathfinding
+ * - Improve Pathfinding
+ */
+public class TestDebugPathfindingEntity extends DamageableEntityBase {
     private Image sprite;
     private Pro_Player targetPlayer;
     private long lastUpdate;
@@ -27,7 +28,7 @@ public class TestSkullEntity extends DamageableEntityBase {
     private int cacheNum;
 
 
-    public TestSkullEntity(World world, GlobalGameData globalGameData, int x, int y) {
+    public TestDebugPathfindingEntity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
         sprite = TestRenderHelper.resample(globalGameData.getSprite("Skull"),2);
         cachePositionList = new ArrayList<>();
@@ -35,13 +36,13 @@ public class TestSkullEntity extends DamageableEntityBase {
     }
 
     @Override
-    public void takeDamage(DamageType damageType, int damageAmount) {
-
+    public boolean takeDamage(DamageType damageType, int damageAmount) {
+        return true;
     }
 
     @Override
-    public void takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
-
+    public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
+        return true;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class TestSkullEntity extends DamageableEntityBase {
 
                 if(cachePositionList.size() == 0 || cacheNum >= 5)
                 {
-                    ArrayList<Position> positionList = PathfindingMap.findPathNonDiagnal(world,x,y,targetPlayer.getX(),targetPlayer.getY());
+                    ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world,x,y,targetPlayer.getX(),targetPlayer.getY());
                     cachePositionList.clear();
 
                     for(int i = 0; i < positionList.size(); i++)
@@ -70,7 +71,7 @@ public class TestSkullEntity extends DamageableEntityBase {
                 }
 
                 if(cachePositionList.size() != 0) {
-                    System.out.println("Moving Relative " + (cachePositionList.get(0).getX() - x) + " " + (cachePositionList.get(0).getY() - y));
+                    //System.out.println("Moving Relative " + (cachePositionList.get(0).getX() - x) + " " + (cachePositionList.get(0).getY() - y));
                     advancedMoveRelative(cachePositionList.get(0).getX() - x, cachePositionList.get(0).getY() - y,true,true,true,true);
                     cacheNum++;
                     cachePositionList.remove(cachePositionList.get(0));
