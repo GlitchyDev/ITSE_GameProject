@@ -1,16 +1,12 @@
 package GameInfo.Environment.Entities;
 
-import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
 import GameInfo.Environment.Entities.Enums.EntityType;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingNode;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
-import GameStates.TestWorldGameState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -217,17 +213,19 @@ public class Pro_Player extends DamageableEntityBase {
     }
 
     @Override
-    public void takeDamage(DamageType damageType, int damageAmount) {
+    public boolean takeDamage(DamageType damageType, int damageAmount) {
         currentHealth -= damageAmount;
         if(damageAmount <= 0)
         {
             isDead = true;
         }
+        return true;
     }
 
     @Override
-    public void takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
+    public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
         takeDamage(damageType,damageAmount);
+        return true;
     }
 
 

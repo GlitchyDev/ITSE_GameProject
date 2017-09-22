@@ -1,16 +1,12 @@
 package GameStates;
 
 import GameInfo.*;
-import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.DebugBlock;
-import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.EntityType;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingMap;
-import GameInfo.Environment.Entities.Pathfinding.Position;
 import GameInfo.Environment.Entities.Pro_Player;
-import GameInfo.Environment.Entities.TestSkullEntity;
+import GameInfo.Environment.Entities.Scatter_Skull_Entity;
+import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -110,11 +106,15 @@ public class TestWorldGameState extends GameStateBase {
         viewport = new Viewport(client,world);
 
 
-        TestSkullEntity skullEntity = new TestSkullEntity(world,globalGameData,0,5);
+        TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
+        world.addEntityToWorld(pathfindingDebug);
+
+        Scatter_Skull_Entity skullEntity = new Scatter_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);
 
 
     }
+
 
     @Override
     public void exitState(GameStateEnum lastState) {

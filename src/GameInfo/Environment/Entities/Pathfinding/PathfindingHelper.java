@@ -1,9 +1,6 @@
 package GameInfo.Environment.Entities.Pathfinding;
 
-import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.PathfindingDebugBlock;
-import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 
 import java.util.ArrayList;
@@ -11,17 +8,29 @@ import java.util.Collections;
 
 /**
  * The purpose of this class is
- * - Pathfind
+ * - Pathfind from 1 point to another
+ * Issues
+ * - Doesn't detect "Impossible Paths"
+ * - Doesn't work against chunks (Entity Tick Rewrite)
  */
 
 
-public class PathfindingMap
+public class PathfindingHelper
 {
-    public static ArrayList<PathfindingNode> openList = new ArrayList<>();
-    public static ArrayList<PathfindingNode> closedList = new ArrayList<>();
+    private static ArrayList<PathfindingNode> openList = new ArrayList<>();
+    private static ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private static PathfindingNode firstNode;
 
 
+    /**
+     * Used for Pathfinding without Diagnals
+     * @param world
+     * @param xStart
+     * @param yStart
+     * @param xTarget
+     * @param yTarget
+     * @return A List of Positions of the best path towards the player
+     */
     public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
     {
         openList.clear();
@@ -50,7 +59,7 @@ public class PathfindingMap
             }
             else
             {
-                System.out.println("Broken node is " + temp );
+                //System.out.println("Broken node is " + temp );
                 break;
             }
         }
@@ -60,11 +69,11 @@ public class PathfindingMap
 
     public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
     {
-        PathfindingMap.openList.addAll(PathfindingMap.getConnectedTiles(world,currentNode,xTarget,yTarget));
+        PathfindingHelper.openList.addAll(PathfindingHelper.getConnectedTiles(world,currentNode,xTarget,yTarget));
         int leastF = Integer.MAX_VALUE;
 
         PathfindingNode newNode = currentNode;
-        for(PathfindingNode node: PathfindingMap.openList)
+        for(PathfindingNode node: PathfindingHelper.openList)
         {
             node.recalculateH(xTarget,yTarget);
             if(node.getF() < leastF)
@@ -74,8 +83,8 @@ public class PathfindingMap
             }
         }
 
-        PathfindingMap.openList.remove(currentNode);
-        PathfindingMap.closedList.add(currentNode);
+        PathfindingHelper.openList.remove(currentNode);
+        PathfindingHelper.closedList.add(currentNode);
 
         /*
         PathfindingDebugBlock b1 = new PathfindingDebugBlock(currentNode);
@@ -159,7 +168,7 @@ public class PathfindingMap
 
 }
 /*
-public class PathfindingMap {
+public class PathfindingHelper {
     private ArrayList<PathfindingNode> openList = new ArrayList<>();
     private ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private ArrayList<PathfindingNode> path = new ArrayList<>();
