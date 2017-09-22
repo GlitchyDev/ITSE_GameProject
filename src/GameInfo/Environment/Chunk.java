@@ -4,8 +4,9 @@ import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.TestRockEntity;
+import GameInfo.Environment.Structures.BasicHouse;
+import GameInfo.Environment.Structures.DirtBlobStructure;
 import GameInfo.Environment.Structures.StructureBase;
-import GameInfo.Environment.Structures.TestStructures;
 import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
@@ -65,13 +66,24 @@ public class Chunk {
      */
     public void generateStructures(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
+        // Spawn houses first b/c of more difficult placement requirements (i.e. door)
 
-        // This example spawns "TestStructures", it attempts to spawn 200 but will usually only spawn about 80-90, due to overlapping preventions
+        for (int i = 0; i < 75; i++) {
+            BasicHouse h = new BasicHouse(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 7), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 8));
+
+            if (h.attemptBuildStructure()) {
+                world.getStructures().add(h);
+                structures.add(h);
+            }
+        }
+
+
+        // This example spawns "DirtBlobStructure", it attempts to spawn 150
         // The larger the structure the lower chance it will succeed in spawning, this can be prevented by spawning it before all other structures
-        for(int i = 0; i < 200; i++) {
+        for(int i = 0; i < 150; i++) {
             // Here you can see for the X cords I do random.nextInt(World.getChunkSize() - 5)
             // This prevents the structure from picking a location that is partially outside the chunk
-            TestStructures s = new TestStructures(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5));
+            DirtBlobStructure s = new DirtBlobStructure(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 5));
             // This triggers when the Structure has Cleared Collisions and spawned blocks and is "Worthy" of storage
             if (s.attemptBuildStructure()) {
                 world.getStructures().add(s);
@@ -79,7 +91,6 @@ public class Chunk {
             }
 
         }
-
     }
     // Setters and Getters
     public BlockBase[][] getBlockBaseList() {

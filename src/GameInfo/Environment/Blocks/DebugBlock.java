@@ -50,4 +50,6 @@ public class DebugBlock extends BlockBase {
     {
         c = color;
     }
+
+
 }

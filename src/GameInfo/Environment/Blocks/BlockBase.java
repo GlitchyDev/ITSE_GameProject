@@ -2,6 +2,7 @@ package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
+import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -41,7 +42,6 @@ public abstract class BlockBase {
      * @param entity
      */
     public abstract void exitBlock(EntityBase entity);
-
 
     public BlockTypeEnum getBlockType() {
         return blockType;

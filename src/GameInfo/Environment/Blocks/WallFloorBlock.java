@@ -104,6 +104,12 @@ public class WallFloorBlock extends BlockBase {
 
     }
 
+    //note: this doesn't handle incorrect sprite names well. At all, really, but it works if you don't screw it up.
+    public void setSprite(GlobalGameData globalGameData, String spriteName)
+    {
+        sprite = TestRenderHelper.resample(globalGameData.getSprite(spriteName),World.getScaleUpPercent());
+    }
+
     @Override
     public void enterBlock(EntityBase entity) {
         entities.add(entity);
@@ -113,4 +119,6 @@ public class WallFloorBlock extends BlockBase {
     public void exitBlock(EntityBase entity) {
         entities.remove(entity);
     }
+
+
 }
