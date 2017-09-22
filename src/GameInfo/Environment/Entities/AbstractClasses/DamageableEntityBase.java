@@ -21,14 +21,12 @@ public abstract class DamageableEntityBase extends EntityBase {
      * Deal damage to the Entity, no causer specified
      * @param damageType The type of damage Dealt
      * @param damageAmount The amount of Damage Dealt
-     * @return If the damage "Succeeded"
      */
-    public abstract boolean takeDamage(DamageType damageType, int damageAmount);
+    public abstract void takeDamage(DamageType damageType, int damageAmount);
     /**
      * Deal damage to the Entity, no causer specified
      * @param damageType The type of damage Dealt
      * @param damageAmount The amount of Damage Dealt
-     * @return If the damage "Succeeded"
      */
-    public abstract boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount);
+    public abstract void takeDamage(EntityBase causer, DamageType damageType, int damageAmount);
 }

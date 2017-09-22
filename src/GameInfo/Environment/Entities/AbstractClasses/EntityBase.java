@@ -15,7 +15,6 @@ public abstract class EntityBase {
     protected World world;
     protected GlobalGameData globalGameData;
     protected EntityType entityType;
-    protected long creationTime;
     protected int x;
     protected int y;
 
@@ -25,7 +24,6 @@ public abstract class EntityBase {
         this.globalGameData = globalGameData;
         this.x = x;
         this.y = y;
-        creationTime = System.currentTimeMillis();
     }
 
 

@@ -1,5 +1,6 @@
 package GameInfo.Environment.Entities.Pathfinding;
 
+import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
 import GameInfo.Environment.World;
 
@@ -8,105 +9,68 @@ import java.util.Collections;
 
 /**
  * The purpose of this class is
- * - Pathfind from 1 point to another
- * Issues
- * - Doesn't detect "Impossible Paths"
- * - Doesn't work against chunks (Entity Tick Rewrite)
+ * - Pathfind
  */
 
 
-public class PathfindingHelper
+public class PathfindingMap
 {
-    private static ArrayList<PathfindingNode> openList = new ArrayList<>();
-    private static ArrayList<PathfindingNode> closedList = new ArrayList<>();
-    private static PathfindingNode firstNode;
+    public static ArrayList<PathfindingNode> openList = new ArrayList<>();
+    public static ArrayList<PathfindingNode> closedList = new ArrayList<>();
 
-
-    /**
-     * Used for Pathfinding without Diagnals
-     * @param world
-     * @param xStart
-     * @param yStart
-     * @param xTarget
-     * @param yTarget
-     * @return A List of Positions of the best path towards the player
-     */
     public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
     {
-        openList.clear();
-        closedList.clear();
-        firstNode = null;
-        if(xStart == xTarget && yStart == yTarget)
-        {
-            ArrayList<Position> p = new ArrayList<>();
-            p.add(new Position(xStart,yStart));
-            return p;
-        }
-        firstNode = new PathfindingNode(null,xStart,yStart,0,xStart,yTarget);
-        PathfindingNode finalNode = proccessPathfindingNode(world,firstNode,xTarget,yTarget);
-
+        System.out.println("Starting Pathfinding at " + xStart + " " + yStart);
+        PathfindingNode node = proccessPathfindingNode(world,new PathfindingNode(null,xStart,yStart,0,xTarget,yTarget),xTarget,yTarget);
 
 
         ArrayList<Position> positionList = new ArrayList<>();
-        PathfindingNode n = finalNode;
-        int temp = 0;
-        while(!finalNode.isPrimaryNode())
+        PathfindingNode temp = node;
+        while(!temp.isPrimaryNode())
         {
-            if(n != null) {
-                positionList.add(new Position(n.getX(), n.getY()));
-                n = n.getParentNode();
-                temp++;
-            }
-            else
-            {
-                //System.out.println("Broken node is " + temp );
-                break;
-            }
+            positionList.add(new Position(temp.getX(),temp.getY()));
+            temp = temp.getParentNode();
         }
         Collections.reverse(positionList);
+        openList.clear();
+        closedList.clear();
         return positionList;
     }
 
-    public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
+    public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode node, int xTarget, int yTarget)
     {
-        PathfindingHelper.openList.addAll(PathfindingHelper.getConnectedTiles(world,currentNode,xTarget,yTarget));
-        int leastF = Integer.MAX_VALUE;
+        openList.remove(node);
+        closedList.add(node);
 
-        PathfindingNode newNode = currentNode;
-        for(PathfindingNode node: PathfindingHelper.openList)
+        openList.addAll(getConnectedTiles(world,node,xTarget,yTarget));
+
+        if(openList.size() != 0)
         {
-            node.recalculateH(xTarget,yTarget);
-            if(node.getF() < leastF)
+            PathfindingNode temp = openList.get(0);
+            int lowest = Integer.MAX_VALUE;
+            for(PathfindingNode potentialNode: openList)
             {
-                currentNode = node;
-                leastF = newNode.getF();
+                if(node.getF() < lowest)
+                {
+                    lowest = node.getF();
+                    temp = potentialNode;
+                }
             }
-        }
-
-        PathfindingHelper.openList.remove(currentNode);
-        PathfindingHelper.closedList.add(currentNode);
-
-        /*
-        PathfindingDebugBlock b1 = new PathfindingDebugBlock(currentNode);
-        world.setBlockFromCords(currentNode.getX(), currentNode.getY(), b1);
-        */
-
-        //System.out.println();
-       //System.out.println("Current Node " + currentNode.getX() + " " + currentNode.getY());
-       // System.out.println("Target Player " +  xTarget + " " + yTarget);
-        if(currentNode.getX() == xTarget && currentNode.getY() == yTarget)
-        {
-           // System.out.println("You win!");
-            return newNode;
+            if(temp.getX() == xTarget && temp.getG() == yTarget)
+            {
+                return temp;
+            }
+            else
+            {
+                openList.remove(temp);
+                closedList.add(temp);
+                return proccessPathfindingNode(world,temp,xTarget,yTarget);
+            }
         }
         else
         {
-            return proccessPathfindingNode(world,currentNode,xTarget,yTarget);
+            return node;
         }
-
-
-
-
     }
 
 
@@ -168,7 +132,7 @@ public class PathfindingHelper
 
 }
 /*
-public class PathfindingHelper {
+public class PathfindingMap {
     private ArrayList<PathfindingNode> openList = new ArrayList<>();
     private ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private ArrayList<PathfindingNode> path = new ArrayList<>();
