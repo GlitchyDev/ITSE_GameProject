@@ -28,20 +28,16 @@ public class WallFloorBlock extends BlockBase {
     public WallFloorBlock(GlobalGameData globalGameData)
     {
         entities = new ArrayList<>();
-
-
-        if(globalGameData.getRandom().nextInt(4) == 1)
+        if(globalGameData.getRandom().nextInt(6) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
-            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Modified"),World.getScaleUpPercent());
-            secondarySprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Wall_Top"),World.getScaleUpPercent());
+            sprite = globalGameData.getSprite("Test_Wall_Modified");
+            secondarySprite = globalGameData.getSprite("Test_Wall_Top");
         }
         else
         {
             blockType = BlockTypeEnum.TEST_FLOOR;
-
-            sprite = TestRenderHelper.resample(globalGameData.getSprite("Test_Floor_" + (globalGameData.getRandom().nextInt(6) + 1)),World.getScaleUpPercent());
-
+            sprite = globalGameData.getSprite("Test_Floor_" + (globalGameData.getRandom().nextInt(6) + 1));
         }
     }
 

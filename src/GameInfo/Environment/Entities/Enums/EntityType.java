@@ -7,4 +7,5 @@ public enum EntityType {
     DEBUG,
     PLAYER,
     ROCK,
+    SCATTER_SKULL
 }

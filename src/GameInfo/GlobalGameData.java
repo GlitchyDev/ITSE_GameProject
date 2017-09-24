@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import sample.DebugController;
+import sample.TestRenderHelper;
 import sample.XBoxController;
 
 import java.io.File;
@@ -62,6 +63,9 @@ public class GlobalGameData {
                 "GameAssets/Sprites/Terrain/",
                 "GameAssets/Sprites/Skull_Entity/"
         ));
+        ArrayList<String> resizeException = new ArrayList<>(Arrays.asList(
+                "Pro"
+        ));
         System.out.println("Load Assets: Processing Sprites");
         System.out.println("Load Assets: Added Sprites");
         for (String currentFolder : registeredFolders) {
@@ -69,9 +73,26 @@ public class GlobalGameData {
             System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
             for (File file : startingFolder.listFiles()) {
                 if (file.isFile()) {
-                    String temp = file.getName().substring(0, file.getName().length() - 4);
-                    sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
-                    System.out.println("  - " + temp);
+                    String temp = file.getName().replace(".png","");
+
+                    boolean doResize = true;
+                    for(String exception: resizeException) {
+                        if (temp.contains(exception))
+                        {
+                            doResize = false;
+                        }
+                    }
+                    if(doResize)
+                    {
+                        int size = 2;
+                        sprites.put(temp, TestRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size));
+                        System.out.println("  - " + temp);
+                    }
+                    else
+                    {
+                        sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
+                        System.out.println("  ~ " + temp);
+                    }
                 }
             }
         }

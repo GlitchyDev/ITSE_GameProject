@@ -106,8 +106,8 @@ public class TestWorldGameState extends GameStateBase {
         viewport = new Viewport(client,world);
 
 
-        TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
-        world.addEntityToWorld(pathfindingDebug);
+        //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
+        //world.addEntityToWorld(pathfindingDebug);
 
         Scatter_Skull_Entity skullEntity = new Scatter_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);

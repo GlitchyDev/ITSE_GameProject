@@ -17,7 +17,7 @@ public class TestRockEntity extends EntityBase {
     private Image sprite;
     public TestRockEntity(World world, GlobalGameData globalGameData, int x, int y, Image image) {
         super(world, globalGameData, x, y);
-        sprite = TestRenderHelper.resample(image,2);
+        sprite = image;
         entityType = EntityType.ROCK;
     }
 
@@ -29,7 +29,7 @@ public class TestRockEntity extends EntityBase {
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 2) {
             gc.setGlobalAlpha(1.0);
-            gc.drawImage(sprite,x * World.getScaledUpSquareSize(), y * World.getScaledUpSquareSize());
+            gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5)  );
         }
     }
 }

@@ -30,7 +30,7 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
 
     public TestDebugPathfindingEntity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
-        sprite = TestRenderHelper.resample(globalGameData.getSprite("Skull"),2);
+        sprite = globalGameData.getSprite("Skull");
         cachePositionList = new ArrayList<>();
         cacheNum = 0;
     }
