@@ -13,10 +13,12 @@ public abstract class DamageableEntityBase extends EntityBase {
     protected int currentHealth = 0;
     protected boolean isDead = false;
 
-
-    public DamageableEntityBase(World world, GlobalGameData globalGameData, int x, int y) {
-        super(world, globalGameData, x, y);
+    public DamageableEntityBase(World world, GlobalGameData globalGameData, int x, int y)
+    {
+        super(world,globalGameData,x,y);
+        isDamageable = true;
     }
+
     /**
      * Deal damage to the Entity, no causer specified
      * @param damageType The type of damage Dealt

@@ -56,15 +56,10 @@ public class TestWorldGameState extends GameStateBase {
     protected void doRender(Canvas canvas, GraphicsContext gc) {
         viewport.render(canvas,gc);
 
-
         gc.setFill(Color.BLACK);
-        gc.setGlobalAlpha(0.09);
+        gc.setGlobalAlpha(0.15);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         gc.setGlobalAlpha(1.0);
-
-
-
-
 
         gc.setFill(Color.BLACK);
         gc.fillText("FPS: " + lastFPS,250,50);

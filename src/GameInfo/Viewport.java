@@ -110,33 +110,16 @@ public class Viewport {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
-        //ArrayList<Chunk> chunkList = new ArrayList<>();
-        ArrayList<EntityBase> entities = new ArrayList<>();
-        BlockBase[][] viewableBlocks = new BlockBase[viewWidthX + 1 - viewWidthX % 2 + extraViewX * 2][viewHeightY + 1 - viewHeightY % 2 + extraViewY * 2];
-
-
-        ChunkID upperLeftChunk = new ChunkID(World.getChunkNumfromCordNum(centerX + viewWidthX/2 + extraViewX ), World.getChunkNumfromCordNum( centerY + viewHeightY/2 + extraViewY));
-        ChunkID lowerRightChunk = new ChunkID(World.getChunkNumfromCordNum(centerX - viewWidthX/2 - extraViewX ), World.getChunkNumfromCordNum( centerY - viewHeightY/2 - extraViewY));
-
-
-        for(int x = lowerRightChunk.getChunkX(); x <= upperLeftChunk.getChunkX(); x++)
-        {
-            for(int y = lowerRightChunk.getChunkY(); y <= upperLeftChunk.getChunkY(); y++)
-            {
-
-                entities.addAll(world.getChunkFromChunkXY(x,y).getEntities());
-                world.addBlocksInsideChunk(world.getChunkFromChunkXY(x,y),x,y,viewableBlocks,centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
-            }
-        }
-
-
+       // ArrayList<EntityBase> entities = new ArrayList<>();
+        ArrayList<EntityBase> entities = world.getAllEntitiesBetweenPoints(centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
+        BlockBase[][] viewableBlocks = world.getAllBlocksBetweenPoints(centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
         // Reramp this to go from Top of screen down for each layer!
         for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
             for (int y = 0; y < viewableBlocks[0].length; y++) {
                 for (int x = 0; x < viewableBlocks.length; x++) {
                     if (viewableBlocks[x][y] != null) {
                         //System.out.println("X: " + x + "Y: " + y + " " + viewableBlocks.length);
-                        viewableBlocks[x][y].renderBlock(canvas, gc, x - extraViewX + smoothingValueX, y - extraViewY + smoothingValueY, renderLayer);
+                        viewableBlocks[x][y].renderBlock(canvas, gc, x - extraViewX + smoothingValueX, y + 1 - extraViewY + smoothingValueY, renderLayer);
                     }
                     for (EntityBase entity : entities) {
                         if(entity.getX() == (centerX + viewWidthX/2) - (x - extraViewX))
@@ -144,9 +127,6 @@ public class Viewport {
                             if(entity.getY() == (centerY + viewHeightY/2) - (y - extraViewY))
                             {
                                 entity.renderEntity(canvas, gc, (x - extraViewX) + smoothingValueX, (y - extraViewY) + smoothingValueY, renderLayer);
-
-
-
                             }
                         }
                     }

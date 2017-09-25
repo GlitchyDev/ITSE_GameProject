@@ -17,10 +17,11 @@ public class TestRenderHelper {
     public static HashMap<Image,Image> cachedSprites = new HashMap<>();
 
 
-    public static Image resample(Image input, int scaleFactor) {
-        if(cachedSprites.containsKey(input))
-        {
-            return cachedSprites.get(input);
+    public static Image resample(Image input, int scaleFactor, boolean useCache) {
+        if(useCache) {
+            if (cachedSprites.containsKey(input)) {
+                return cachedSprites.get(input);
+            }
         }
         final int W = (int) input.getWidth();
         final int H = (int) input.getHeight();
@@ -42,7 +43,9 @@ public class TestRenderHelper {
                 }
             }
         }
-        cachedSprites.put(input,output);
+        if(useCache) {
+            cachedSprites.put(input, output);
+        }
         return output;
     }
 

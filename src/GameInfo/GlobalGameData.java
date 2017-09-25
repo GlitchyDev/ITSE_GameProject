@@ -64,7 +64,7 @@ public class GlobalGameData {
                 "GameAssets/Sprites/Skull_Entity/"
         ));
         ArrayList<String> resizeException = new ArrayList<>(Arrays.asList(
-                "Pro"
+                "InsertExemptions"
         ));
         System.out.println("Load Assets: Processing Sprites");
         System.out.println("Load Assets: Added Sprites");
@@ -85,7 +85,7 @@ public class GlobalGameData {
                     if(doResize)
                     {
                         int size = 2;
-                        sprites.put(temp, TestRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size));
+                        sprites.put(temp, TestRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size,false));
                         System.out.println("  - " + temp);
                     }
                     else

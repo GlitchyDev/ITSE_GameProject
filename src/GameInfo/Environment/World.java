@@ -175,6 +175,28 @@ public class World {
 
     }
 
+
+    /**
+     * This adds all blocks between points, use it good
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     */
+    public BlockBase[][] getAllBlocksBetweenPoints(int x1, int y1, int x2, int y2)
+    {
+        BlockBase[][] blocks = new BlockBase[Math.abs(x1-x2)+1][Math.abs(y1-y2)+1];
+        for(int x = World.getChunkNumfromCordNum(x2); x <= World.getChunkNumfromCordNum(x1); x++)
+        {
+            for(int y = World.getChunkNumfromCordNum(y2); y <= World.getChunkNumfromCordNum(y1); y++)
+            {
+                addBlocksInsideChunk(getChunkFromChunkXY(x,y),x,y,blocks,x1,y1,x2,y2);
+            }
+        }
+        return blocks;
+    }
+
     /**
      * This adds all blocks inside the specified square to their relative positions in the 2D array
      * - Best used for Pathfinding and Viewport Rendering
@@ -202,7 +224,67 @@ public class World {
                 }
             }
         }
+    }
 
+
+    /**
+     * Grabs all entities between the designated points
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     */
+    public ArrayList<EntityBase> getAllEntitiesBetweenPoints(int x1, int y1, int x2, int y2)
+    {
+        ArrayList<EntityBase> entities = new ArrayList<>();
+        for(int x = World.getChunkNumfromCordNum(x2); x <= World.getChunkNumfromCordNum(x1); x++)
+        {
+            for(int y = World.getChunkNumfromCordNum(y2); y <= World.getChunkNumfromCordNum(y1); y++)
+            {
+                addEntitiesInsideChunk(getChunkFromChunkXY(x,y),x,y,entities,x1,y1,x2,y2);
+            }
+        }
+        return entities;
+    }
+
+    /**
+     * This adds all blocks inside the specified square to their relative positions in the 2D array
+     * - Best used for Pathfinding and Viewport Rendering
+     * @param chunk
+     * @param chunkX
+     * @param chunkY
+     * @param entities
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    public void addEntitiesInsideChunk(Chunk chunk, int chunkX, int chunkY, ArrayList<EntityBase> entities, int x1, int y1, int x2, int y2) {
+
+        for(int x = getPosNumFromChunkNum(chunkX); x <= getPosNumFromChunkNum(chunkX) + World.getChunkSize() - 1; x++)
+        {
+            for(int y = getPosNumFromChunkNum(chunkY); y <= getPosNumFromChunkNum(chunkY) + World.getChunkSize() - 1; y++)
+            {
+                if(x1 >= x && x2 <= x)
+                {
+                    if(y1 >= y && y2 <= y)
+                    {
+                        ArrayList<EntityBase> entitiesInChunk = chunk.getEntities();
+                        for(EntityBase entity: entitiesInChunk)
+                        {
+                            if(entity.getX() == x)
+                            {
+                                if(entity.getY() == y)
+                                {
+                                    entities.add(entity);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void addEntityToWorld(EntityBase entityBase)

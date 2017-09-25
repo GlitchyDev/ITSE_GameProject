@@ -14,6 +14,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import sample.TestRenderHelper;
 
+import java.util.ArrayList;
+
 
 /**
  * THe purpose of this entity is to
@@ -28,16 +30,17 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
 
     private ScatterSkullStateEnum currentState;
     private long stateStartTime;
-
+    private DamageableEntityBase currentTarget;
     public Scatter_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
         entityType = EntityType.SCATTER_SKULL;
 
-        head_sprite = TestRenderHelper.resample(globalGameData.getSprite("Skull"),2);
-        spine_sprite = TestRenderHelper.resample(globalGameData.getSprite("Spine_Part"),2);
+        head_sprite = globalGameData.getSprite("Skull");
+        spine_sprite = globalGameData.getSprite("Spine_Part");
 
         stateStartTime = System.currentTimeMillis();
         currentState = ScatterSkullStateEnum.INACTIVE;
+        currentTarget = null;
     }
 
     @Override
@@ -46,18 +49,23 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
         {
             case INACTIVE:
                 if(globalGameData.getRandom().nextInt(120) == 0) {
+                    System.out.println("Activated");
                     boolean activated = false;
-                    if (world.isEntityAtPos(x + 1, y)) {
-                        activated = true;
-                    }
-                    if (world.isEntityAtPos(x - 1, y)) {
-                        activated = true;
-                    }
-                    if (world.isEntityAtPos(x, y + 1)) {
-                        activated = true;
-                    }
-                    if (world.isEntityAtPos(x, y - 1)) {
-                        activated = true;
+                    double lowestDistance = Double.MAX_VALUE;
+                    int distance = 2;
+                    ArrayList<EntityBase> entities = world.getAllEntitiesBetweenPoints(x+distance,y+distance,x-distance,y-distance);
+                    entities.remove(this);
+                    for(EntityBase entity: entities)
+                    {
+                        if( lowestDistance > distanceFromEntity(entity))
+                        {
+                            if(entity.isDamageable()) {
+                                currentTarget = (DamageableEntityBase) entity;
+                                lowestDistance = distanceFromEntity(entity);
+                                activated = true;
+                            }
+
+                        }
                     }
                     if(activated)
                     {
@@ -95,7 +103,7 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
                     gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
                     break;
                 case ACTIVATE:
-                    double percentage = 0;
+                    double percentage;
                     double timeLength = 4;
                     if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= timeLength)
                     {
@@ -105,9 +113,10 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
                     {
                         percentage = 1;
                     }
-                    Image glitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(15,15),2);
+                    gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                    Image glitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(15,15),2,false);
                     gc.setGlobalAlpha(0.4 * percentage);
-                    gc.drawImage(TestRenderHelper.adjustImage(glitchStatic,TestRenderHelper.resample(globalGameData.getSprite("Skull_Map"),2)),(int) (World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(head_sprite)), (int) (World.getScaledUpSquareSize() * y + 0.5));
+                    gc.drawImage(TestRenderHelper.adjustImage(glitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(glitchStatic)), (int) (World.getScaledUpSquareSize() * y + 0.5));
                     gc.setGlobalAlpha(1.0);
                     // After X time passes, enter "Erupt, dealing X damage to all nearby
                     break;
@@ -121,7 +130,8 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
                     // Throw head towards nearest target until hits wall, spawns new Scatter skull,
                     // Enters new mode
                     break;
-                case RETREAT:;
+                case RETREAT:
+                    break;
             }
 
 

@@ -18,6 +18,7 @@ public abstract class EntityBase {
     protected long creationTime;
     protected int x;
     protected int y;
+    protected boolean isDamageable;
 
     public EntityBase(World world, GlobalGameData globalGameData, int x, int y)
     {
@@ -26,6 +27,7 @@ public abstract class EntityBase {
         this.x = x;
         this.y = y;
         creationTime = System.currentTimeMillis();
+        isDamageable = false;
     }
 
 
@@ -73,23 +75,17 @@ public abstract class EntityBase {
         }
     }
 
-    public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent)
-    {
+    public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
-        if(oldChunk != newChunk)
-        {
+        if (oldChunk != newChunk) {
             newChunk.getEntities().add(this);
             oldChunk.getEntities().remove(this);
         }
-        if(doCheckColisions)
-        {
-            if(doStructureEvents)
-            {
-                if(newChunk.isStructureAtRelative(x + relativeX, y + relativeY))
-                {
-                    switch(newChunk.getStructureAtPos(x + relativeX, y + relativeY).checkCollision(x + relativeX, y + relativeY))
-                    {
+        if (doCheckColisions) {
+            if (doStructureEvents) {
+                if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
+                    switch (newChunk.getStructureAtPos(x + relativeX, y + relativeY).checkCollision(x + relativeX, y + relativeY)) {
                         case CAN_NOT_MOVE_DEFINITE:
                             return false;
                         case CHECK_BLOCK_COLLISIONS:
@@ -98,23 +94,19 @@ public abstract class EntityBase {
                             }
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
                         return false;
                     }
                 }
-            }
-            else {
+            } else {
                 if (!(world.getBlockFromCords(x + relativeX, y + relativeY).checkCollision(world, this))) {
                     return false;
                 }
             }
         }
-        if(doGenerateEnterEvent)
-        {
-            if(doStructureEvents) {
+        if (doGenerateEnterEvent) {
+            if (doStructureEvents) {
                 //System.out.println("We should be finding shit!");
                 if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
                     //System.out.println("We found shit!");
@@ -123,9 +115,8 @@ public abstract class EntityBase {
             }
             world.getBlockFromCords(x, y).exitBlock(this);
         }
-        if(doGenerateExitEvent)
-        {
-            if(doStructureEvents) {
+        if (doGenerateExitEvent) {
+            if (doStructureEvents) {
                 if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
                     newChunk.getStructureAtPos(x + relativeX, y + relativeY).exitEvent(x + relativeX, y + relativeY);
                 }
@@ -150,6 +141,9 @@ public abstract class EntityBase {
     public int getY(){return y;}
     public void setX(int x){this.x = x;}
     public void setY(int y){this.y = y;}
+    public boolean isDamageable() {
+        return isDamageable;
+    }
 
     public EntityType getEntityType() {
         return entityType;
