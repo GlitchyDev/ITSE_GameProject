@@ -18,6 +18,7 @@ Tanner: Founder of the Git, holder of the only (regularly used) Mac, and contrib
 Abdullah: Master of SQL and our only Linuix user! How rare!
 
 Ben: ???? MASTER OF THE UNKNOWN AND HASN'T SHOWN UP SINCE DAY ONE!
+Edit: OUR MESIA HAS RETURNED WITH THE GIFT OF SOUND!
 
 
 Wish us luck! ( We need it D_D )
