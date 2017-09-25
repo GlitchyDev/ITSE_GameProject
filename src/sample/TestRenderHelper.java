@@ -20,7 +20,9 @@ public class TestRenderHelper {
     public static Image resample(Image input, int scaleFactor, boolean useCache) {
         if(useCache) {
             if (cachedSprites.containsKey(input)) {
+                System.out.println("CACHEING!");
                 return cachedSprites.get(input);
+
             }
         }
         final int W = (int) input.getWidth();

@@ -10,9 +10,13 @@ import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import sample.XBoxController;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -23,6 +27,7 @@ public class TestWorldGameState extends GameStateBase {
     private World world;
     private Viewport viewport;
     private Client client;
+    private MediaPlayer backgroundMusic;
 
 
 
@@ -61,10 +66,19 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         gc.setGlobalAlpha(1.0);
 
+
+        int mb = 1024 * 1024;
+        Runtime instance = Runtime.getRuntime();
+        double usedMemory = (instance.totalMemory() - instance.freeMemory()) / mb;
+
         gc.setFill(Color.BLACK);
-        gc.fillText("FPS: " + lastFPS,250,50);
-        gc.fillText("LogicPercentage: " + lastLogicFramePercentage,250,60);
-        gc.fillText("RenderPercentage: " + lastRenderFramePercentage,250,70);
+        gc.fillText("FPS: " + lastFPS,350,50);
+        gc.fillText("LogicPercentage: " + lastLogicFramePercentage,350,60);
+        gc.fillText("RenderPercentage: " + lastRenderFramePercentage,350,70);
+        gc.fillText("Used Memory: " + usedMemory + " MB",350,80);
+
+
+
     }
 
     @Override
@@ -106,6 +120,11 @@ public class TestWorldGameState extends GameStateBase {
 
         Scatter_Skull_Entity skullEntity = new Scatter_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);
+
+        Media sound = globalGameData.getSound("CaveWaterDrops");
+        backgroundMusic = new MediaPlayer(sound);
+        backgroundMusic.setOnEndOfMedia(() -> backgroundMusic.seek(Duration.ZERO));
+        backgroundMusic.play();
 
 
     }

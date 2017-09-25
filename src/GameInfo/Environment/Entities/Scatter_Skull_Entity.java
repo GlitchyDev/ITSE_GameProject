@@ -48,7 +48,7 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
         switch(currentState)
         {
             case INACTIVE:
-                if(globalGameData.getRandom().nextInt(120) == 0) {
+                if(globalGameData.getRandom().nextInt(50) == 0) {
                     System.out.println("Activated");
                     boolean activated = false;
                     double lowestDistance = Double.MAX_VALUE;
@@ -73,8 +73,16 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
                         currentState = ScatterSkullStateEnum.ACTIVATE;
                     }
                 }
+
+
+
                 break;
             case ACTIVATE:
+                if(System.currentTimeMillis() >= stateStartTime + 2000)
+                {
+                    stateStartTime = System.currentTimeMillis();
+                    currentState = ScatterSkullStateEnum.ERUPT;
+                }
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
                 break;
             case ERUPT:
@@ -100,28 +108,59 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
             switch(currentState)
             {
                 case INACTIVE:
-                    gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                    gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
                     break;
                 case ACTIVATE:
-                    double percentage;
-                    double timeLength = 4;
-                    if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= timeLength)
+                    double activatePercentage;
+                    double activationLength = 2;
+                    if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= activationLength)
                     {
-                        percentage = 1.0 / (timeLength * 1000.0) * (System.currentTimeMillis() - stateStartTime);
+                        activatePercentage = 1.0 / (activationLength * 1000.0) * (System.currentTimeMillis() - stateStartTime);
                     }
                     else
                     {
-                        percentage = 1;
+                        activatePercentage = 1;
                     }
-                    gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
-                    Image glitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(15,15),2,false);
-                    gc.setGlobalAlpha(0.4 * percentage);
-                    gc.drawImage(TestRenderHelper.adjustImage(glitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(glitchStatic)), (int) (World.getScaledUpSquareSize() * y + 0.5));
+                    // gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                    gc.drawImage(globalGameData.getSprite("Skull_Activate_" + (int)(1+(activatePercentage*2))), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                    //Image activationGlitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(15,15),2,false);
+                    gc.setGlobalAlpha(0.4 * activatePercentage);
+                    //gc.drawImage(TestRenderHelper.adjustImage(activationGlitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(activationGlitchStatic)), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
                     gc.setGlobalAlpha(1.0);
                     // After X time passes, enter "Erupt, dealing X damage to all nearby
                     break;
                 case ERUPT:
-                    // Deal damage to all nearby targets
+                    double eruptPercentage;
+                    double eruptLength = 1.5;
+                    if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= eruptLength)
+                    {
+                        eruptPercentage = 1.0 / (eruptLength * 1000.0) * (System.currentTimeMillis() - stateStartTime);
+                    }
+                    else
+                    {
+                        eruptPercentage = 1;
+                    }
+
+                    double yOffset = Math.sin(eruptPercentage * Math.PI/2) * 100.0;
+                    double xOffset = Math.sin(eruptPercentage * Math.PI) * 10;
+
+                    for(int i = 0; i < eruptPercentage * (100/14); i++)
+                    {
+                        xOffset = Math.sin(((System.currentTimeMillis() - stateStartTime)/1000.0 + 0.5*i) * Math.PI ) * 5;
+                        gc.drawImage(globalGameData.getSprite("Spine_Part"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Spine_Part")) + xOffset), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset + 30 + i*14));
+                        gc.setGlobalAlpha(0.3);
+                        //Image eruptGlitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(14,7),2,false);
+                        //gc.drawImage(TestRenderHelper.adjustImage(eruptGlitchStatic,globalGameData.getSprite("Spine_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(eruptGlitchStatic)) + xOffset, (int) (World.getScaledUpSquareSize() *  y + 0.5 + 1 - yOffset + 30 + i*14));
+                        gc.setGlobalAlpha(1.0);
+
+                    }
+                    xOffset = Math.sin(eruptPercentage * Math.PI) * 10;
+                    gc.drawImage(globalGameData.getSprite("Skull_Activate_" + (int)(3+(eruptPercentage*5))), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull")) + xOffset), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset));
+                    //Image eruptGlitchStatic = TestRenderHelper.resample(TestRenderHelper.generateRandomStatic(19,17),2,false);
+                    gc.setGlobalAlpha(0.4);
+                    //gc.drawImage(TestRenderHelper.adjustImage(eruptGlitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + TestRenderHelper.findCenterXMod(eruptGlitchStatic)) + xOffset, (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset) - 2);
+                    gc.setGlobalAlpha(1.0);
+
                     break;
                 case WOBBLE:
                     // Idle, search for nearby targets

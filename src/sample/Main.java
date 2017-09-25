@@ -65,8 +65,10 @@ public class Main extends Application {
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas,gc);
-                globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas,gc);
+                if(!primaryStage.isIconified()) {
+                    globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas, gc);
+                    globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas, gc);
+                }
             }
         }.start();
 

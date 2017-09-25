@@ -5,6 +5,7 @@ import GameStates.GameStateBase;
 import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import sample.DebugController;
@@ -28,6 +29,8 @@ import java.util.Random;
 public class GlobalGameData {
     private HashMap<String, GameStateBase> gameStates;
     private HashMap<String, Image> sprites;
+    private HashMap<String, Media> sounds;
+
     private GameStateEnum currentGameState;
     private ArrayList<XBoxController> connectedControllers;
     private ArrayList<Player> connectedPlayers;
@@ -38,6 +41,7 @@ public class GlobalGameData {
         System.out.println("Global Gamestate: Creating Global GameState");
         gameStates = new HashMap<>();
         sprites = new HashMap<>();
+        sounds = new HashMap<>();
         this.currentGameState = startingState;
         random = new Random();
         connectedControllers = new ArrayList<>();
@@ -57,7 +61,7 @@ public class GlobalGameData {
 
     private void loadAssets() {
         System.out.println("Load Assets: Loading all Registered Folders");
-        ArrayList<String> registeredFolders = new ArrayList<>(Arrays.asList(
+        ArrayList<String> registeredSpriteFolders = new ArrayList<>(Arrays.asList(
                 "GameAssets/Sprites/TestSprites/",
                 "GameAssets/Sprites/Pro/",
                 "GameAssets/Sprites/Terrain/",
@@ -68,7 +72,7 @@ public class GlobalGameData {
         ));
         System.out.println("Load Assets: Processing Sprites");
         System.out.println("Load Assets: Added Sprites");
-        for (String currentFolder : registeredFolders) {
+        for (String currentFolder : registeredSpriteFolders) {
             File startingFolder = new File(currentFolder);
             System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
             for (File file : startingFolder.listFiles()) {
@@ -93,6 +97,25 @@ public class GlobalGameData {
                         sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
                         System.out.println("  ~ " + temp);
                     }
+                }
+            }
+        }
+        ArrayList<String> registeredSoundFolders = new ArrayList<>(Arrays.asList(
+                "GameAssets/Sounds/"
+
+        ));
+        System.out.println("Load Assets: Processing Sounds");
+        System.out.println("Load Assets: Added Sounds");
+        for (String currentFolder : registeredSoundFolders) {
+            File startingFolder = new File(currentFolder);
+            System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
+            for (File file : startingFolder.listFiles()) {
+                if (file.isFile()) {
+                    String temp = file.getName().replace("mp3","");
+                    temp = temp.replace("MP3","");
+                    temp = temp.replace(".","");
+                    sounds.put(temp, new Media(new File(currentFolder + file.getName()).toURI().toString()));
+                    System.out.println("  - " + temp);
                 }
             }
         }
@@ -170,10 +193,14 @@ public class GlobalGameData {
         getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
     }
 
-
     public Image getSprite(String sprite)
     {
         return sprites.get(sprite);
+    }
+
+    public Media getSound(String sound)
+    {
+        return sounds.get(sound);
     }
 
     public GameStateEnum getCurrentGameState() {
