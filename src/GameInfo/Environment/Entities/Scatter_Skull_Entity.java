@@ -48,41 +48,11 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
         switch(currentState)
         {
             case INACTIVE:
-                if(globalGameData.getRandom().nextInt(50) == 0) {
-                    System.out.println("Activated");
-                    boolean activated = false;
-                    double lowestDistance = Double.MAX_VALUE;
-                    int distance = 2;
-                    ArrayList<EntityBase> entities = world.getAllEntitiesBetweenPoints(x+distance,y+distance,x-distance,y-distance);
-                    entities.remove(this);
-                    for(EntityBase entity: entities)
-                    {
-                        if( lowestDistance > distanceFromEntity(entity))
-                        {
-                            if(entity.isDamageable()) {
-                                currentTarget = (DamageableEntityBase) entity;
-                                lowestDistance = distanceFromEntity(entity);
-                                activated = true;
-                            }
-
-                        }
-                    }
-                    if(activated)
-                    {
-                        stateStartTime = System.currentTimeMillis();
-                        currentState = ScatterSkullStateEnum.ACTIVATE;
-                    }
-                }
-
 
 
                 break;
             case ACTIVATE:
-                if(System.currentTimeMillis() >= stateStartTime + 2000)
-                {
-                    stateStartTime = System.currentTimeMillis();
-                    currentState = ScatterSkullStateEnum.ERUPT;
-                }
+
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
                 break;
             case ERUPT:
@@ -108,6 +78,62 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
             switch(currentState)
             {
                 case INACTIVE:
+                    double timePassed = ((System.currentTimeMillis() - this.creationTime)%8000)/1000;
+
+                    switch((int)timePassed)
+                    {
+                        case 0:
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Forward"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 1:
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Left"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 2:
+                            gc.drawImage(globalGameData.getSprite("Skull_Left"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 3:
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 4:
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 5:
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 6:
+                            gc.drawImage(globalGameData.getSprite("Skull_Right"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                        case 7:
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            break;
+                    }
+
+
+                    break;
+                case ACTIVATE:
+
+                    break;
+                case ERUPT:
+
+
+                    break;
+                case WOBBLE:
+                    // Idle, search for nearby targets
+                    break;
+                case ATTACK:
+                    // Throw head towards nearest target until hits wall, spawns new Scatter skull,
+                    // Enters new mode
+                    break;
+                case RETREAT:
+                    break;
+            }
+
+
+
+
+        }
+            /*
+            case INACTIVE:
                     gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  TestRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
                     break;
                 case ACTIVATE:
@@ -171,29 +197,7 @@ public class Scatter_Skull_Entity extends DamageableEntityBase {
                     break;
                 case RETREAT:
                     break;
-            }
-
-
-
-
-        }
-            //gc.setStroke(Color.RED);
-            //gc.strokeLine(0,0,(int)(x*World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()/2),(int)(y*World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()/2));
-
-            /*
-            double wobble = 0;
-
-            int multiplier = 20;
-            for(int i = (int)(headraise / 8); i >= 0; i--)
-            {
-                wobble = Math.sin(Math.PI/1200.0 * (System.currentTimeMillis() - creationTime - 500 * i)) * (4 + 0.5 * ((headraise / 8) -i));
-                gc.drawImage(spine_sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 10 + wobble), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - headraise + 15 + 8 * i ));
-            }
-
-            wobble = Math.sin(Math.PI/1200.0 * (System.currentTimeMillis() - creationTime)) * 8;
-            gc.drawImage(head_sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 4 + wobble * 1.2), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - headraise));
-            */
-
+             */
 
     }
 
