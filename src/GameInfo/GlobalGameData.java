@@ -5,6 +5,7 @@ import GameStates.GameStateBase;
 import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
 import RenderingHelpers.ImageRenderHelper;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import net.java.games.input.Controller;
@@ -12,6 +13,7 @@ import net.java.games.input.ControllerEnvironment;
 import HardwareAdaptors.DebugController;
 import HardwareAdaptors.XBoxController;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,6 +79,7 @@ public class GlobalGameData {
             for (File file : startingFolder.listFiles()) {
                 if (file.isFile()) {
                     String temp = file.getName().replace(".png","");
+
 
                     boolean doResize = true;
                     for(String exception: resizeException) {

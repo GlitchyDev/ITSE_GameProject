@@ -2,6 +2,7 @@ package GameStates;
 
 import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
+import RenderingHelpers.BufferedRenderingContext;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -20,12 +21,9 @@ import java.util.Random;
  */
 public class DebugControlsGameState extends GameStateBase {
     private XBoxController controller;
-    private Random random;
-
     public DebugControlsGameState(GlobalGameData globalGameData)
     {
         super(globalGameData);
-        random = new Random();
     }
 
     @Override
@@ -44,15 +42,15 @@ public class DebugControlsGameState extends GameStateBase {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
         // Render Background
-        for(int x = 0; x < 51; x++)
+        for(int x = 0; x < canvas.getWidth()/20; x++)
         {
-            for(int y = 0; y < 26; y++)
+            for(int y = 0; y < canvas.getHeight()/20; y++)
             {
-                int imageSize = 27;
-                gc.drawImage(globalGameData.getSprite("Test"),x * imageSize,y * imageSize,imageSize,imageSize);
+                gc.drawImage(globalGameData.getSprite("Test"),x * 20,y * 20);
 
             }
         }
+
 
         if(controller.hasController()) {
             // Render Controller Button Information
