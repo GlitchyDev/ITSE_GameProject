@@ -5,18 +5,19 @@ import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Pro_Player;
-import GameInfo.Environment.Entities.Scatter_Skull_Entity;
-import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
+import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.World;
+import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.WritableImage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import sample.XBoxController;
+import HardwareAdaptors.XBoxController;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -77,6 +78,10 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillText("RenderPercentage: " + lastRenderFramePercentage,350,70);
         gc.fillText("Used Memory: " + usedMemory + " MB",350,80);
 
+        //WritableImage image = new WritableImage((int)canvas.getWidth(),(int)canvas.getHeight());
+        //canvas.snapshot(null, image);
+        //gc.drawImage(image,5,5);
+
 
 
     }
@@ -118,7 +123,7 @@ public class TestWorldGameState extends GameStateBase {
         //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
         //world.addEntityToWorld(pathfindingDebug);
 
-        Scatter_Skull_Entity skullEntity = new Scatter_Skull_Entity(world,globalGameData,7,7);
+        Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);
 
         Media sound = globalGameData.getSound("CaveWaterDrops");

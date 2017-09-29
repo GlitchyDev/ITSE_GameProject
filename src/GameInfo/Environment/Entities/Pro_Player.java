@@ -10,9 +10,8 @@ import GameInfo.Player;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import sample.DirectionalPadEnum;
-import sample.TestRenderHelper;
-import sample.XBoxController;
+import HardwareAdaptors.DirectionalPadEnum;
+import HardwareAdaptors.XBoxController;
 
 import java.util.ArrayList;
 

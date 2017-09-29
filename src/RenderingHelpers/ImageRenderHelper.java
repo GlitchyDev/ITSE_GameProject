@@ -1,4 +1,4 @@
-package sample;
+package RenderingHelpers;
 
 import GameInfo.Environment.World;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * This class intends to store the "Resampled" versions of sprites
  */
-public class TestRenderHelper {
+public class ImageRenderHelper {
     public static HashMap<Image,Image> cachedSprites = new HashMap<>();
 
 

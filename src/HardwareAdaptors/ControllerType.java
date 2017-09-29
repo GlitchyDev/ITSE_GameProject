@@ -1,4 +1,4 @@
-package sample;
+package HardwareAdaptors;
 
 public enum ControllerType {
     XBoxController,

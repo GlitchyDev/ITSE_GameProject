@@ -6,8 +6,8 @@ import GameStates.Enums.MainMenuPhaseEnum;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import sample.ControllerType;
-import sample.XBoxController;
+import HardwareAdaptors.ControllerType;
+import HardwareAdaptors.XBoxController;
 
 public class MainMenuGameState extends GameStateBase {
     // Phases within a State report "MiniStates" that don't require a seperate State

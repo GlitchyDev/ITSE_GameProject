@@ -4,13 +4,10 @@ import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import sample.ControllerType;
-import sample.XBoxController;
+import HardwareAdaptors.ControllerType;
+import HardwareAdaptors.XBoxController;
 
-import java.util.HashMap;
 import java.util.Random;
 
 /**

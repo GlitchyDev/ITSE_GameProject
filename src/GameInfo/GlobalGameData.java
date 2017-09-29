@@ -4,16 +4,15 @@ import GameStates.DebugControlsGameState;
 import GameStates.GameStateBase;
 import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
+import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-import sample.DebugController;
-import sample.TestRenderHelper;
-import sample.XBoxController;
+import HardwareAdaptors.DebugController;
+import HardwareAdaptors.XBoxController;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -89,7 +88,7 @@ public class GlobalGameData {
                     if(doResize)
                     {
                         int size = 2;
-                        sprites.put(temp, TestRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size,false));
+                        sprites.put(temp, ImageRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size,false));
                         System.out.println("  - " + temp);
                     }
                     else

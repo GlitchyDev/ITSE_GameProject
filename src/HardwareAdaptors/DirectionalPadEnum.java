@@ -1,4 +1,4 @@
-package sample;
+package HardwareAdaptors;
 
 /**
  * Created by Robert on 8/25/2017.

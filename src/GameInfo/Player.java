@@ -1,7 +1,7 @@
 package GameInfo;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import sample.XBoxController;
+import HardwareAdaptors.XBoxController;
 
 import java.util.UUID;
 

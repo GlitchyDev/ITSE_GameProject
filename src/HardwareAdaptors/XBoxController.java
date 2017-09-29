@@ -1,8 +1,6 @@
-package sample;
+package HardwareAdaptors;
 
 import net.java.games.input.Controller;
-
-import java.util.HashMap;
 
 /**
  * Created by Robert on 8/24/2017.

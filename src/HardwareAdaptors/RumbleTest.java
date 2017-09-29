@@ -1,4 +1,4 @@
-package sample;
+package HardwareAdaptors;
 
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
