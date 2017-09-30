@@ -24,4 +24,20 @@ public enum BlockTypeEnum {
         return true;
     }
 
+    public static int caculateLightCost(BlockTypeEnum type, int light) {
+        switch (type) {
+            case TEST_FLOOR:
+                return light - 1;
+            case TEST_WALL:
+                return 0;
+            case DEBUG_BLOCK:
+                return light;
+            case PATHFINDING_DEBUG:
+                return light - 1;
+        }
+        return 0;
+    }
+
+
+
 }

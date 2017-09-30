@@ -11,20 +11,29 @@ import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.image.WritableImage;
+import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import HardwareAdaptors.XBoxController;
+import sample.RenderingTest;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 /**
  * The "World of the Game", keepping track of the World, viewport, and the Client
  * Created by Robert on 8/28/2017.
  */
 public class TestWorldGameState extends GameStateBase {
+    private final WritablePixelFormat<IntBuffer> pixelFormat =
+            PixelFormat.getIntArgbPreInstance();
+
     private World world;
     private Viewport viewport;
     private Client client;
@@ -63,9 +72,10 @@ public class TestWorldGameState extends GameStateBase {
         viewport.render(canvas,gc);
 
         gc.setFill(Color.BLACK);
-        gc.setGlobalAlpha(0.15);
+        gc.setGlobalAlpha(0.05);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         gc.setGlobalAlpha(1.0);
+
 
 
         int mb = 1024 * 1024;
@@ -81,8 +91,6 @@ public class TestWorldGameState extends GameStateBase {
         //WritableImage image = new WritableImage((int)canvas.getWidth(),(int)canvas.getHeight());
         //canvas.snapshot(null, image);
         //gc.drawImage(image,5,5);
-
-
 
     }
 
