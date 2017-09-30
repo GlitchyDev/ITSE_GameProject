@@ -98,10 +98,15 @@ public class WallFloorBlock extends BlockBase {
 
     }
 
-    //note: this doesn't handle incorrect sprite names well. At all, really, but it works if you don't screw it up.
+    //These methods allow you to set the sprites the block uses
     public void setSprite(GlobalGameData globalGameData, String spriteName)
     {
         sprite = globalGameData.getSprite(spriteName);
+    }
+
+    public void setSecondarySprite(GlobalGameData globalGameData, String spriteName)
+    {
+        secondarySprite = globalGameData.getSprite(spriteName);
     }
 
     @Override
