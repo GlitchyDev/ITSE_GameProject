@@ -18,35 +18,34 @@ import java.util.ArrayList;
 public class DoorBlock extends BlockBase {
     // Entities currently contained
     private ArrayList<EntityBase> entities;
-    // The assigned sprite
-    private Image sprite;
+    // The assigned sprites
+    private Image spriteOpen;
+    private Image spriteClosed;
 
     public DoorBlock(GlobalGameData globalGameData)
     {
         entities = new ArrayList<>();
         blockType = BlockTypeEnum.DOOR_CLOSED;
-        sprite = globalGameData.getSprite("Test_Door_Closed");
+        spriteClosed = globalGameData.getSprite("Test_Door_Closed");
+        spriteOpen = globalGameData.getSprite("Test_Door_Open");
     }
 
     public DoorBlock(GlobalGameData globalGameData, BlockTypeEnum type)
     {
         entities = new ArrayList<>();
-
-        if(type == BlockTypeEnum.DOOR_OPEN)
-        {
-            blockType = BlockTypeEnum.DOOR_OPEN;
-            sprite = globalGameData.getSprite("Test_Door_Open");
-        }
-        else
-        {
-            blockType = BlockTypeEnum.DOOR_CLOSED;
-            sprite = globalGameData.getSprite("Test_Door_Closed");
-        }
+        blockType = type;
+        spriteClosed = globalGameData.getSprite("Test_Door_Closed");
+        spriteOpen = globalGameData.getSprite("Test_Door_Open");
     }
 
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize()/4*3);
+        if(renderLayer == 1) {
+            if (blockType == BlockTypeEnum.DOOR_OPEN)
+                gc.drawImage(spriteOpen, (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize() / 4 * 3);
+            else
+                gc.drawImage(spriteClosed, (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize() / 4 * 3);
+        }
     }
 
     @Override
