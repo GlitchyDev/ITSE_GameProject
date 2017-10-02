@@ -18,4 +18,5 @@ Abdullah: SQLer
 Ben: Sound designer
 
 Design document: https://docs.google.com/document/d/1NrAsJm9TykxZeyx0QOA5NYeONZ8zWThkQvhTzzTYYaE/edit
+
 Group meeting minutes: https://docs.google.com/document/d/1MtRKyAAVEGkwjyVDMVLXQWxFbYqNOVCp2hgO-gpsH_U/edit
