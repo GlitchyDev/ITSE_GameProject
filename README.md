@@ -1,24 +1,21 @@
 # ITSE_GameProject
-Our Group Intro to Software Engineering Project!
 
 Hello!
-Welcome to our ITSE Gameproject!
 
-As part of our final project for our Intro to Software Engineering class, we are required to make a big collaberative software project!
-We decided to have fun with it! And build a Video game! Wooo! A 2D infinitly generating Multiplayer Dungeon Crawler! Much fun!
+As part of our final project for our Intro to Software Engineering class, we are required to make a big collaborative software project!
+We decided to have fun with it and build a video game, a 2D infinitely generating multiplayer Dungeon Crawler! Wooo! Much fun!
 
 Here is our Team!
 
-Robert: The "Framework" developer, with 6 years of prior Java experiance
+Robert: Framework developer
 
-Charlie: The head of Terrain Generation, and general "Keep us on track'er!
+Charlie: Head of terrain and structure generation and cat herder
 
-Tanner: Founder of the Git, holder of the only (regularly used) Mac, and contributer of great ideas!
+Tanner: Founder of the git and contributor of great ideas!
 
-Abdullah: Master of SQL and our only Linuix user! How rare!
+Abdullah: SQLer
 
-Ben: ???? MASTER OF THE UNKNOWN AND HASN'T SHOWN UP SINCE DAY ONE!
-Edit: OUR MESIA HAS RETURNED WITH THE GIFT OF SOUND!
+Ben: Sound designer
 
-
-Wish us luck! ( We need it D_D )
+Design document: https://docs.google.com/document/d/1NrAsJm9TykxZeyx0QOA5NYeONZ8zWThkQvhTzzTYYaE/edit
+Group meeting minutes: https://docs.google.com/document/d/1MtRKyAAVEGkwjyVDMVLXQWxFbYqNOVCp2hgO-gpsH_U/edit
