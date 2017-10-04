@@ -7,6 +7,8 @@ package GameInfo.Environment.Blocks;
 public enum BlockTypeEnum {
     TEST_FLOOR,
     TEST_WALL,
+    DOOR_OPEN,
+    DOOR_CLOSED,
     DEBUG_BLOCK,
     PATHFINDING_DEBUG;
 
@@ -15,6 +17,10 @@ public enum BlockTypeEnum {
             case TEST_FLOOR:
                 return true;
             case TEST_WALL:
+                return false;
+            case DOOR_OPEN:
+                return true;
+            case DOOR_CLOSED:
                 return false;
             case DEBUG_BLOCK:
                 return true;

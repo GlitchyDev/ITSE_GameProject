@@ -2,10 +2,15 @@ package GameInfo.Environment.Structures;
 
 import GameInfo.Environment.Blocks.BlockTypeEnum;
 import GameInfo.Environment.Blocks.WallFloorBlock;
+import GameInfo.Environment.Blocks.DoorBlock;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
+
+/* Created by Charlie on 2017-09-22
+ * This class implements a simple house structure, with four walls and a door at the bottom center
+ */
 
 public class BasicHouse extends StructureBase {
 
@@ -20,19 +25,58 @@ public class BasicHouse extends StructureBase {
     public void buildStructure() {
         for(int x = 0; x < structureWidth; x++)
         {
-            for(int y = 0; y < structureHeight; y++)
-            {
+            for(int y = 0; y < structureHeight; y++) {
                 //builds walls around edges, except door in center of next-to-last row
-                if ((x == 0 || y == 1 || x == structureWidth - 1 || y == structureHeight - 1) && !(y == 1 && x == Math.ceil(structureWidth/2)))
-                {
+                //Sets correct sprite for each block (top/bottom sides, left/right sides, corners)
+                //First the left wall and right walls, then the top and bottom, including the corners and door
+                if ((x == 0 || x == structureWidth - 1) && (y > 1 && y < structureHeight - 1)) {
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
+                    b.setSprite(globalGameData, "House_Wall_V");
+                    b.setSecondarySprite(globalGameData, "House_Wall_Top_V");
                 }
-                //fills inside w/ floor
-                //y == 0 is left alone to make placing the structure easier (i.e. cheat, make sure block outside door will always be in the same chunk as the structure)
-                else if (y != 0)
-                {
+                //now top and bottom rows, which all have same sprite but door block
+                else if ((y == structureHeight - 1 || y == 1)) {
+
+                    if (y == 1 && x == (int) Math.ceil(structureWidth / 2)) {
+                        DoorBlock b = new DoorBlock(globalGameData, BlockTypeEnum.DOOR_CLOSED);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                    } else if (y == structureHeight - 1 && x == 0) {
+                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                        b.setSprite(globalGameData, "House_Wall_R");
+                        b.setSecondarySprite(globalGameData, "House_Wall_Top_UR");
+                    } else if (y == 1 && x == 0) {
+                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                        b.setSprite(globalGameData, "House_Wall_R");
+                        b.setSecondarySprite(globalGameData, "House_Wall_Top_LR");
+                    } else if (y == 1 && x == structureWidth - 1) {
+                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                        b.setSprite(globalGameData, "House_Wall_L");
+                        b.setSecondarySprite(globalGameData, "House_Wall_Top_LL");
+                    }  else if (y == structureHeight - 1 && x == structureWidth - 1) {
+                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                        b.setSprite(globalGameData, "House_Wall_L");
+                        b.setSecondarySprite(globalGameData, "House_Wall_Top_UL");
+                    } else {
+                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        world.setBlockFromCords(structureX + x, structureY + y, b);
+                        affectedBlocks.add(b);
+                        b.setSprite(globalGameData, "House_Wall_H");
+                        b.setSecondarySprite(globalGameData, "House_Wall_Top_H");
+                    }
+                }
+                //fills inside of house and bottom row with floor
+                else {
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
@@ -58,11 +102,6 @@ public class BasicHouse extends StructureBase {
                 passed = false;
             }
         }
-
-        //checks whether there's a wall block in front of the door and prevents building if so
-        //who decided Math.ceil should return a double when the result is, by definition, an integer
-        if (world.getBlockFromCords(structureX + (int)Math.ceil(structureWidth/2), structureY).getBlockType() == BlockTypeEnum.TEST_WALL)
-            passed = false;
 
         if(passed) {
             //System.out.println("No overlaps! So we build!");
