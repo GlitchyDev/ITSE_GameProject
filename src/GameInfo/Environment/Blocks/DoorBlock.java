@@ -39,6 +39,11 @@ public class DoorBlock extends BlockBase {
     }
 
     @Override
+    public void tickBlock(World world) {
+        
+    }
+
+    @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.DOOR_OPEN)
