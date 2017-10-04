@@ -135,9 +135,8 @@ public class Viewport {
         }
 
         // Debug Test Information
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.BLUE);
         gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),350,10);
-        gc.setFill(Color.BLACK);
         gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
     }
 

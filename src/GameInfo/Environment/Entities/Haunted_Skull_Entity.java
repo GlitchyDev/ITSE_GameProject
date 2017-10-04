@@ -30,6 +30,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
         stateStartTime = System.currentTimeMillis();
         currentState = HauntedSkullStateEnum.INACTIVE;
+        world.getBlockFromCords(x,y).enterBlock(this);
         currentTarget = null;
     }
 
@@ -62,28 +63,28 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     switch((int)timePassed)
                     {
                         case 0:
-                            gc.drawImage(globalGameData.getSprite("Skull_Forward"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Forward"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Forward"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 1:
-                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Left"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Left"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 2:
-                            gc.drawImage(globalGameData.getSprite("Skull_Left"), (int) (World.getScaledUpSquareSize() * x + 2 + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Left"), (int) (World.getScaledUpSquareSize() * x + 2 + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 3:
-                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Left_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 4:
-                            gc.drawImage(globalGameData.getSprite("Skull_Backwards"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 5:
-                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Backwards_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 6:
-                            gc.drawImage(globalGameData.getSprite("Skull_Right"), (int) (World.getScaledUpSquareSize() * x + 0.5 - 2 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Right"), (int) (World.getScaledUpSquareSize() * x + 0.5 - 2 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Right"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                         case 7:
-                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+                            gc.drawImage(globalGameData.getSprite("Skull_Forward_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                     }
 

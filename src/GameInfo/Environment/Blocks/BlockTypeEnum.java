@@ -24,12 +24,28 @@ public enum BlockTypeEnum {
         return true;
     }
 
+
+    public static boolean isOpaque(BlockTypeEnum type) {
+        switch (type) {
+            case TEST_FLOOR:
+                return false;
+            case TEST_WALL:
+                return true;
+            case DEBUG_BLOCK:
+                return false;
+            case PATHFINDING_DEBUG:
+                return false;
+        }
+        return true;
+    }
+
+
     public static int caculateLightCost(BlockTypeEnum type, int light) {
         switch (type) {
             case TEST_FLOOR:
                 return light - 1;
             case TEST_WALL:
-                return 0;
+                return light;
             case DEBUG_BLOCK:
                 return light;
             case PATHFINDING_DEBUG:

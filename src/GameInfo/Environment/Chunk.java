@@ -66,7 +66,7 @@ public class Chunk {
      */
     public void generateStructures(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
-        /*
+
         // Spawn houses first b/c of more difficult placement requirements (i.e. door)
         for (int i = 0; i < 75; i++) {
             BasicHouse h = new BasicHouse(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 7), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 8));
@@ -91,7 +91,7 @@ public class Chunk {
             }
 
         }
-        */
+        
     }
     // Setters and Getters
     public BlockBase[][] getBlockBaseList() {

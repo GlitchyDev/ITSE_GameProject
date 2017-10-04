@@ -58,6 +58,7 @@ public class Main extends Application {
         canvas.setCache(true);
 
 
+
         primaryStage.show();
 
 

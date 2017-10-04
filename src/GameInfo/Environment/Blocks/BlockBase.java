@@ -15,13 +15,22 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class BlockBase {
     protected BlockTypeEnum blockType;
+    protected int currentLightLevel;
+    protected boolean isCurrentlyLit;
 
     public BlockBase()
     {
+
         blockType = BlockTypeEnum.TEST_FLOOR;
+        currentLightLevel = 0;
+        isCurrentlyLit = false;
     }
+    public abstract void tickBlock(World world);
 
     public abstract void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
+
+
+
 
 
     /**
@@ -49,5 +58,24 @@ public abstract class BlockBase {
 
     public void setBlockType(BlockTypeEnum blockType) {
         this.blockType = blockType;
+    }
+
+
+    public void setCurrentLightLevel(int currentLightLevel) {
+        this.currentLightLevel = currentLightLevel;
+    }
+
+    public void setCurrentlyLit(boolean currentlyLit) {
+        isCurrentlyLit = currentlyLit;
+    }
+
+    public boolean isCurrentlyLit()
+    {
+        return isCurrentlyLit;
+    }
+
+    public int getCurrentLightLevel()
+    {
+        return currentLightLevel;
     }
 }

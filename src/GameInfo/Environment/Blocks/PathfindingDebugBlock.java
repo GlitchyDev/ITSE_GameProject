@@ -19,6 +19,12 @@ public class PathfindingDebugBlock extends BlockBase {
     }
 
     @Override
+    public void tickBlock(World world)
+    {
+
+    }
+
+    @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0) {
             gc.setFill(color);

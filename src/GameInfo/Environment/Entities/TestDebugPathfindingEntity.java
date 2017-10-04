@@ -10,6 +10,7 @@ import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -54,28 +55,26 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
             if (System.currentTimeMillis() > lastUpdate + 500) {
                 lastUpdate = System.currentTimeMillis();
 
-                if(cachePositionList.size() == 0 || cacheNum >= 5)
-                {
-                    ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world,x,y,targetPlayer.getX(),targetPlayer.getY());
-                    cachePositionList.clear();
+                if(distanceFromEntity(targetPlayer) != 1) {
+                    if (cachePositionList.size() == 0 || cacheNum >= 5) {
+                        ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world, x, y, targetPlayer.getX(), targetPlayer.getY());
+                        cachePositionList.clear();
 
-                    for(int i = 0; i < positionList.size(); i++)
-                    {
-                        if(i <= 5)
-                        {
-                            cachePositionList.add(positionList.get(i));
+                        for (int i = 0; i < positionList.size(); i++) {
+                            if (i <= 5) {
+                                cachePositionList.add(positionList.get(i));
+                            }
                         }
+                        cacheNum = 0;
                     }
-                    cacheNum = 0;
-                }
 
-                if(cachePositionList.size() != 0) {
-                    //System.out.println("Moving Relative " + (cachePositionList.get(0).getX() - x) + " " + (cachePositionList.get(0).getY() - y));
-                    advancedMoveRelative(cachePositionList.get(0).getX() - x, cachePositionList.get(0).getY() - y,true,true,true,true);
-                    cacheNum++;
-                    cachePositionList.remove(cachePositionList.get(0));
+                    if (cachePositionList.size() != 0) {
+                        //System.out.println("Moving Relative " + (cachePositionList.get(0).getX() - x) + " " + (cachePositionList.get(0).getY() - y));
+                        advancedMoveRelative(cachePositionList.get(0).getX() - x, cachePositionList.get(0).getY() - y, true, true, true, true);
+                        cacheNum++;
+                        cachePositionList.remove(cachePositionList.get(0));
+                    }
                 }
-
 
 
 
@@ -90,7 +89,11 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0) {
-            gc.drawImage(sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
+            gc.drawImage(sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) ((World.getScaledUpSquareSize() * (y+1) ) + 0.5 + 1));
         }
+
+        gc.setFill(Color.RED);
+        gc.fillText("Cord: " + this.x + ":" + this.y,350,100);
+
     }
 }

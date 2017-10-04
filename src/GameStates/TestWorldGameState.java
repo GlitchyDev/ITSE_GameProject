@@ -1,11 +1,13 @@
 package GameStates;
 
 import GameInfo.*;
+import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.Entities.Haunted_Skull_Entity;
+import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
 import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
 import javafx.scene.Node;
@@ -55,6 +57,13 @@ public class TestWorldGameState extends GameStateBase {
         {
             p.getPlayerCharacter().tickEntity();
             Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
+            for(BlockBase[] b : c.getBlockBaseList())
+            {
+                for(BlockBase block : b)
+                {
+                    block.tickBlock(world);
+                }
+            }
             for(EntityBase entity: c.getEntities())
             {
                 if(entity.getEntityType() != EntityType.PLAYER)
@@ -62,6 +71,7 @@ public class TestWorldGameState extends GameStateBase {
                     entity.tickEntity();
                 }
             }
+
 
         }
 
@@ -82,7 +92,7 @@ public class TestWorldGameState extends GameStateBase {
         Runtime instance = Runtime.getRuntime();
         double usedMemory = (instance.totalMemory() - instance.freeMemory()) / mb;
 
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.BLUE);
         gc.fillText("FPS: " + lastFPS,350,50);
         gc.fillText("LogicPercentage: " + lastLogicFramePercentage,350,60);
         gc.fillText("RenderPercentage: " + lastRenderFramePercentage,350,70);
@@ -128,8 +138,8 @@ public class TestWorldGameState extends GameStateBase {
         viewport = new Viewport(client,world);
 
 
-        //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
-        //world.addEntityToWorld(pathfindingDebug);
+        TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
+        world.addEntityToWorld(pathfindingDebug);
 
         Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);

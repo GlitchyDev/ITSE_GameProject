@@ -3,6 +3,7 @@ package GameInfo.Environment.Blocks;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import RenderingHelpers.LightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -58,6 +59,12 @@ public class WallFloorBlock extends BlockBase {
     }
 
     @Override
+    public void tickBlock(World world)
+    {
+
+    }
+
+    @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0)
         {
@@ -68,6 +75,21 @@ public class WallFloorBlock extends BlockBase {
                     gc.setFill(Color.BLUE);
                     gc.fillRect((x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), 5,5);
                 }
+
+
+                gc.setFill(Color.BLACK);
+                gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
+                gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
+                gc.setGlobalAlpha(1.0);
+                gc.setFill(Color.BLUE);
+                //if(isCurrentlyLit)
+                //    gc.fillText("Light " + currentLightLevel,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()));
+                if(isCurrentlyLit) {
+                    isCurrentlyLit = false;
+                    currentLightLevel = 0;
+                }
+
+
             }
         }
         if(renderLayer == 1) {
@@ -75,6 +97,17 @@ public class WallFloorBlock extends BlockBase {
                 gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) + World.getScaledUpSquareSize()/4);
                 gc.drawImage(secondarySprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize()/4*3);
 
+                gc.setFill(Color.BLACK);
+                gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
+                gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 - World.getScaledUpSquareSize()/4*3), World.getScaledUpSquareSize(), World.getScaledUpSquareSize()/4*7);
+                gc.setGlobalAlpha(1.0);
+                gc.setFill(Color.BLUE);
+                //if(isCurrentlyLit)
+                //    gc.fillText("Light " + currentLightLevel,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()));
+                if(isCurrentlyLit) {
+                    isCurrentlyLit = false;
+                    currentLightLevel = 0;
+                }
 
             }
         }

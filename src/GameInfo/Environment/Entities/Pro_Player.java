@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
+import RenderingHelpers.LightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -162,6 +163,8 @@ public class Pro_Player extends DamageableEntityBase {
             }
             isMoving = false;
         }
+
+        LightProducer.produceLight(world,x,y,10);
     }
 
 

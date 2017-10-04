@@ -22,6 +22,12 @@ public class DebugBlock extends BlockBase {
     }
 
     @Override
+    public void tickBlock(World world)
+    {
+
+    }
+
+    @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         // This is specifying this renders on the absolute lowest rendering level
         if(renderLayer == 0) {
