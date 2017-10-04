@@ -40,7 +40,7 @@ public class DoorBlock extends BlockBase {
 
     @Override
     public void tickBlock(World world) {
-        
+
     }
 
     @Override

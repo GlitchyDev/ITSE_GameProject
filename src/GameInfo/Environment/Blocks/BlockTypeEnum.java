@@ -21,7 +21,7 @@ public enum BlockTypeEnum {
             case DOOR_OPEN:
                 return true;
             case DOOR_CLOSED:
-                return false;
+                return true;
             case DEBUG_BLOCK:
                 return true;
             case PATHFINDING_DEBUG:
@@ -36,6 +36,10 @@ public enum BlockTypeEnum {
             case TEST_FLOOR:
                 return false;
             case TEST_WALL:
+                return true;
+            case DOOR_OPEN:
+                return false;
+            case DOOR_CLOSED:
                 return true;
             case DEBUG_BLOCK:
                 return false;
@@ -56,6 +60,11 @@ public enum BlockTypeEnum {
                 return light;
             case PATHFINDING_DEBUG:
                 return light - 1;
+            case DOOR_OPEN:
+                return light - 1;
+            case DOOR_CLOSED:
+                return light;
+
         }
         return 0;
     }

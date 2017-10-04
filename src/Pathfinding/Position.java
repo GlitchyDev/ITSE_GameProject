@@ -1,4 +1,4 @@
-package GameInfo.Environment.Entities.Pathfinding;
+package Pathfinding;
 
 public class Position {
     private int x;

@@ -2,7 +2,7 @@ package RenderingHelpers;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Entities.Pathfinding.Position;
+import Pathfinding.Position;
 import GameInfo.Environment.World;
 
 import java.util.ArrayList;

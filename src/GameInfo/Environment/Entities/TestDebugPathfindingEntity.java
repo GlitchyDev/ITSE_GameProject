@@ -3,8 +3,8 @@ package GameInfo.Environment.Entities;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingHelper;
-import GameInfo.Environment.Entities.Pathfinding.Position;
+import Pathfinding.PathfindingHelper;
+import Pathfinding.Position;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
@@ -57,15 +57,17 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
 
                 if(distanceFromEntity(targetPlayer) != 1) {
                     if (cachePositionList.size() == 0 || cacheNum >= 5) {
-                        ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world, x, y, targetPlayer.getX(), targetPlayer.getY());
+                        ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world, x, y, targetPlayer.getX(), targetPlayer.getY(),100);
                         cachePositionList.clear();
 
-                        for (int i = 0; i < positionList.size(); i++) {
-                            if (i <= 5) {
-                                cachePositionList.add(positionList.get(i));
+                        if(positionList != null) {
+                            for (int i = 0; i < positionList.size(); i++) {
+                                if (i <= 5) {
+                                    cachePositionList.add(positionList.get(i));
+                                }
                             }
+                            cacheNum = 0;
                         }
-                        cacheNum = 0;
                     }
 
                     if (cachePositionList.size() != 0) {

@@ -1,4 +1,4 @@
-package GameInfo.Environment.Entities.Pathfinding;
+package Pathfinding;
 
 import GameInfo.Environment.Blocks.BlockTypeEnum;
 import GameInfo.Environment.World;
@@ -20,6 +20,9 @@ public class PathfindingHelper
     private static ArrayList<PathfindingNode> openList = new ArrayList<>();
     private static ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private static PathfindingNode firstNode;
+    private static int timeOut = 0;
+    private static int currentTime = 0;
+    private static boolean timedOut = false;
 
 
     /**
@@ -31,10 +34,15 @@ public class PathfindingHelper
      * @param yTarget
      * @return A List of Positions of the best path towards the player
      */
-    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
+
+
+    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget, int timeOut)
     {
         openList.clear();
         closedList.clear();
+        PathfindingHelper.timeOut = timeOut;
+        PathfindingHelper.timedOut = false;
+        currentTime = 0;
         firstNode = null;
         if(xStart == xTarget && yStart == yTarget)
         {
@@ -45,30 +53,37 @@ public class PathfindingHelper
         firstNode = new PathfindingNode(null,xStart,yStart,0,xStart,yTarget);
         PathfindingNode finalNode = proccessPathfindingNode(world,firstNode,xTarget,yTarget);
 
+        if(!timedOut) {
 
 
-        ArrayList<Position> positionList = new ArrayList<>();
-        PathfindingNode n = finalNode;
-        int temp = 0;
-        while(!finalNode.isPrimaryNode())
-        {
-            if(n != null) {
-                positionList.add(new Position(n.getX(), n.getY()));
-                n = n.getParentNode();
-                temp++;
+            ArrayList<Position> positionList = new ArrayList<>();
+            PathfindingNode n = finalNode;
+            while (!finalNode.isPrimaryNode()) {
+                if (n != null) {
+                    positionList.add(new Position(n.getX(), n.getY()));
+                    n = n.getParentNode();
+                } else {
+                    //System.out.println("Broken node is " + temp );
+                    break;
+                }
             }
-            else
-            {
-                //System.out.println("Broken node is " + temp );
-                break;
-            }
+            Collections.reverse(positionList);
+            return positionList;
         }
-        Collections.reverse(positionList);
-        return positionList;
+        else
+        {
+            return null;
+        }
     }
 
     public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
     {
+        currentTime++;
+        if(currentTime >= timeOut)
+        {
+            timedOut = true;
+            return currentNode;
+        }
         PathfindingHelper.openList.addAll(PathfindingHelper.getConnectedTiles(world,currentNode,xTarget,yTarget));
         int leastF = Integer.MAX_VALUE;
 

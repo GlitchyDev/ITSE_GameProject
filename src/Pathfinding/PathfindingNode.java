@@ -1,4 +1,4 @@
-package GameInfo.Environment.Entities.Pathfinding;
+package Pathfinding;
 
 public class PathfindingNode {
     private PathfindingNode parentNode;

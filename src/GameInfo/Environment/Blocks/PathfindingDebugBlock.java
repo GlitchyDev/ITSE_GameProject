@@ -1,7 +1,7 @@
 package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import GameInfo.Environment.Entities.Pathfinding.PathfindingNode;
+import Pathfinding.PathfindingNode;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
