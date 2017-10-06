@@ -3,6 +3,7 @@ package GameInfo.Environment.Blocks;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -47,9 +48,11 @@ public class DoorBlock extends BlockBase {
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.DOOR_OPEN)
-                gc.drawImage(spriteOpen, (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize() / 4 * 3);
+                drawAtXY(spriteOpen,gc,x,y,0,-World.getScaledUpSquareSize() / 4 * 3);
+                //gc.drawImage(spriteOpen, (int) (x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer) - World.getScaledUpSquareSize() / 4 * 3);
             else
-                gc.drawImage(spriteClosed, (int) (x * World.getScaledUpSquareSize() + 0.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize() / 4 * 3);
+                drawAtXY(spriteClosed,gc,x,y,0,-World.getScaledUpSquareSize() / 4 * 3);
+                //gc.drawImage(spriteClosed, (int) (x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer) - World.getScaledUpSquareSize() / 4 * 3);
         }
     }
 

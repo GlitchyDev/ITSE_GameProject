@@ -4,8 +4,10 @@ import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  * Created by Robert on 8/27/2017.
@@ -127,6 +129,12 @@ public abstract class EntityBase {
         y += relativeY;
         return true;
     }
+
+    public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset)
+    {
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5) + xOffset + Viewport.widthBuffer, (int)((y+1) * World.getScaledUpSquareSize() + 0.5) + yOffset + Viewport.heightBuffer  );
+    }
+
 
     public double distanceFromEntity(EntityBase entity)
     {

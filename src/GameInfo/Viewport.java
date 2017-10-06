@@ -1,9 +1,7 @@
 package GameInfo;
 
 import GameInfo.Environment.Blocks.BlockBase;
-import GameInfo.Environment.ChunkID;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,12 +29,18 @@ public class Viewport {
     // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
     private int extraViewX = 5;
     private int extraViewY = 5;
-    // This affects how much "Smoothing" the screen has between movements
+    // This affects how much "Smoothing" the screen has between movements, lower the more smoothing is done
     private double smoothingValueX = 0;
     private double smoothingValueY = 0;
-    private final double smoothingAmouunt = 1.1;
+    public static final double smoothingAmouunt = 1.1;
     // Used to except smoothing on the first frame
-    private boolean firstFrame = true;
+    private boolean isFirstFrame = true;
+
+    private int viewportWidth = viewWidthX * World.getScaledUpSquareSize();
+    private int viewportHeight = viewHeightY * World.getScaledUpSquareSize();
+    public static int widthBuffer = 0;
+    public static int heightBuffer = 0;
+
 
 
 
@@ -57,9 +61,9 @@ public class Viewport {
     {
         if(!client.isLocalClient())
         {
-            if(firstFrame)
+            if(isFirstFrame)
             {
-                firstFrame = false;
+                isFirstFrame = false;
             }
             else {
                 smoothingValueX += centerX - client.getPlayers().get(0).getPlayerCharacter().getX();
@@ -78,9 +82,9 @@ public class Viewport {
                 averageX += p.getPlayerCharacter().getX();
                 averageY += p.getPlayerCharacter().getY();
             }
-            if(firstFrame)
+            if(isFirstFrame)
             {
-                firstFrame = false;
+                isFirstFrame = false;
             }
             else {
                 smoothingValueX += centerX - (averageX / client.getPlayers().size());
@@ -106,14 +110,20 @@ public class Viewport {
      */
     public void render(Canvas canvas, GraphicsContext gc)
     {
+        if(widthBuffer == 0)
+        {
+            widthBuffer = (int)((canvas.getWidth() - viewportWidth)/2 + 0.5);
+        }
+        if(heightBuffer == 0)
+        {
+            heightBuffer = (int)((canvas.getHeight() - viewportHeight)/2 + 0.5);
+        }
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
 
-       // ArrayList<EntityBase> entities = new ArrayList<>();
         ArrayList<EntityBase> entities = world.getAllEntitiesBetweenPoints(centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
         BlockBase[][] viewableBlocks = world.getAllBlocksBetweenPoints(centerX + viewWidthX/2 + extraViewX,centerY + viewHeightY/2 + extraViewY,centerX - viewWidthX/2 - extraViewX,centerY - viewHeightY/2 - extraViewY);
-        // Reramp this to go from Top of screen down for each layer!
         for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
             for (int y = 0; y < viewableBlocks[0].length; y++) {
                 for (int x = 0; x < viewableBlocks.length; x++) {
@@ -133,6 +143,24 @@ public class Viewport {
                 }
             }
         }
+
+
+        gc.setStroke(Color.RED);
+        gc.strokeRect(widthBuffer,heightBuffer,viewWidthX * World.getScaledUpSquareSize(),viewHeightY * World.getScaledUpSquareSize());
+        gc.setStroke(Color.PURPLE);
+        gc.strokeRect(widthBuffer,heightBuffer,viewWidthX * World.getScaledUpSquareSize(),viewHeightY * World.getScaledUpSquareSize());
+
+
+
+        gc.setFill(Color.GRAY);
+        //gc.setGlobalAlpha(0.5);
+        gc.fillRect(0,0,canvas.getWidth(),heightBuffer);
+        gc.fillRect(0,viewportHeight + heightBuffer,canvas.getWidth(),heightBuffer);
+        gc.fillRect(0,0,widthBuffer,canvas.getHeight());
+        gc.fillRect(viewportWidth + widthBuffer,0,widthBuffer,canvas.getHeight());
+        gc.setGlobalAlpha(1.0);
+        gc.setFill(Color.BLACK);
+
 
         // Debug Test Information
         gc.setFill(Color.BLUE);

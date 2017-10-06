@@ -91,7 +91,8 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 0) {
-            gc.drawImage(sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) ((World.getScaledUpSquareSize() * (y+1) ) + 0.5 + 1));
+            drawSpriteAtXY(sprite,gc,x,y,5,5);
+            //gc.drawImage(sprite, (int) (World.getScaledUpSquareSize() * x + 0.5 + 4), (int) ((World.getScaledUpSquareSize() * (y+1) ) + 0.5 + 1));
         }
 
         gc.setFill(Color.RED);

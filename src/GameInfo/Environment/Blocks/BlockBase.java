@@ -3,8 +3,10 @@ package GameInfo.Environment.Blocks;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  * Created by Robert on 8/27/2017.
@@ -77,5 +79,16 @@ public abstract class BlockBase {
     public int getCurrentLightLevel()
     {
         return currentLightLevel;
+    }
+
+    public void drawAtXY(Image sprite, GraphicsContext gc, double x, double y, int xOffset, int yOffset)
+    {
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer);
+
+    }
+
+    public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
+    {
+        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer,width,height  );
     }
 }

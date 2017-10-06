@@ -3,6 +3,7 @@ package GameInfo.Environment.Blocks;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import GameInfo.Viewport;
 import RenderingHelpers.LightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -69,21 +70,21 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 0)
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
-                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5));
-                if(entities.size() > 0)
-                {
-                    gc.setFill(Color.BLUE);
-                    gc.fillRect((x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), 5,5);
-                }
 
+
+                drawAtXY(sprite, gc, x, y, 0, 0);
 
                 gc.setFill(Color.BLACK);
                 gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
-                gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
+                drawRectangleAtXY(gc,x,y, 0,0,World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
                 gc.setGlobalAlpha(1.0);
-                gc.setFill(Color.BLUE);
-                //if(isCurrentlyLit)
-                //    gc.fillText("Light " + currentLightLevel,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()));
+
+                if(entities.size() > 0)
+                {
+                    gc.setFill(Color.BLUE);
+                    drawRectangleAtXY(gc,x,y,0,0,5,5);
+                }
+
                 if(isCurrentlyLit) {
                     isCurrentlyLit = false;
                     currentLightLevel = 0;
@@ -94,16 +95,15 @@ public class WallFloorBlock extends BlockBase {
         }
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
-                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) + World.getScaledUpSquareSize()/4);
-                gc.drawImage(secondarySprite,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5) - World.getScaledUpSquareSize()/4*3);
+
+                drawAtXY(sprite, gc, x, y, 0, World.getScaledUpSquareSize() / 4);
+                drawAtXY(secondarySprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3);
 
                 gc.setFill(Color.BLACK);
                 gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
-                gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 - World.getScaledUpSquareSize()/4*3), World.getScaledUpSquareSize(), World.getScaledUpSquareSize()/4*7);
+                drawRectangleAtXY(gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, World.getScaledUpSquareSize(), World.getScaledUpSquareSize() / 4 * 7);
                 gc.setGlobalAlpha(1.0);
-                gc.setFill(Color.BLUE);
-                //if(isCurrentlyLit)
-                //    gc.fillText("Light " + currentLightLevel,(int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5 + World.getScaledUpSquareSize()));
+
                 if(isCurrentlyLit) {
                     isCurrentlyLit = false;
                     currentLightLevel = 0;

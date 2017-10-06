@@ -6,10 +6,12 @@ import GameInfo.GlobalGameData;
 import GameStates.TestWorldGameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -26,13 +28,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //new Thread(new ServerConnection()).start();
-       // new Thread(new ClientConnection()).start();
-
-
-        // *****
-
-
 
         /*
         TestWorldGameState debugState = new TestWorldGameState(g, g.scanForControllers().get(0));
@@ -45,14 +40,29 @@ public class Main extends Application {
 
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu);
 
+        Screen screen = Screen.getPrimary();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
+
+
         // Create the initial window size
-        primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getScaledUpSquareSize() + 6);
-        primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getScaledUpSquareSize() + 39);
+        //primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getScaledUpSquareSize() + 6);
+        //primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getScaledUpSquareSize() + 39);
 
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
         Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 39);
+
+        canvas.widthProperty().bind(primaryStage.widthProperty().subtract(6));
+        canvas.heightProperty().bind(primaryStage.heightProperty().subtract(39));
+
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);

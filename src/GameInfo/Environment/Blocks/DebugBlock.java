@@ -2,6 +2,7 @@ package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
+import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -32,7 +33,9 @@ public class DebugBlock extends BlockBase {
         // This is specifying this renders on the absolute lowest rendering level
         if(renderLayer == 0) {
             gc.setFill(c);
-            gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5), (int)(y * World.getScaledUpSquareSize() + 0.5), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
+            drawRectangleAtXY(gc,x,y,0,0,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
+
+            //gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
         }
     }
 
