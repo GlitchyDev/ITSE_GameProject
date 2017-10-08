@@ -7,7 +7,7 @@ import GameInfo.Environment.World;
 
 import java.util.ArrayList;
 
-public class LightProducer {
+public class RadiantLightProducer {
 
     private static ArrayList<Position> blocksLookedAt = new ArrayList<>();
 

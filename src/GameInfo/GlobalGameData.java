@@ -78,26 +78,24 @@ public class GlobalGameData {
             System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
             for (File file : startingFolder.listFiles()) {
                 if (file.isFile()) {
-                    String temp = file.getName().replace(".png","");
+                    if(file.getName().contains(".png")) {
+                        String temp = file.getName().replace(".png", "");
 
 
-                    boolean doResize = true;
-                    for(String exception: resizeException) {
-                        if (temp.contains(exception))
-                        {
-                            doResize = false;
+                        boolean doResize = true;
+                        for (String exception : resizeException) {
+                            if (temp.contains(exception)) {
+                                doResize = false;
+                            }
                         }
-                    }
-                    if(doResize)
-                    {
-                        int size = 2;
-                        sprites.put(temp, ImageRenderHelper.resample(new Image("file:" + currentFolder + file.getName()),size,false));
-                        System.out.println("  - " + temp);
-                    }
-                    else
-                    {
-                        sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
-                        System.out.println("  ~ " + temp);
+                        if (doResize) {
+                            int size = 2;
+                            sprites.put(temp, ImageRenderHelper.resample(new Image("file:" + currentFolder + file.getName()), size, false));
+                            System.out.println("  - " + temp);
+                        } else {
+                            sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
+                            System.out.println("  ~ " + temp);
+                        }
                     }
                 }
             }

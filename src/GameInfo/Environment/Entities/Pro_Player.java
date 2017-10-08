@@ -7,7 +7,7 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
-import RenderingHelpers.LightProducer;
+import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -164,7 +164,7 @@ public class Pro_Player extends DamageableEntityBase {
             isMoving = false;
         }
 
-        LightProducer.produceLight(world,x,y,10);
+        //RadiantLightProducer.produceLight(world,x,y,10);
     }
 
 
@@ -193,27 +193,28 @@ public class Pro_Player extends DamageableEntityBase {
             if (isMoving) {
                 int cycle = 250;
                 if (System.currentTimeMillis() % cycle < cycle / 4 * 1) {
-                    drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
+                    drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(-sprites.get(id + 0).getHeight() + World.getScaledUpSquareSize()/2));
                     //gc.drawImage(sprites.get(id + 0), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
                 } else {
                     if (System.currentTimeMillis() % cycle < cycle / 4 * 2) {
-                        drawSpriteAtXY(sprites.get(id + 1),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
+                        drawSpriteAtXY(sprites.get(id + 1),gc,x,y,1.5,(-sprites.get(id + 1).getHeight() + World.getScaledUpSquareSize()/2));
                         //gc.drawImage(sprites.get(id + 1), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
 
                     } else {
                         if (System.currentTimeMillis() % cycle < cycle / 4 * 3) {
                             //gc.drawImage(sprites.get(id + 0), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-                            drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
+                            drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,-sprites.get(id + 0).getHeight() + World.getScaledUpSquareSize()/2);
 
                         } else {
                             //gc.drawImage(sprites.get(id + 2), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-                            drawSpriteAtXY(sprites.get(id + 2),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
+                            drawSpriteAtXY(sprites.get(id + 2),gc,x,y,1.5,(-sprites.get(id + 2).getHeight() + World.getScaledUpSquareSize()/2));
 
                         }
                     }
                 }
             } else {
                 drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
+
             }
         }
     }

@@ -3,8 +3,7 @@ package GameInfo.Environment.Blocks;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
-import RenderingHelpers.LightProducer;
+import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -75,7 +74,7 @@ public class WallFloorBlock extends BlockBase {
                 drawAtXY(sprite, gc, x, y, 0, 0);
 
                 gc.setFill(Color.BLACK);
-                gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
+                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(currentLightLevel));
                 drawRectangleAtXY(gc,x,y, 0,0,World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
                 gc.setGlobalAlpha(1.0);
 
@@ -100,7 +99,7 @@ public class WallFloorBlock extends BlockBase {
                 drawAtXY(secondarySprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3);
 
                 gc.setFill(Color.BLACK);
-                gc.setGlobalAlpha(LightProducer.determineDarkness(currentLightLevel));
+                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(currentLightLevel));
                 drawRectangleAtXY(gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, World.getScaledUpSquareSize(), World.getScaledUpSquareSize() / 4 * 7);
                 gc.setGlobalAlpha(1.0);
 

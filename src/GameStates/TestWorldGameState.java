@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.Entities.Haunted_Skull_Entity;
+import GameInfo.Environment.Entities.SpriteTesterEntity;
 import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
 import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
@@ -138,11 +139,15 @@ public class TestWorldGameState extends GameStateBase {
         viewport = new Viewport(client,world);
 
 
-        TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
-        world.addEntityToWorld(pathfindingDebug);
+        //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
+        //world.addEntityToWorld(pathfindingDebug);
 
         Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
         world.addEntityToWorld(skullEntity);
+
+        SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
+        world.addEntityToWorld(test);
+
 
         Media sound = globalGameData.getSound("CaveWaterDrops");
         backgroundMusic = new MediaPlayer(sound);
