@@ -4,21 +4,21 @@ import GameStates.DebugControlsGameState;
 import GameStates.GameStateBase;
 import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
+import RenderingHelpers.BufferedRenderingContext;
 import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import HardwareAdaptors.DebugController;
 import HardwareAdaptors.XBoxController;
 
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  *  The purpose of this Class is to store all Global GameData used by GameStates such as
@@ -36,6 +36,7 @@ public class GlobalGameData {
     private ArrayList<XBoxController> connectedControllers;
     private ArrayList<Player> connectedPlayers;
     private Random random;
+    MediaPlayer player;
 
     public GlobalGameData(GameStateEnum startingState)
     {
@@ -49,7 +50,9 @@ public class GlobalGameData {
         connectedPlayers = new ArrayList<>();
 
         connectedControllers.addAll(scanForControllers());
+
         loadAssets();
+
         createGameStates();
     }
 
@@ -60,13 +63,117 @@ public class GlobalGameData {
         gameStates.put("DebugControls", new DebugControlsGameState(this));
     }
 
+
+
+
+    public void loadAssets()
+    {
+        String link = "/Sprites/Old/Pro_Test_Darker.png";
+        InputStream stream = getClass().getResourceAsStream(link);
+        Image image = null;
+        if("true".equals(System.getProperty("isJar"))) {
+
+            /*
+            System.out.println("Load Assets: Jar Asset Loading");
+            image = new Image(getClass().getResourceAsStream(link));
+            sprites.put("IMAGE",image);
+
+            Media media = new Media(getClass().getResource("/Sounds/BackgroundMusic/CaveWaterDrops.mp3").toExternalForm());
+            //Media media = new Media(getClass().getResource("Sounds/BackgroundMusic/CaveWaterDrops.mp3").toString());
+            player = new MediaPlayer(media);
+
+            player.play();
+            */
+            InputStream inputSound = getClass().getResourceAsStream("/Sounds/SoundsAssetList.txt");
+            Scanner soundScanner = new Scanner(new InputStreamReader(inputSound));
+            while(soundScanner.hasNextLine())
+            {
+                String soundPath = soundScanner.nextLine();
+                String[] parsed = soundPath.split("/");
+                //System.out.println("Adding Sound " + parsed[parsed.length-1].replace(".mp3","") + " " + (new Media(getClass().getResource("/Sounds" + soundPath).toString()) == null) );
+                sounds.put(parsed[parsed.length-1].replace(".mp3",""),new Media(getClass().getResource("/Sounds" + soundPath).toString()));
+            }
+
+            InputStream inputSprites = getClass().getResourceAsStream("/Sprites/SpriteAssetList.txt");
+            Scanner spriteScanner = new Scanner(new InputStreamReader(inputSprites));
+            while(spriteScanner.hasNextLine())
+            {
+                String spritePath = spriteScanner.nextLine();
+                String[] parsed = spritePath.split("/");
+                sprites.put(parsed[parsed.length-1].replace(".png",""),new Image(getClass().getResourceAsStream("/Sprites" + spritePath)));
+            }
+
+        }
+        else
+        {
+            System.out.println("Load Assets: Project Asset Loading");
+            System.out.println("Load Assets: UpdatingAssetList");
+
+            // Loading Sprites
+            File spriteFile = new File("GameAssets/Sprites/SpriteAssetList.txt");
+            spriteFile.delete();
+            try {
+                PrintWriter writer = new PrintWriter(spriteFile);
+
+                File startingFolder = new File("GameAssets/Sprites/");
+                for(File innerFolders: startingFolder.listFiles())
+                {
+                    if(!innerFolders.getName().equals("SpriteAssetList.txt"))
+                    {
+                        for(File sprite: innerFolders.listFiles())
+                        {
+                            Image newSprite = new Image(getClass().getResource("/Sprites/" + innerFolders.getName() + "/" + sprite.getName()).toString());
+                                System.out.println(sprite.getName().replace(".png","")+"*");
+                                sprites.put(sprite.getName().replace(".png",""), ImageRenderHelper.resample(newSprite,2,false));
+                                writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
+                        }
+                    }
+                }
+
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            // Load Sounds
+            File soundFile = new File("GameAssets/Sounds/SoundsAssetList.txt");
+            soundFile.delete();
+            try {
+                PrintWriter writer = new PrintWriter(soundFile);
+
+                File startingFolder = new File("GameAssets/Sounds/");
+                for(File innerFolders: startingFolder.listFiles())
+                {
+                    if(!innerFolders.getName().equals("SoundsAssetList.txt"))
+                    {
+                        for(File sound: innerFolders.listFiles())
+                        {
+                            System.out.println(sound.getName().replace(".mp3","")+"*");
+                            Media media = new Media( getClass().getResource("/Sounds/" + innerFolders.getName() + "/" + sound.getName()).toString());
+                            sounds.put(sound.getName().replace(".mp3",""),media);
+                            writer.println("/" + innerFolders.getName() + "/" + sound.getName());
+                        }
+                    }
+                }
+
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+
+    }
+
+    /*
     private void loadAssets() {
         System.out.println("Load Assets: Loading all Registered Folders");
         ArrayList<String> registeredSpriteFolders = new ArrayList<>(Arrays.asList(
-                "GameAssets/Sprites/TestSprites/",
-                "GameAssets/Sprites/Pro/",
-                "GameAssets/Sprites/Terrain/",
-                "GameAssets/Sprites/Skull_Entity/"
+                "/Sprites/TestSprites",
+                "/Sprites/Pro",
+                "/Sprites/Terrain",
+                "/Sprites/Skull_Entity"
         ));
         ArrayList<String> resizeException = new ArrayList<>(Arrays.asList(
                 "InsertExemptions"
@@ -74,9 +181,13 @@ public class GlobalGameData {
         System.out.println("Load Assets: Processing Sprites");
         System.out.println("Load Assets: Added Sprites");
         for (String currentFolder : registeredSpriteFolders) {
-            File startingFolder = new File(currentFolder);
-            System.out.println("Load Assets: Checking Folder " + startingFolder.getName());
+
+
+            File startingFolder = new File("GameAssets" + currentFolder + "/");
+
+            System.out.println("Load Assets: Checking Folder " + startingFolder.getName() + startingFolder.exists());
             for (File file : startingFolder.listFiles()) {
+                System.out.println("Found " + file.getName());
                 if (file.isFile()) {
                     if(file.getName().contains(".png")) {
                         String temp = file.getName().replace(".png", "");
@@ -90,7 +201,8 @@ public class GlobalGameData {
                         }
                         if (doResize) {
                             int size = 2;
-                            sprites.put(temp, ImageRenderHelper.resample(new Image("file:" + currentFolder + file.getName()), size, false));
+
+                            sprites.put(temp, ImageRenderHelper.resample(new Image(getClass().getResource(currentFolder + "/" + file.getName()).toExternalForm()), size, false));
                             System.out.println("  - " + temp);
                         } else {
                             sprites.put(temp, new Image("file:" + currentFolder + file.getName()));
@@ -122,6 +234,7 @@ public class GlobalGameData {
         System.out.println("Load Assets: Completed Loading");
     }
 
+*/
     public ArrayList<XBoxController> scanForControllers()
     {
         System.out.println("Scan Controllers: Acquiring controllers");

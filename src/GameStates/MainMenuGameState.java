@@ -58,7 +58,6 @@ public class MainMenuGameState extends GameStateBase {
 
     @Override
     protected void doRender(Canvas canvas, GraphicsContext gc) {
-
         switch(phaseEnum)
         {
             case MMGSE_Startup:
@@ -93,6 +92,8 @@ public class MainMenuGameState extends GameStateBase {
                 }
                 break;
         }
+        gc.setGlobalAlpha(1.0);
+        gc.drawImage(globalGameData.getSprite("IMAGE"),0,0);
 
     }
 
