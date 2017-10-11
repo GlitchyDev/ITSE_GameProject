@@ -93,7 +93,7 @@ public class MainMenuGameState extends GameStateBase {
                 break;
         }
         gc.setGlobalAlpha(1.0);
-        gc.drawImage(globalGameData.getSprite("IMAGE"),0,0);
+        gc.drawImage(globalGameData.getSprite("Rock_Test"),0,0);
 
     }
 

@@ -20,12 +20,14 @@ public abstract class BlockBase {
     protected int currentLightLevel;
     protected boolean isCurrentlyLit;
 
+
     public BlockBase()
     {
 
         blockType = BlockTypeEnum.TEST_FLOOR;
         currentLightLevel = 0;
         isCurrentlyLit = false;
+
     }
     public abstract void tickBlock(World world);
 

@@ -4,6 +4,7 @@ import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
 import GameInfo.Environment.Entities.Enums.EntityType;
+import GameInfo.Environment.Entities.Enums.ProPlayerEnum;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
@@ -26,14 +27,14 @@ public class Pro_Player extends DamageableEntityBase {
     private Player player;
     // The Controller
     private XBoxController controller;
-    // The current Sprite storage system, probably will be changed
-    private ArrayList<Image> sprites;
 
     // The Previous Frame's direction
     private DirectionalPadEnum cachedDirection;
     // The last Nondiagnal direction we have recieved, used to keep the sprite pointing in the right direction
     private DirectionalPadEnum primaryDirection;
 
+    private ProPlayerEnum entityState;
+    private long stateStartTime;
 
     // This all controls the "Hold Down and move" logic
     private boolean isMoving = false;
@@ -54,28 +55,108 @@ public class Pro_Player extends DamageableEntityBase {
         cachedDirection = DirectionalPadEnum.NONE;
         primaryDirection = DirectionalPadEnum.SOUTH;
 
-
-        sprites = new ArrayList<>();
-        sprites.add(globalGameData.getSprite("Pro_Back_Moving_1"));
-        sprites.add(globalGameData.getSprite("Pro_Back_Moving_2"));
-        sprites.add(globalGameData.getSprite("Pro_Back_Moving_3"));
-
-        sprites.add(globalGameData.getSprite("Pro_Right_Moving_1"));
-        sprites.add(globalGameData.getSprite("Pro_Right_Moving_2"));
-        sprites.add(globalGameData.getSprite("Pro_Right_Moving_3"));
-
-        sprites.add(globalGameData.getSprite("Pro_Front_Moving_1"));
-        sprites.add(globalGameData.getSprite("Pro_Front_Moving_2"));
-        sprites.add(globalGameData.getSprite("Pro_Front_Moving_3"));
-
-        sprites.add(globalGameData.getSprite("Pro_Left_Moving_1"));
-        sprites.add(globalGameData.getSprite("Pro_Left_Moving_2"));
-        sprites.add(globalGameData.getSprite("Pro_Left_Moving_3"));
+        entityState = ProPlayerEnum.IDLE;
+        stateStartTime = System.currentTimeMillis();
 
     }
 
+    /*
+
+    public Image determineSprite()
+    {
+        // This will help determine time specific animations to states
+        double statePassedTime = (System.currentTimeMillis() - stateStartTime)/1000.0;
+
+
+
+        // This will help determine what "Primary" Sprite is needed    z
+        String directionIntro = "";
+        switch(primaryDirection)
+        {
+            case NORTH:
+                directionIntro = "Pro_Back";
+                break;
+            case SOUTH:
+                directionIntro = "Pro_Front";
+                break;
+            case EAST:
+                directionIntro = "Pro_Right";
+                break;
+            case WEST:
+                directionIntro = "Pro_Left";
+                break;
+            case NONE:
+                directionIntro = "Pro_Front";
+                break;
+            default:
+                directionIntro = primaryDirection.toString();
+                System.out.println(directionIntro);
+        }
+
+
+        switch(entityState)
+        {
+
+            case IDLE:
+                if(statePassedTime < 0.2)
+                {
+                    return globalGameData.getSprite(directionIntro + "_Moving_1");
+                }
+                if(statePassedTime < 0.4)
+                {
+                    return globalGameData.getSprite(directionIntro + "_Moving_2");
+                }
+                if(statePassedTime < 0.6) {
+                    return globalGameData.getSprite(directionIntro + "_Moving_1");
+                }
+                return globalGameData.getSprite(directionIntro + "_Moving_3");
+            case WALKING:
+                switch(primaryDirection)
+                {
+                    case NORTH:
+                        break;
+                    case SOUTH:
+                        break;
+                    case EAST:
+                        break;
+                    case WEST:
+                        break;
+                }
+                break;
+            case DAMAGED:
+                switch(primaryDirection)
+                {
+                    case NORTH:
+                        break;
+                    case SOUTH:
+                        break;
+                    case EAST:
+                        break;
+                    case WEST:
+                        break;
+                }
+                break;
+            case PULLING_OUT_TORCH:
+                switch(primaryDirection)
+                {
+                    case NORTH:
+                        break;
+                    case SOUTH:
+                        break;
+                    case EAST:
+                        break;
+                    case WEST:
+                        break;
+                }
+                break;
+        }
+        return globalGameData.getSprite("Rock_Test");
+    }
+    */
+
     @Override
     public void tickEntity() {
+        /*
         controller.poll();
 
         // Debug command "Reset World"
@@ -116,7 +197,9 @@ public class Pro_Player extends DamageableEntityBase {
             isMoving = true;
             lastMovement = System.currentTimeMillis();
             cachedDirection = controller.getDirectionalPad();
-            primaryDirection = controller.getDirectionalPad();
+            if(!DirectionalPadEnum.isDiagnal(controller.getDirectionalPad())) {
+                primaryDirection = controller.getDirectionalPad();
+            }
         } else {
             if (controller.getDirectionalPad() == DirectionalPadEnum.NONE) {
                 cachedDirection = controller.getDirectionalPad();
@@ -162,8 +245,10 @@ public class Pro_Player extends DamageableEntityBase {
                     break;
             }
             isMoving = false;
+
         }
 
+*/
         //RadiantLightProducer.produceLight(world,x,y,10);
     }
 
@@ -174,48 +259,15 @@ public class Pro_Player extends DamageableEntityBase {
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
-            int id = 0;
-            switch (primaryDirection) {
-                case NORTH:
-                    id = 0;
-                    break;
-                case EAST:
-                    id = 3;
-                    break;
-                case SOUTH:
-                    id = 6;
-                    break;
-                case WEST:
-                    id = 9;
-                    break;
+
+            /*
+            Image sprite = determineSprite();
+            if(sprite == null)
+            {
+                System.out.println("BEEP");
             }
-
-            if (isMoving) {
-                int cycle = 250;
-                if (System.currentTimeMillis() % cycle < cycle / 4 * 1) {
-                    drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(-sprites.get(id + 0).getHeight() + World.getScaledUpSquareSize()/2));
-                    //gc.drawImage(sprites.get(id + 0), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-                } else {
-                    if (System.currentTimeMillis() % cycle < cycle / 4 * 2) {
-                        drawSpriteAtXY(sprites.get(id + 1),gc,x,y,1.5,(-sprites.get(id + 1).getHeight() + World.getScaledUpSquareSize()/2));
-                        //gc.drawImage(sprites.get(id + 1), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-
-                    } else {
-                        if (System.currentTimeMillis() % cycle < cycle / 4 * 3) {
-                            //gc.drawImage(sprites.get(id + 0), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-                            drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,-sprites.get(id + 0).getHeight() + World.getScaledUpSquareSize()/2);
-
-                        } else {
-                            //gc.drawImage(sprites.get(id + 2), (int) (x * World.getScaledUpSquareSize() + 1.5), (int) (y * World.getScaledUpSquareSize() + 0.5) - (World.getScaledUpSquareSize() * 2 - sprites.get(0).getHeight()));
-                            drawSpriteAtXY(sprites.get(id + 2),gc,x,y,1.5,(-sprites.get(id + 2).getHeight() + World.getScaledUpSquareSize()/2));
-
-                        }
-                    }
-                }
-            } else {
-                drawSpriteAtXY(sprites.get(id + 0),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprites.get(0).getHeight()-World.getScaledUpSquareSize()/2));
-
-            }
+            drawSpriteAtXY(determineSprite(),gc,x,y,1.5,(World.getScaledUpSquareSize()-sprite.getHeight()-World.getScaledUpSquareSize()/2));
+            */
         }
     }
 
