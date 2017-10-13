@@ -4,21 +4,21 @@ import GameStates.DebugControlsGameState;
 import GameStates.GameStateBase;
 import GameStates.MainMenuGameState;
 import GameStates.TestWorldGameState;
-import RenderingHelpers.BufferedRenderingContext;
-import RenderingHelpers.ImageRenderHelper;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
 import HardwareAdaptors.DebugController;
 import HardwareAdaptors.XBoxController;
+import RenderingHelpers.ImageRenderHelper;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.stage.Stage;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 
-import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  *  The purpose of this Class is to store all Global GameData used by GameStates such as
@@ -31,20 +31,23 @@ public class GlobalGameData {
     private HashMap<String, GameStateBase> gameStates;
     private HashMap<String, Image> sprites;
     private HashMap<String, Media> sounds;
+    private Stage primaryStage;
+    private Canvas canvas;
 
     private GameStateEnum currentGameState;
     private ArrayList<XBoxController> connectedControllers;
     private ArrayList<Player> connectedPlayers;
     private Random random;
-    MediaPlayer player;
 
-    public GlobalGameData(GameStateEnum startingState)
+    public GlobalGameData(GameStateEnum startingState,Stage primaryStage, Canvas canvas)
     {
         System.out.println("Global Gamestate: Creating Global GameState");
         gameStates = new HashMap<>();
         sprites = new HashMap<>();
         sounds = new HashMap<>();
         this.currentGameState = startingState;
+        this.primaryStage = primaryStage;
+        this.canvas = canvas;
         random = new Random();
         connectedControllers = new ArrayList<>();
         connectedPlayers = new ArrayList<>();
@@ -59,7 +62,7 @@ public class GlobalGameData {
     private void createGameStates()
     {
         gameStates.put("MainMenu", new MainMenuGameState(this));
-        gameStates.put("TestWorld", new TestWorldGameState(this));
+        gameStates.put("TestWorld", new TestWorldGameState(this,primaryStage,canvas));
         gameStates.put("DebugControls", new DebugControlsGameState(this));
     }
 
@@ -115,10 +118,12 @@ public class GlobalGameData {
                     {
                         for(File sprite: innerFolders.listFiles())
                         {
-                            Image newSprite = new Image(getClass().getResource("/Sprites/" + innerFolders.getName() + "/" + sprite.getName()).toString());
-                            sprites.put(sprite.getName().replace(".png",""), ImageRenderHelper.resample(newSprite,2,false));
-                            writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
-                            System.out.println("    -" + sprite.getName().replace(".png",""));
+                            if(sprite.getName().contains(".png")) {
+                                Image newSprite = new Image(getClass().getResource("/Sprites/" + innerFolders.getName() + "/" + sprite.getName()).toString());
+                                sprites.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
+                                writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
+                                System.out.println("    -" + sprite.getName().replace(".png", ""));
+                            }
                         }
                     }
                 }
@@ -139,10 +144,13 @@ public class GlobalGameData {
                     {
                         for(File sound: innerFolders.listFiles())
                         {
-                            Media media = new Media( getClass().getResource("/Sounds/" + innerFolders.getName() + "/" + sound.getName()).toString());
-                            sounds.put(sound.getName().replace(".mp3",""),media);
-                            writer.println("/" + innerFolders.getName() + "/" + sound.getName());
-                            System.out.println("    -" + sound.getName().replace(".mp3",""));
+                            if(sound.getName().contains(".mp3")) {
+
+                                Media media = new Media(getClass().getResource("/Sounds/" + innerFolders.getName() + "/" + sound.getName()).toString());
+                                sounds.put(sound.getName().replace(".mp3", ""), media);
+                                writer.println("/" + innerFolders.getName() + "/" + sound.getName());
+                                System.out.println("    -" + sound.getName().replace(".mp3", ""));
+                            }
                         }
                     }
                 }
@@ -221,14 +229,28 @@ public class GlobalGameData {
     public void resetWorld()
     {
         gameStates.remove("TestWorld");
-        gameStates.put("TestWorld",new TestWorldGameState(this));
+        gameStates.put("TestWorld",new TestWorldGameState(this,primaryStage,canvas));
         getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
     }
 
     public Image getSprite(String sprite)
     {
-        return sprites.get(sprite);
+        //if(sprites.containsKey(sprite))
+        //{
+            return sprites.get(sprite);
+        //}
+        //else
+        //{
+        //    System.out.println("Image " + sprite + " was not found");
+        //}
+        //return sprites.get("Test_Rock");
     }
+
+    public HashMap<String,Image> getSprites()
+    {
+        return sprites;
+    }
+
 
     public Media getSound(String sound)
     {

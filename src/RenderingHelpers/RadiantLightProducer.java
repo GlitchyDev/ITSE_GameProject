@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class RadiantLightProducer {
 
-    private static ArrayList<Position> blocksLookedAt = new ArrayList<>();
+    //private static ArrayList<Position> blocksLookedAt = new ArrayList<>();
 
     public static void produceLight(World world, int x, int y, int initLightAmount)
     {
@@ -17,7 +17,7 @@ public class RadiantLightProducer {
         b.setCurrentlyLit(true);
         b.setCurrentLightLevel(initLightAmount);
         expandLightMap(world,x,y,initLightAmount);
-        blocksLookedAt.clear();
+        //blocksLookedAt.clear();
 
 
     }
@@ -39,7 +39,7 @@ public class RadiantLightProducer {
                     }
                 }
             }
-            blocksLookedAt.add(new Position(x, y - 1));
+            //blocksLookedAt.add(new Position(x, y - 1));
         }
 
 
@@ -55,7 +55,7 @@ public class RadiantLightProducer {
                     }
                 }
             }
-            blocksLookedAt.add(new Position(x, y - 1));
+            //blocksLookedAt.add(new Position(x, y - 1));
         }
 
         b = world.getBlockFromCords(x + 1, y );
@@ -70,7 +70,7 @@ public class RadiantLightProducer {
                     }
                 }
             }
-            blocksLookedAt.add(new Position(x + 1, y ));
+            //blocksLookedAt.add(new Position(x + 1, y ));
         }
         b = world.getBlockFromCords(x - 1, y);
         if(BlockTypeEnum.caculateLightCost(b.getBlockType(),initLightAmount) > 0) {
@@ -84,7 +84,7 @@ public class RadiantLightProducer {
                     }
                 }
             }
-            blocksLookedAt.add(new Position(x + 1, y ));
+            //blocksLookedAt.add(new Position(x + 1, y ));
         }
 
         if(expandNorth != -1)

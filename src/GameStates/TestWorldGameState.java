@@ -21,6 +21,7 @@ import javafx.scene.image.WritablePixelFormat;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import HardwareAdaptors.XBoxController;
 import sample.RenderingTest;
@@ -41,14 +42,18 @@ public class TestWorldGameState extends GameStateBase {
     private Viewport viewport;
     private Client client;
     private MediaPlayer backgroundMusic;
+    private Stage primaryStage;
+    private Canvas canvas;
 
 
 
-    public TestWorldGameState(GlobalGameData globalGameData)
+    public TestWorldGameState(GlobalGameData globalGameData, Stage primaryStage, Canvas canvas)
     {
         super(globalGameData);
         world = new World(globalGameData);
-        viewport = new Viewport(client,world);
+        viewport = new Viewport(client,world,primaryStage,canvas);
+        this.primaryStage = primaryStage;
+        this.canvas = canvas;
 
     }
 
@@ -93,15 +98,36 @@ public class TestWorldGameState extends GameStateBase {
         Runtime instance = Runtime.getRuntime();
         double usedMemory = (instance.totalMemory() - instance.freeMemory()) / mb;
 
-        gc.setFill(Color.BLUE);
-        gc.fillText("FPS: " + lastFPS,350,50);
-        gc.fillText("LogicPercentage: " + lastLogicFramePercentage,350,60);
-        gc.fillText("RenderPercentage: " + lastRenderFramePercentage,350,70);
-        gc.fillText("Used Memory: " + usedMemory + " MB",350,80);
 
-        //WritableImage image = new WritableImage((int)canvas.getWidth(),(int)canvas.getHeight());
-        //canvas.snapshot(null, image);
-        //gc.drawImage(image,5,5);
+        gc.setFill(Color.BLUE);
+        if(lastFPS <= 57)
+        {
+            gc.setFill(Color.ORANGE);
+        }
+        gc.fillText("FPS: " + lastFPS,350,50);
+
+        gc.setFill(Color.BLUE);
+        if(lastLogicFramePercentage >= 10)
+        {
+            gc.setFill(Color.ORANGE);
+        }
+        gc.fillText("LogicPercentage: " + lastLogicFramePercentage,350,60);
+
+        gc.setFill(Color.BLUE);
+        if(lastRenderFramePercentage >= 10)
+        {
+            if(lastRenderFramePercentage >= 20)
+            {
+                gc.setFill(Color.RED);
+            }
+            else {
+                gc.setFill(Color.ORANGE);
+            }
+        }
+        gc.fillText("RenderPercentage: " + lastRenderFramePercentage,350,70);
+
+        gc.setFill(Color.BLUE);
+        gc.fillText("Used Memory: " + usedMemory + " MB",350,80);
 
     }
 
@@ -136,7 +162,7 @@ public class TestWorldGameState extends GameStateBase {
         }
 
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
-        viewport = new Viewport(client,world);
+        viewport = new Viewport(client,world,primaryStage,canvas);
 
 
         //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);

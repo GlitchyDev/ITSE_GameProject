@@ -14,6 +14,8 @@ public enum DirectionalPadEnum {
     NORTH_WEST,
     NONE;
 
+
+
     public static DirectionalPadEnum translateRawDirection(double d)
     {
         switch(String.valueOf(d))

@@ -6,6 +6,7 @@ import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -44,10 +45,20 @@ public class Viewport {
 
 
 
-    public Viewport(Client client, World world)
+    public Viewport(Client client, World world, Stage primaryStage, Canvas canvas)
     {
         this.client = client;
         this.world = world;
+
+        primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+                widthBuffer = (int)((canvas.getWidth() - viewportWidth)/2 + 0.5);
+        });
+
+        primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            heightBuffer = (int)((canvas.getHeight() - viewportHeight)/2 + 0.5);
+        });
+        primaryStage.setMinHeight(viewportHeight + 39);
+        primaryStage.setMinWidth(viewportWidth + 6);
 
     }
 
