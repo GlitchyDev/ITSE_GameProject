@@ -132,7 +132,12 @@ public abstract class EntityBase {
 
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset)
     {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5) + xOffset + Viewport.widthBuffer, (int)((y+1) * World.getScaledUpSquareSize() + 0.5) + yOffset + Viewport.heightBuffer  );
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5) + xOffset + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5) + yOffset + Viewport.heightBuffer  );
+    }
+
+    public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
+    {
+        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer,width,height  );
     }
 
 

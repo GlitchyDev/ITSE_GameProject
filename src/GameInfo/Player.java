@@ -39,4 +39,9 @@ public class Player {
     public void setPlayerCharacter(EntityBase playerCharacter) {
         this.playerCharacter = playerCharacter;
     }
+
+    public String getSkinID()
+    {
+        return "P1|P1|P1";
+    }
 }

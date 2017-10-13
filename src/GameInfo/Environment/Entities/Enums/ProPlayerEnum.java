@@ -2,7 +2,8 @@ package GameInfo.Environment.Entities.Enums;
 
 public enum ProPlayerEnum {
     IDLE,
-    WALKING,
+    ATTEMPTING_MOVE,
+    MOVING,
     DAMAGED,
-    PULLING_OUT_TORCH
+
 }

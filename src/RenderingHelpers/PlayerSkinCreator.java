@@ -24,15 +24,15 @@ public class PlayerSkinCreator {
 
     public static void generateSkin(Player player, GlobalGameData globalGameData){
         // Determine Skin Type from Player using Connection
-        String headType = "P1";
-        String bodyType = "P1";
-        String legType = "P1";
+        String headType = player.getSkinID().split("|")[0];
+        String bodyType = player.getSkinID().split("|")[1];
+        String legType = player.getSkinID().split("|")[2];
 
         ArrayList<Image> generatedSprites = new ArrayList<>();
-        createSprites(player.getUuid(),"Front","P1","P1","P1", globalGameData);
-        createSprites(player.getUuid(),"Back","P1","P1","P1", globalGameData);
-        createSprites(player.getUuid(),"Left","P1","P1","P1", globalGameData);
-        createSprites(player.getUuid(),"Right","P1","P1","P1", globalGameData);
+        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
 
 
 

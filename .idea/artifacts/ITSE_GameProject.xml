@@ -6,15 +6,15 @@
         <option name="appClass" value="sample.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
-        <option name="title" value="I WANT DEATH" />
-        <option name="vendor" value="" />
-        <option name="version" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="ITSE_GameProject" />
+        <option name="vendor" value="ITSE_Group" />
+        <option name="version" value="Alpha" />
       </options>
     </properties>
     <root id="root">
       <element id="archive" name="ITSE_GameProject.jar">
         <element id="module-output" name="ITSE_GameProject" />
-        <element id="library" level="project" name="jinput" />
       </element>
     </root>
   </artifact>
