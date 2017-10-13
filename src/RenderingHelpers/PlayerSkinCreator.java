@@ -12,62 +12,84 @@ import java.util.*;
 
 public class PlayerSkinCreator {
     public static ArrayList<UUID> skinsCreated = new ArrayList<>();
-    private static final List<String> headModifiers = Arrays.asList("Head","Head_Look_Left","Head_Look_Right","Head_Really");
+    private static final List<String> headModifiers = Arrays.asList("Head","Head_Look_Left","Head_Look_Right","Head_Really","Head_Evil", "Head_Eyes_Closed");
     private static final List<String> bodyModifiers = Arrays.asList("Body","Body_Light_On","Body_Light_Off","Body_Light_Away");
     private static final List<String> legModifiers = Arrays.asList("Legs_1","Legs_2","Legs_3");
 
-    private static final List<String> frontExclusive = Arrays.asList("Head_Look_Left","Head_Look_Right","Head_Really");
+    private static final List<String> frontExclusive = Arrays.asList("Head_Look_Left","Head_Look_Right");
     private static final List<String> backExclusive = Arrays.asList();
     private static final List<String> leftExclusive = Arrays.asList();
     private static final List<String> rightExclusive = Arrays.asList();
 
 
-    public static void generateSkin(Player player, HashMap<String,Image> sprites){
+    public static void generateSkin(Player player, GlobalGameData globalGameData){
         // Determine Skin Type from Player using Connection
         String headType = "P1";
         String bodyType = "P1";
         String legType = "P1";
 
         ArrayList<Image> generatedSprites = new ArrayList<>();
+        createSprites(player.getUuid(),"Front","P1","P1","P1", globalGameData);
+        createSprites(player.getUuid(),"Back","P1","P1","P1", globalGameData);
+        createSprites(player.getUuid(),"Left","P1","P1","P1", globalGameData);
+        createSprites(player.getUuid(),"Right","P1","P1","P1", globalGameData);
 
 
 
-        // Front Standing
     }
 
-    public static ArrayList<Image> createFront(String headType, String bodyType, String legType, GlobalGameData globalGameData)
+
+    private static void createSprites(UUID uuid, String mode, String headType, String bodyType, String legType, GlobalGameData globalGameData)
     {
-        System.out.println("Creating front");
-        ArrayList<Image> images = new ArrayList<>();
         for(String head: headModifiers)
         {
-            if(canUseMod("Front",head))
+            if(canUseMod(mode,head))
             {
                 for(String body: bodyModifiers)
                 {
-                    if(canUseMod("Front",body))
+                    if(canUseMod(mode,body))
                     {
                         for(String legs: legModifiers)
                         {
-                            if(canUseMod("Front",legs))
+                            if(canUseMod(mode,legs))
                             {
+
                                 WritableImage base = new WritableImage(38,70);
-                                addSpriteToBase(base,globalGameData.getSprite(legType + "_" + "Front" + "_" + legs));
-                                addSpriteToBase(base,globalGameData.getSprite(headType + "_" + "Front" + "_" + head));
-                                addSpriteToBase(base,globalGameData.getSprite(bodyType + "_" + "Front" + "_" + body));
-                                images.add(base);
+                                String name = uuid.toString();
+                                name += "|" + headType + "_" + mode + "_" + head;
+                                name += "|" + bodyType + "_" + mode + "_" + body;
+                                name += "|" + legType + "_" + mode + "_" + legs;
+                                System.out.println(name);
+                                if(mode.equals("Left") || mode.equals("Right"))
+                                {
+                                    new WritableImage(40,70);
+                                }
+                                if(!mode.equals("Back")) {
+                                    addSpriteToBase(base, globalGameData.getSprite(legType + "_" + mode + "_" + legs));
+                                    addSpriteToBase(base, globalGameData.getSprite(headType + "_" + mode + "_" + head));
+                                    addSpriteToBase(base, globalGameData.getSprite(bodyType + "_" + mode + "_" + body));
+                                }
+                                else
+                                {
+                                    addSpriteToBase(base, globalGameData.getSprite(legType + "_" + mode + "_" + legs));
+                                    addSpriteToBase(base, globalGameData.getSprite(bodyType + "_" + mode + "_" + body));
+                                    addSpriteToBase(base, globalGameData.getSprite(headType + "_" + mode + "_" + head));
+                                }
 
-
+                                globalGameData.getSprites().put(name,base);
                             }
                         }
                     }
                 }
             }
         }
-        return images;
+
+
+
+
     }
 
-    public static void addSpriteToBase(WritableImage base, Image sprite)
+    private static void addSpriteToBase(WritableImage base, Image sprite)
     {
         PixelWriter writer = base.getPixelWriter();
         PixelReader reader = sprite.getPixelReader();
@@ -85,7 +107,7 @@ public class PlayerSkinCreator {
         }
     }
 
-    public static boolean canUseMod(String direction, String mod)
+    private static boolean canUseMod(String direction, String mod)
     {
         switch(direction)
         {

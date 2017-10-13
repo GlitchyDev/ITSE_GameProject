@@ -13,6 +13,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import net.java.games.input.Version;
 
 /**
  * This class is meant to
@@ -51,7 +52,7 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
 
-        primaryStage.setTitle("Endless Days");
+        primaryStage.setTitle("Endless Days " + Version.getVersion());
         primaryStage.setResizable(true);
 
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu,primaryStage,canvas);
