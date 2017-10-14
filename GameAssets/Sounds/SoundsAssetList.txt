@@ -1,1 +1,5 @@
 /BackgroundMusic/CaveWaterDrops.mp3
+/BackgroundMusic/maintheme.mp3
+/SoundEffects/elecHum.mp3
+/SoundEffects/flashLightOff.mp3
+/SoundEffects/flashLightOn.mp3

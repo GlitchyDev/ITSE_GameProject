@@ -42,6 +42,6 @@ public class Player {
 
     public String getSkinID()
     {
-        return "P1|P1|P1";
+        return "P1,P1,P1";
     }
 }

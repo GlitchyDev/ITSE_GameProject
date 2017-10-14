@@ -235,15 +235,15 @@ public class GlobalGameData {
 
     public Image getSprite(String sprite)
     {
-        //if(sprites.containsKey(sprite))
-        //{
+        if(sprites.containsKey(sprite))
+        {
             return sprites.get(sprite);
-        //}
-        //else
-        //{
-        //    System.out.println("Image " + sprite + " was not found");
-        //}
-        //return sprites.get("Test_Rock");
+        }
+        else
+        {
+            System.out.println("Image " + sprite + " was not found");
+        }
+        return null;
     }
 
     public HashMap<String,Image> getSprites()

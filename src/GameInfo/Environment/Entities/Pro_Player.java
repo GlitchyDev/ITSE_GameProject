@@ -15,6 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import HardwareAdaptors.DirectionalPadEnum;
 import HardwareAdaptors.XBoxController;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -34,8 +35,8 @@ public class Pro_Player extends DamageableEntityBase {
     private long stateStartTime;
 
     private int lightLevel = -1;
-    private final double holdDownTime = 0.2;
-    private final double moveTime = 1.0;
+    private final double holdDownTime = 0.13;
+    private final double moveTime = 0.1;
 
 
 
@@ -51,6 +52,7 @@ public class Pro_Player extends DamageableEntityBase {
         entityState = ProPlayerEnum.IDLE;
         stateStartTime = System.currentTimeMillis();
 
+        System.out.println("Player is calling  this");
         PlayerSkinCreator.generateSkin(player,globalGameData);
     }
 
@@ -62,15 +64,30 @@ public class Pro_Player extends DamageableEntityBase {
             case IDLE:
                 break;
             case ATTEMPTING_MOVE:
-                if(System.currentTimeMillis() > stateStartTime + holdDownTime)
+                if(System.currentTimeMillis() > stateStartTime + holdDownTime*1000)
                 {
                     entityState = ProPlayerEnum.MOVING;
                     stateStartTime = System.currentTimeMillis();
                 }
                 break;
             case MOVING:
-                if(System.currentTimeMillis() > stateStartTime + moveTime)
+                if(System.currentTimeMillis() > stateStartTime + moveTime*1000)
                 {
+                    switch(cachedDirection)
+                    {
+                        case NORTH:
+                            moveRelative(0,1);
+                            break;
+                        case SOUTH:
+                            moveRelative(0,-1);
+                            break;
+                        case EAST:
+                            moveRelative(-1,0);
+                            break;
+                        case WEST:
+                            moveRelative(1,0);
+                            break;
+                    }
                     entityState = ProPlayerEnum.IDLE;
                     stateStartTime = System.currentTimeMillis();
                 }
@@ -89,11 +106,19 @@ public class Pro_Player extends DamageableEntityBase {
         switch(entityState)
         {
             case IDLE:
-                if(direction != DirectionalPadEnum.NONE && cachedDirection == DirectionalPadEnum.NONE)
+                if(direction != DirectionalPadEnum.NONE && cachedDirection == DirectionalPadEnum.NONE && !DirectionalPadEnum.isDiagnal(direction))
                 {
+
                     entityState = ProPlayerEnum.ATTEMPTING_MOVE;
                     stateStartTime = System.currentTimeMillis();
                     cachedDirection = direction;
+                }
+                else
+                {
+                    if(direction != cachedDirection)
+                    {
+                        cachedDirection = direction;
+                    }
                 }
                 break;
             case ATTEMPTING_MOVE:
@@ -113,6 +138,33 @@ public class Pro_Player extends DamageableEntityBase {
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
+        double xOffset = 0;
+        double yOffset = 0;
+        if(entityState == ProPlayerEnum.MOVING)
+        {
+            switch(cachedDirection)
+            {
+                case NORTH:
+                    yOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    break;
+                case SOUTH:
+                    yOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    break;
+                case EAST:
+                    xOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    break;
+                case WEST:
+                    xOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    break;
+            }
+        }
+
+        if(renderLayer == 1) {
+            drawSpriteAtXY(globalGameData.getSprite("Pro_Test_Darker"), gc, x, y, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + yOffset);
+        }
+        //drawRectangleAtXY(gc,x,y,(int)xOffset,(int)yOffset,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
+        //gc.setFill(Color.WHITE);
+        //System.out.println(entityState.toString());
 
     }
 

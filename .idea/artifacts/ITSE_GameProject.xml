@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" build-on-make="true" name="ITSE_GameProject">
+  <artifact type="javafx" name="ITSE_GameProject">
     <output-path>$PROJECT_DIR$/out/artifacts/ITSE_GameProject</output-path>
     <properties id="javafx-properties">
       <options>
