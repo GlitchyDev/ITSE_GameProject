@@ -56,16 +56,13 @@ public class PlayerSkinCreator {
                             if(canUseMod(mode,legs))
                             {
 
-                                WritableImage base = new WritableImage(38,70);
+                                WritableImage base = new WritableImage(40,70);
                                 String name = uuid.toString();
                                 name += "|" + headType + "_" + mode + "_" + head;
                                 name += "|" + bodyType + "_" + mode + "_" + body;
                                 name += "|" + legType + "_" + mode + "_" + legs;
                                 System.out.println(name);
-                                if(mode.equals("Left") || mode.equals("Right"))
-                                {
-                                    new WritableImage(40,70);
-                                }
+
                                 if(!mode.equals("Back")) {
                                     addSpriteToBase(base, globalGameData.getSprite(legType + "_" + mode + "_" + legs));
                                     addSpriteToBase(base, globalGameData.getSprite(headType + "_" + mode + "_" + head));
@@ -100,10 +97,11 @@ public class PlayerSkinCreator {
         {
             for(int y = 0; y < base.getHeight(); y++)
             {
-                Color c = reader.getColor(x,y);
-                if(c.getOpacity() == 1.0)
-                {
-                    writer.setColor(x,y,c);
+                if(x < sprite.getWidth() && y < sprite.getHeight()) {
+                    Color c = reader.getColor(x, y);
+                    if (c.getOpacity() == 1.0) {
+                        writer.setColor(x, y, c);
+                    }
                 }
             }
         }

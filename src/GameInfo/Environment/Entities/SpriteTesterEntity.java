@@ -27,7 +27,7 @@ public class SpriteTesterEntity extends EntityBase {
 
     @Override
     public void tickEntity() {
-        RadiantLightProducer.produceLight(world, x, y, 10);
+        RadiantLightProducer.produceLight(world, x, y, 3);
     }
 
     public int legCycle(int i)

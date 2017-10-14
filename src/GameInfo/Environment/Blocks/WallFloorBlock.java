@@ -81,7 +81,7 @@ public class WallFloorBlock extends BlockBase {
                 if(entities.size() > 0)
                 {
                     gc.setFill(Color.BLUE);
-                    drawRectangleAtXY(gc,x,y,0,0,5,5);
+                    drawRectangleAtXY(gc,x,y,0,0,40,40);
                 }
 
                 if(isCurrentlyLit) {

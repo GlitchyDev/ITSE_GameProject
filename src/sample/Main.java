@@ -3,6 +3,7 @@ package sample;
 import GameInfo.Environment.World;
 import GameInfo.GameStateEnum;
 import GameInfo.GlobalGameData;
+import GameInfo.Viewport;
 import GameStates.TestWorldGameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -29,41 +30,26 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Screen screen = Screen.getPrimary();
-        //Rectangle2D bounds = screen.getVisualBounds();
+        primaryStage.setWidth(World.getScaledUpSquareSize() * Viewport.widthBuffer + 16);
+        primaryStage.setHeight(World.getScaledUpSquareSize() * Viewport.heightBuffer + 39);
 
-        //primaryStage.setX(bounds.getMinX());
-       // primaryStage.setY(bounds.getMinY());
-        //primaryStage.setWidth(bounds.getWidth());
-        //primaryStage.setHeight(bounds.getHeight());
-
-       //primaryStage.setMaximized(true);
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setMinWidth(World.getScaledUpSquareSize() * 15 + 16);
+        primaryStage.setMinHeight(World.getScaledUpSquareSize() * 15 + 39);
 
         Group root = new Group();
         Scene theScene = new Scene(root);
         primaryStage.setScene(theScene);
-        Canvas canvas = new Canvas(primaryStage.getWidth() - 6, primaryStage.getHeight() - 39);
-
-        canvas.heightProperty().bind(primaryStage.heightProperty().subtract(39));
-        canvas.widthProperty().bind(primaryStage.widthProperty().subtract(6));
+        Canvas canvas = new Canvas(primaryStage.getWidth(), primaryStage.getHeight());
 
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
 
-        primaryStage.setTitle("Endless Days " + Version.getVersion());
+        primaryStage.setTitle("Endless Days");
         primaryStage.setResizable(true);
 
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu,primaryStage,canvas);
-
-        // Create the initial window size
-        primaryStage.setWidth(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewWidthX() * World.getScaledUpSquareSize() + 6);
-        primaryStage.setHeight(((TestWorldGameState)globalGameData.getGameState("TestWorld")).getViewport().getViewHeightY() * World.getScaledUpSquareSize() + 39);
-
         primaryStage.show();
-
-
 
 
         new AnimationTimer() {

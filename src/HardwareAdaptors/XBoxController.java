@@ -2,6 +2,8 @@ package HardwareAdaptors;
 
 import net.java.games.input.Controller;
 
+import java.util.concurrent.*;
+
 /**
  * Created by Robert on 8/24/2017.
  *
@@ -15,6 +17,13 @@ public class XBoxController {
     protected Controller controllerDevice;
     protected int id;
     protected ControllerType controllerType;
+    private final Runnable stuffToDo = new Thread() {
+        @Override
+        public void run() {
+            controllerDevice.poll();
+        }
+    };
+
 
     public boolean hasController()
     {
@@ -27,7 +36,25 @@ public class XBoxController {
         controllerType = ControllerType.XBoxController;
     }
 
-    public void poll() {controllerDevice.poll();}
+    public void poll() {
+        //controllerDevice.poll();
+        final ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future future = executor.submit(stuffToDo);
+        executor.shutdown(); // This does not cancel the already-scheduled task.
+        try {
+            future.get(500, TimeUnit.MILLISECONDS);
+        }
+        catch (InterruptedException ie) {
+        }
+        catch (ExecutionException ee) {
+        }
+        catch (TimeoutException te) {
+        }
+        if (!executor.isTerminated()) {
+            executor.shutdownNow(); // If you want to stop the code that hasn't finished.
+        }
+
+    }
 
     public double getLeftStickY()
     {

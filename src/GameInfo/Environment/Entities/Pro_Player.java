@@ -7,6 +7,7 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
 import RenderingHelpers.PlayerSkinCreator;
+import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -27,10 +28,14 @@ public class Pro_Player extends DamageableEntityBase {
 
     private ProPlayerStateEnum entityState;
     private long stateStartTime;
-
-    private int lightLevel = -1;
-    private final double holdDownTime = 0.13;
+    private final double holdDownTime = 0.1;
     private final double moveTime = 0.1;
+
+
+    private boolean lightButtonCache = false;
+    private long lightChangeTime = 0;
+    private int lightLevel = -2;
+
 
     private ProPlayerEmotion emotion = ProPlayerEmotion.NONE;
     private ProPlayerBodyState bodyState = ProPlayerBodyState.NONE;
@@ -50,7 +55,7 @@ public class Pro_Player extends DamageableEntityBase {
         primaryDirection = DirectionalPadEnum.SOUTH;
         entityState = ProPlayerStateEnum.IDLE;
         stateStartTime = System.currentTimeMillis();
-
+        lightChangeTime = System.currentTimeMillis();
         System.out.println("Player is calling  this");
         PlayerSkinCreator.generateSkin(player,globalGameData);
         String[] args = player.getSkinID().split(",");
@@ -68,30 +73,35 @@ public class Pro_Player extends DamageableEntityBase {
             case IDLE:
                 break;
             case ATTEMPTING_MOVE:
-                if(System.currentTimeMillis() > stateStartTime + holdDownTime*1000)
-                {
-                    entityState = ProPlayerStateEnum.MOVING;
-                    stateStartTime = System.currentTimeMillis();
+                boolean moveFailed = true;
+                if(System.currentTimeMillis() > stateStartTime + holdDownTime*1000) {
+                    switch (cachedDirection) {
+                        case NORTH:
+                            moveFailed = advancedMoveRelative(0, 1, true, true, true, true);
+                            break;
+                        case SOUTH:
+                            moveFailed = advancedMoveRelative(0, -1, true, true, true, true);
+                            break;
+                        case EAST:
+                            moveFailed = advancedMoveRelative(-1, 0, true, true, true, true);
+                            break;
+                        case WEST:
+                            moveFailed = advancedMoveRelative(1, 0, true, true, true, true);
+                            break;
+                    }
+                    if (moveFailed) {
+                        entityState = ProPlayerStateEnum.MOVING;
+                        stateStartTime = System.currentTimeMillis();
+                    } else
+                    {
+                        entityState = ProPlayerStateEnum.IDLE;
+                        stateStartTime = System.currentTimeMillis();
+                    }
                 }
                 break;
             case MOVING:
                 if(System.currentTimeMillis() > stateStartTime + moveTime*1000)
                 {
-                    switch(cachedDirection)
-                    {
-                        case NORTH:
-                            moveRelative(0,1);
-                            break;
-                        case SOUTH:
-                            moveRelative(0,-1);
-                            break;
-                        case EAST:
-                            moveRelative(-1,0);
-                            break;
-                        case WEST:
-                            moveRelative(1,0);
-                            break;
-                    }
                     entityState = ProPlayerStateEnum.IDLE;
                     stateStartTime = System.currentTimeMillis();
                 }
@@ -100,12 +110,63 @@ public class Pro_Player extends DamageableEntityBase {
                 break;
 
         }
+        switch(bodyState)
+        {
+            case NONE:
+                lightLevel = 0;
+                break;
+            case LIGHT_ON:
+                if((System.currentTimeMillis() - lightChangeTime)/500.0 <= 1)
+                {
+                    lightLevel = (int)(((System.currentTimeMillis() - lightChangeTime)/500.0)*10);
+                }
+                else
+                {
+                    switch((int)(Math.random() * 100))
+                    {
+                        case 0:
+                            lightLevel = 5;
+                            break;
+                        case 1:
+                            lightLevel = 6;
+                            break;
+                        case 2:
+                            lightLevel = 7;
+                            break;
+                        default:
+                            lightLevel = 10;
+                            break;
+                    }
+                }
+                break;
+            case LIGHT_OFF:
+                if((System.currentTimeMillis() - lightChangeTime)/1000.0 >= 0.3)
+                {
+                    bodyState = ProPlayerBodyState.LIGHT_AWAY;
+                    lightChangeTime = System.currentTimeMillis();
+                }
+                else
+                {
+                    lightLevel = 10 - (int)(((System.currentTimeMillis() - lightChangeTime)/200.0)*10);
 
+                }
+                break;
+            case LIGHT_AWAY:
+                if((System.currentTimeMillis() - lightChangeTime)/1000.0 >= 0.1)
+                {
+                    bodyState = ProPlayerBodyState.NONE;
+                    lightChangeTime = System.currentTimeMillis();
+                }
+                break;
+        }
+        RadiantLightProducer.produceLight(world,x,y,lightLevel);
     }
 
     public void buttonInput()
     {
         controller.poll();
+
+        // MOVEMENT
         DirectionalPadEnum direction = controller.getDirectionalPad();
         switch(entityState)
         {
@@ -144,11 +205,33 @@ public class Pro_Player extends DamageableEntityBase {
             case DAMAGED: break;
 
         }
+        // Lighting
+        if(lightButtonCache != controller.getRightShoulder())
+        {
+            if(controller.getRightShoulder())
+            {
+                System.out.println("Button has been Pressed Again");
+
+                if(bodyState == ProPlayerBodyState.LIGHT_ON)
+                {
+                    bodyState = ProPlayerBodyState.LIGHT_OFF;
+                    lightChangeTime = System.currentTimeMillis();
+                }
+                else {
+                    if (bodyState == ProPlayerBodyState.NONE) {
+                        bodyState = ProPlayerBodyState.LIGHT_ON;
+                        lightChangeTime = System.currentTimeMillis();
+                    }
+                }
+            }
+            lightButtonCache = controller.getRightShoulder();
+        }
+
     }
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        if(renderLayer == 2) {
+        if(renderLayer == 1) {
             double xOffset = 0;
             double yOffset = 0;
 
@@ -158,16 +241,16 @@ public class Pro_Player extends DamageableEntityBase {
                 switch(primaryDirection)
                 {
                     case NORTH:
-                        yOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        yOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
                         break;
                     case SOUTH:
-                        yOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        yOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
                         break;
                     case EAST:
-                        xOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        xOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
                         break;
                     case WEST:
-                        xOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        xOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
                         break;
                 }
             }
@@ -188,6 +271,21 @@ public class Pro_Player extends DamageableEntityBase {
             }
             String head = headType + "_" + direction + "_Head";
             String body = bodyType + "_" + direction + "_Body";
+            switch(bodyState)
+            {
+                case LIGHT_ON:
+                    body += "_Light_On";
+                    break;
+                case LIGHT_OFF:
+                    body += "_Light_Off";
+                    break;
+                case LIGHT_AWAY:
+                    body += "_Light_Away";
+                    break;
+                case NONE:
+                    body += "";
+                    break;
+            }
             String leg = legType + "_" + direction + "_";
             if(entityState == ProPlayerStateEnum.ATTEMPTING_MOVE || entityState == ProPlayerStateEnum.MOVING) {
                 switch((int)(System.currentTimeMillis() / (moveTime/5) % 5 ))
@@ -212,10 +310,10 @@ public class Pro_Player extends DamageableEntityBase {
             }
 
             Image image = globalGameData.getSprite(player.getUuid().toString() + "|" + head + "|" + body + "|" + leg);
-            gc.setGlobalAlpha(0.2);
-            drawSpriteAtXY(image, gc, x, y, 1.5 + (xOffset/2.0), (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + (yOffset/2.0));
+           // gc.setGlobalAlpha(0.2);
+           // drawSpriteAtXY(image, gc, x, y+1, 1.5 + (xOffset/2.0), (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + (yOffset/2.0));
             gc.setGlobalAlpha(1.0);
-            drawSpriteAtXY(image, gc, x, y, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize()/2 ) + yOffset);
+            drawSpriteAtXY(image, gc, x, y+1, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize()/2 ) + yOffset);
         }
 
 

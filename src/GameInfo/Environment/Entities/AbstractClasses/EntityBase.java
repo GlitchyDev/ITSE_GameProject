@@ -77,6 +77,16 @@ public abstract class EntityBase {
         }
     }
 
+    /**
+     *
+     * @param relativeX
+     * @param relativeY
+     * @param doCheckColisions
+     * @param doStructureEvents
+     * @param doGenerateEnterEvent
+     * @param doGenerateExitEvent
+     * @return If the Movement was Blocked
+     */
     public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);

@@ -107,7 +107,7 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillText("FPS: " + lastFPS,350,50);
 
         gc.setFill(Color.BLUE);
-        if(lastLogicFramePercentage >= 10)
+        if(lastLogicFramePercentage >= 20)
         {
             gc.setFill(Color.ORANGE);
         }

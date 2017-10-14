@@ -25,8 +25,8 @@ public class Viewport {
     private int centerX;
     private int centerY;
     // How many block units should be rendered on screen
-    private int viewWidthX = 15;
-    private int viewHeightY = 15;
+    private static int viewWidthX = 15;
+    private static int viewHeightY = 15;
     // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
     private int extraViewX = 5;
     private int extraViewY = 5;
@@ -50,15 +50,24 @@ public class Viewport {
         this.client = client;
         this.world = world;
 
+        heightBuffer = 0;
+        widthBuffer = 0;
+
+
+
         primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-                widthBuffer = (int)((canvas.getWidth() - viewportWidth)/2 + 0.5);
+            widthBuffer = (int)((primaryStage.getWidth()-6) - viewportWidth)/2;
+            canvas.setWidth(primaryStage.getWidth()-6);
         });
 
         primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            heightBuffer = (int)((canvas.getHeight() - viewportHeight)/2 + 0.5);
+            heightBuffer = (int)((primaryStage.getHeight()-39) - viewportHeight)/2;
+            canvas.setHeight(primaryStage.getHeight()-39);
         });
-        primaryStage.setMinHeight(viewportHeight + 39);
-        primaryStage.setMinWidth(viewportWidth + 6);
+        widthBuffer = (int)((primaryStage.getWidth()-6) - viewportWidth)/2 - 6;
+        heightBuffer = (int)((primaryStage.getHeight()-39) - viewportHeight)/2;
+
+
 
     }
 
@@ -121,14 +130,7 @@ public class Viewport {
      */
     public void render(Canvas canvas, GraphicsContext gc)
     {
-        if(widthBuffer == 0)
-        {
-            widthBuffer = (int)((canvas.getWidth() - viewportWidth)/2 + 0.5);
-        }
-        if(heightBuffer == 0)
-        {
-            heightBuffer = (int)((canvas.getHeight() - viewportHeight)/2 + 0.5);
-        }
+
         gc.setFill(Color.WHITE);
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         determineCenter();
@@ -156,17 +158,12 @@ public class Viewport {
         }
 
 
-        gc.setStroke(Color.RED);
-        gc.strokeRect(widthBuffer,heightBuffer,viewWidthX * World.getScaledUpSquareSize(),viewHeightY * World.getScaledUpSquareSize());
-        gc.setStroke(Color.PURPLE);
-        gc.strokeRect(widthBuffer,heightBuffer,viewWidthX * World.getScaledUpSquareSize(),viewHeightY * World.getScaledUpSquareSize());
-
 
 
         gc.setFill(Color.GRAY);
         //gc.setGlobalAlpha(0.5);
         gc.fillRect(0,0,canvas.getWidth(),heightBuffer);
-        gc.fillRect(0,viewportHeight + heightBuffer,canvas.getWidth(),heightBuffer);
+        gc.fillRect(0,viewportHeight + heightBuffer,canvas.getWidth(),heightBuffer+1);
         gc.fillRect(0,0,widthBuffer,canvas.getHeight());
         gc.fillRect(viewportWidth + widthBuffer,0,widthBuffer,canvas.getHeight());
         gc.setGlobalAlpha(1.0);
