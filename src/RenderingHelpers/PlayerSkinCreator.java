@@ -32,9 +32,9 @@ public class PlayerSkinCreator {
         System.out.println(player.getSkinID() + "~" + player.getSkinID().split("|"));
 
         createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Back",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Left",headType,bodyType,legType, globalGameData);
+        createSprites(player.getUuid(),"Right",headType,bodyType,legType, globalGameData);
 
 
 

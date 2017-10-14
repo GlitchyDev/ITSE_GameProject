@@ -1,6 +1,6 @@
 package GameInfo.Environment.Entities.Enums;
 
-public enum ProPlayerEnum {
+public enum ProPlayerStateEnum {
     IDLE,
     ATTEMPTING_MOVE,
     MOVING,

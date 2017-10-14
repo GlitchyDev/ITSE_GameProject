@@ -2,22 +2,16 @@ package GameInfo.Environment.Entities;
 
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import GameInfo.Environment.Entities.Enums.DamageType;
-import GameInfo.Environment.Entities.Enums.EntityType;
-import GameInfo.Environment.Entities.Enums.ProPlayerEnum;
+import GameInfo.Environment.Entities.Enums.*;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
 import RenderingHelpers.PlayerSkinCreator;
-import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import HardwareAdaptors.DirectionalPadEnum;
 import HardwareAdaptors.XBoxController;
-import javafx.scene.paint.Color;
-
-import java.util.ArrayList;
 
 /**
  * This class aims to
@@ -31,13 +25,18 @@ public class Pro_Player extends DamageableEntityBase {
     private DirectionalPadEnum cachedDirection;
     private DirectionalPadEnum primaryDirection;
 
-    private ProPlayerEnum entityState;
+    private ProPlayerStateEnum entityState;
     private long stateStartTime;
 
     private int lightLevel = -1;
     private final double holdDownTime = 0.13;
     private final double moveTime = 0.1;
 
+    private ProPlayerEmotion emotion = ProPlayerEmotion.NONE;
+    private ProPlayerBodyState bodyState = ProPlayerBodyState.NONE;
+    private String headType = "P1";
+    private String bodyType = "P1";
+    private String legType = "P1";
 
 
     public Pro_Player(World world, GlobalGameData globalGameData, Player player, int x, int y) {
@@ -49,11 +48,16 @@ public class Pro_Player extends DamageableEntityBase {
         maxHealth = 5;
         cachedDirection = DirectionalPadEnum.NONE;
         primaryDirection = DirectionalPadEnum.SOUTH;
-        entityState = ProPlayerEnum.IDLE;
+        entityState = ProPlayerStateEnum.IDLE;
         stateStartTime = System.currentTimeMillis();
 
         System.out.println("Player is calling  this");
         PlayerSkinCreator.generateSkin(player,globalGameData);
+        String[] args = player.getSkinID().split(",");
+        headType = args[0];
+        bodyType = args[1];
+        legType = args[2];
+
     }
 
     @Override
@@ -66,7 +70,7 @@ public class Pro_Player extends DamageableEntityBase {
             case ATTEMPTING_MOVE:
                 if(System.currentTimeMillis() > stateStartTime + holdDownTime*1000)
                 {
-                    entityState = ProPlayerEnum.MOVING;
+                    entityState = ProPlayerStateEnum.MOVING;
                     stateStartTime = System.currentTimeMillis();
                 }
                 break;
@@ -88,7 +92,7 @@ public class Pro_Player extends DamageableEntityBase {
                             moveRelative(1,0);
                             break;
                     }
-                    entityState = ProPlayerEnum.IDLE;
+                    entityState = ProPlayerStateEnum.IDLE;
                     stateStartTime = System.currentTimeMillis();
                 }
                 break;
@@ -109,22 +113,28 @@ public class Pro_Player extends DamageableEntityBase {
                 if(direction != DirectionalPadEnum.NONE && cachedDirection == DirectionalPadEnum.NONE && !DirectionalPadEnum.isDiagnal(direction))
                 {
 
-                    entityState = ProPlayerEnum.ATTEMPTING_MOVE;
+                    entityState = ProPlayerStateEnum.ATTEMPTING_MOVE;
                     stateStartTime = System.currentTimeMillis();
                     cachedDirection = direction;
+                    primaryDirection = direction;
                 }
                 else
                 {
                     if(direction != cachedDirection)
                     {
                         cachedDirection = direction;
+                        if(direction != DirectionalPadEnum.NONE)
+                        {
+                            primaryDirection = direction;
+                        }
+
                     }
                 }
                 break;
             case ATTEMPTING_MOVE:
                 if(cachedDirection != direction)
                 {
-                    entityState = ProPlayerEnum.IDLE;
+                    entityState = ProPlayerStateEnum.IDLE;
                     stateStartTime = System.currentTimeMillis();
                     cachedDirection = direction;
                 }
@@ -138,33 +148,76 @@ public class Pro_Player extends DamageableEntityBase {
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        double xOffset = 0;
-        double yOffset = 0;
-        if(entityState == ProPlayerEnum.MOVING)
-        {
-            switch(cachedDirection)
+        if(renderLayer == 2) {
+            double xOffset = 0;
+            double yOffset = 0;
+
+            String direction = "Front";
+            if(entityState == ProPlayerStateEnum.MOVING)
+            {
+                switch(primaryDirection)
+                {
+                    case NORTH:
+                        yOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        break;
+                    case SOUTH:
+                        yOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        break;
+                    case EAST:
+                        xOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        break;
+                    case WEST:
+                        xOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        break;
+                }
+            }
+            switch(primaryDirection)
             {
                 case NORTH:
-                    yOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    direction = "Back";
                     break;
                 case SOUTH:
-                    yOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    direction = "Front";
                     break;
                 case EAST:
-                    xOffset = ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    direction = "Right";
                     break;
                 case WEST:
-                    xOffset = -((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                    direction = "Left";
                     break;
             }
+            String head = headType + "_" + direction + "_Head";
+            String body = bodyType + "_" + direction + "_Body";
+            String leg = legType + "_" + direction + "_";
+            if(entityState == ProPlayerStateEnum.ATTEMPTING_MOVE || entityState == ProPlayerStateEnum.MOVING) {
+                switch((int)(System.currentTimeMillis() / (moveTime/5) % 5 ))
+                    {
+                    case 0:
+                        leg += "Legs_1";
+                        break;
+                    case 1:
+                        leg += "Legs_2";
+                        break;
+                    case 2:
+                        leg += "Legs_1";
+                        break;
+                    case 3:
+                        leg += "Legs_3";
+                        break;
+                }
+            }
+            else
+            {
+                leg += "Legs_1";
+            }
+
+            Image image = globalGameData.getSprite(player.getUuid().toString() + "|" + head + "|" + body + "|" + leg);
+            gc.setGlobalAlpha(0.2);
+            drawSpriteAtXY(image, gc, x, y, 1.5 + (xOffset/2.0), (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + (yOffset/2.0));
+            gc.setGlobalAlpha(1.0);
+            drawSpriteAtXY(image, gc, x, y, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize()/2 ) + yOffset);
         }
 
-        if(renderLayer == 1) {
-            drawSpriteAtXY(globalGameData.getSprite("Pro_Test_Darker"), gc, x, y, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + yOffset);
-        }
-        //drawRectangleAtXY(gc,x,y,(int)xOffset,(int)yOffset,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
-        //gc.setFill(Color.WHITE);
-        //System.out.println(entityState.toString());
 
     }
 
