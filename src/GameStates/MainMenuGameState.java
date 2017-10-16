@@ -5,6 +5,7 @@ import GameInfo.GlobalGameData;
 import GameStates.Enums.MainMenuPhaseEnum;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import HardwareAdaptors.ControllerType;
 import HardwareAdaptors.XBoxController;
@@ -93,7 +94,40 @@ public class MainMenuGameState extends GameStateBase {
                 break;
         }
         gc.setGlobalAlpha(1.0);
-        gc.drawImage(globalGameData.getSprite("Rock_Test"),0,0);
+
+        Image sprite = globalGameData.getSprite("Gear_1");
+        gc.save();
+        gc.translate(50, 35);
+        gc.translate(sprite.getWidth()/2, sprite.getHeight()/2);
+        gc.rotate((((int) (System.currentTimeMillis() % 8000.0) / 500) % 16 + 1) * 45/2);
+        gc.drawImage(sprite, -sprite.getWidth()/2, -sprite.getHeight()/2);
+        gc.restore();
+
+        gc.save();
+        gc.translate(82, 35);
+        gc.translate(sprite.getWidth()/2, sprite.getHeight()/2);
+        gc.rotate(-(((int) (System.currentTimeMillis() % 8000.0) / 500 + 5) % 16 + 1) * 45/2);
+        gc.drawImage(sprite, -sprite.getWidth()/2, -sprite.getHeight()/2);
+        gc.restore();
+
+        /*
+
+        for(int i = 0; i < 5; i++) {
+            //Image sprite = globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1));
+
+            Image sprite = globalGameData.getSprite("Gear_1");
+            gc.save(); // saves the current state on stack, including the current transform
+            gc.rotate(45 * (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1));
+            gc.drawImage(sprite,i * 50,0);
+            gc.restore(); // back to original state (before rotation)
+
+
+
+            //gc.drawImage(globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 0) % 8 + 1)), 0, 0);
+            //gc.drawImage(globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1)), 30 * i, 0);
+        }
+        */
+
 
     }
 

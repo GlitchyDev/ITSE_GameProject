@@ -98,6 +98,14 @@
 /Terrain/Test_Wall.png
 /Terrain/Test_Wall_Modified.png
 /Terrain/Test_Wall_Top.png
+/TestSprites/Gear_1.png
+/TestSprites/Gear_2.png
+/TestSprites/Gear_3.png
+/TestSprites/Gear_4.png
+/TestSprites/Gear_5.png
+/TestSprites/Gear_6.png
+/TestSprites/Gear_7.png
+/TestSprites/Gear_8.png
 /TestSprites/Pro_Back_Light.png
 /TestSprites/Pro_Back_Light_Away.png
 /TestSprites/Pro_Back_Light_Off.png

@@ -7,8 +7,11 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Enums.HauntedSkullStateEnum;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import HardwareAdaptors.DirectionalEnum;
+import Pathfinding.LineOfSightHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 
 /**
@@ -22,15 +25,17 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private HauntedSkullStateEnum currentState;
     private long stateStartTime;
     private DamageableEntityBase currentTarget;
+    private DirectionalEnum direction;
+
     public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
         entityType = EntityType.SCATTER_SKULL;
-
 
         stateStartTime = System.currentTimeMillis();
         currentState = HauntedSkullStateEnum.INACTIVE;
         world.getBlockFromCords(x,y).enterBlock(this);
         currentTarget = null;
+        direction = DirectionalEnum.randomDirection(globalGameData);
     }
 
     @Override
@@ -38,7 +43,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
         switch(currentState)
         {
             case INACTIVE:
-
+                //Block b = world.getBlockFromCords(x,y);
 
                 break;
             case ACTIVATE:
@@ -53,6 +58,11 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
+        boolean answer = LineOfSightHelper.lineOfSight(world,this.x,this.y,10,direction);
+        gc.setGlobalAlpha(1.0);
+        gc.setFill(Color.BLUE);
+        gc.fillText("Can see " + answer,50,50);
+
         if(renderLayer == 1) {
             switch(currentState)
             {

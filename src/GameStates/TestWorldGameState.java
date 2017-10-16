@@ -147,7 +147,9 @@ public class TestWorldGameState extends GameStateBase {
                 p.setPlayerCharacter(new Pro_Player(world,globalGameData,p,i + 5,i + 5));
                 i++;
                 players.add(p);
-                world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
+                //world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
+                world.attemptSpawn(p.getPlayerCharacter(),i+5,i+5,true,globalGameData);
+
 
             }
             client = new Client(players);
@@ -157,7 +159,8 @@ public class TestWorldGameState extends GameStateBase {
         {
             Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
             p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,5,5));
-            world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
+            world.attemptSpawn(p1.getPlayerCharacter(),5,5,true,globalGameData);
+            //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }
 
@@ -169,10 +172,12 @@ public class TestWorldGameState extends GameStateBase {
         //world.addEntityToWorld(pathfindingDebug);
 
         Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
-        world.addEntityToWorld(skullEntity);
+        world.attemptSpawn(skullEntity,7,7,true,globalGameData);
+        //world.addEntityToWorld(skullEntity);
 
         SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
-        world.addEntityToWorld(test);
+        world.attemptSpawn(test,3,3,true,globalGameData);
+        //world.addEntityToWorld(test);
 
 
         Media sound = globalGameData.getSound("CaveWaterDrops");

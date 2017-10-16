@@ -1,9 +1,11 @@
 package HardwareAdaptors;
 
+import GameInfo.GlobalGameData;
+
 /**
  * Created by Robert on 8/25/2017.
  */
-public enum DirectionalPadEnum {
+public enum DirectionalEnum {
     NORTH,
     EAST,
     SOUTH,
@@ -16,7 +18,7 @@ public enum DirectionalPadEnum {
 
 
 
-    public static DirectionalPadEnum translateRawDirection(double d)
+    public static DirectionalEnum translateRawDirection(double d)
     {
         switch(String.valueOf(d))
         {
@@ -41,8 +43,24 @@ public enum DirectionalPadEnum {
         }
     }
 
-    public static boolean isDiagnal(DirectionalPadEnum direction)
+    public static boolean isDiagnal(DirectionalEnum direction)
     {
         return (direction == NORTH_EAST || direction == NORTH_WEST || direction == SOUTH_EAST || direction == SOUTH_WEST);
+    }
+
+    public static DirectionalEnum randomDirection(GlobalGameData globalGameData)
+    {
+        switch(globalGameData.getRandom().nextInt(4))
+        {
+            case 0:
+                return DirectionalEnum.NORTH;
+            case 1:
+                return DirectionalEnum.EAST;
+            case 2:
+                return DirectionalEnum.SOUTH;
+            case 3:
+                return DirectionalEnum.WEST;
+        }
+        return DirectionalEnum.NORTH;
     }
 }

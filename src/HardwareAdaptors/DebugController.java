@@ -20,20 +20,20 @@ public class DebugController extends XBoxController {
 
 
     @Override
-    public DirectionalPadEnum getDirectionalPad() {
+    public DirectionalEnum getDirectionalPad() {
         if(keyboard.isKeyDown(Component.Identifier.Key.UP))
         {
             if(keyboard.isKeyDown(Component.Identifier.Key.LEFT))
             {
-                return DirectionalPadEnum.NORTH_WEST;
+                return DirectionalEnum.NORTH_WEST;
             }
             else {
                 if (keyboard.isKeyDown(Component.Identifier.Key.RIGHT)) {
-                    return DirectionalPadEnum.NORTH_EAST;
+                    return DirectionalEnum.NORTH_EAST;
                 }
                 else
                 {
-                    return DirectionalPadEnum.NORTH;
+                    return DirectionalEnum.NORTH;
                 }
             }
         }
@@ -41,29 +41,29 @@ public class DebugController extends XBoxController {
         {
             if(keyboard.isKeyDown(Component.Identifier.Key.LEFT))
             {
-                return DirectionalPadEnum.SOUTH_WEST;
+                return DirectionalEnum.SOUTH_WEST;
             }
             else {
                 if (keyboard.isKeyDown(Component.Identifier.Key.RIGHT)) {
-                    return DirectionalPadEnum.SOUTH_EAST;
+                    return DirectionalEnum.SOUTH_EAST;
                 }
                 else
                 {
-                    return DirectionalPadEnum.SOUTH;
+                    return DirectionalEnum.SOUTH;
                 }
             }
         }
 
         if(keyboard.isKeyDown(Component.Identifier.Key.LEFT))
         {
-            return DirectionalPadEnum.WEST;
+            return DirectionalEnum.WEST;
         }
         if(keyboard.isKeyDown(Component.Identifier.Key.RIGHT))
         {
-            return DirectionalPadEnum.EAST;
+            return DirectionalEnum.EAST;
         }
 
-        return DirectionalPadEnum.NONE;
+        return DirectionalEnum.NONE;
     }
 
     @Override

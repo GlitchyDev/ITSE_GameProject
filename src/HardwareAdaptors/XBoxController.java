@@ -79,8 +79,8 @@ public class XBoxController {
         return normalizeDirectionInput(controllerDevice.getComponents()[4].getPollData());
     }
 
-    public DirectionalPadEnum getDirectionalPad() {
-        return DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData());
+    public DirectionalEnum getDirectionalPad() {
+        return DirectionalEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData());
     }
 
     public boolean getButtonA()
@@ -143,7 +143,7 @@ public class XBoxController {
         information += "Start: " + isButtonPressed(controllerDevice.getComponents()[12].getPollData()) + "\n";
         information += "Left Stick Press: " + isButtonPressed(controllerDevice.getComponents()[13].getPollData()) + "\n";
         information += "Right Stick Press: " + isButtonPressed(controllerDevice.getComponents()[14].getPollData()) + "\n";
-        information += "Directional Pad: " + DirectionalPadEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData()) + "\n";
+        information += "Directional Pad: " + DirectionalEnum.translateRawDirection(controllerDevice.getComponents()[15].getPollData()) + "\n";
         information += "Rumblers: " + controllerDevice.getRumblers().length + "\n";
         return information;
     }

@@ -78,7 +78,6 @@ public class SpriteTesterEntity extends EntityBase {
 
             drawSpriteAtXY(image,gc,x,y,1.5,(World.getScaledUpSquareSize()-70-World.getScaledUpSquareSize()/2));
 
-
         }
 
     }

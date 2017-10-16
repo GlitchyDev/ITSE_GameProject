@@ -11,7 +11,7 @@ import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import HardwareAdaptors.DirectionalPadEnum;
+import HardwareAdaptors.DirectionalEnum;
 import HardwareAdaptors.XBoxController;
 
 /**
@@ -23,13 +23,13 @@ public class Pro_Player extends DamageableEntityBase {
     private Player player;
     private XBoxController controller;
 
-    private DirectionalPadEnum cachedDirection;
-    private DirectionalPadEnum primaryDirection;
+    private DirectionalEnum cachedDirection;
+    private DirectionalEnum primaryDirection;
 
     private ProPlayerStateEnum entityState;
     private long stateStartTime;
     private final double holdDownTime = 0.1;
-    private final double moveTime = 0.1;
+    private final double moveTime = 0.2;
 
 
     private boolean lightButtonCache = false;
@@ -51,8 +51,8 @@ public class Pro_Player extends DamageableEntityBase {
         entityType = EntityType.PLAYER;
         currentHealth = 5;
         maxHealth = 5;
-        cachedDirection = DirectionalPadEnum.NONE;
-        primaryDirection = DirectionalPadEnum.SOUTH;
+        cachedDirection = DirectionalEnum.NONE;
+        primaryDirection = DirectionalEnum.SOUTH;
         entityState = ProPlayerStateEnum.IDLE;
         stateStartTime = System.currentTimeMillis();
         lightChangeTime = System.currentTimeMillis();
@@ -167,11 +167,11 @@ public class Pro_Player extends DamageableEntityBase {
         controller.poll();
 
         // MOVEMENT
-        DirectionalPadEnum direction = controller.getDirectionalPad();
+        DirectionalEnum direction = controller.getDirectionalPad();
         switch(entityState)
         {
             case IDLE:
-                if(direction != DirectionalPadEnum.NONE && cachedDirection == DirectionalPadEnum.NONE && !DirectionalPadEnum.isDiagnal(direction))
+                if(direction != DirectionalEnum.NONE && cachedDirection == DirectionalEnum.NONE && !DirectionalEnum.isDiagnal(direction))
                 {
 
                     entityState = ProPlayerStateEnum.ATTEMPTING_MOVE;
@@ -184,7 +184,7 @@ public class Pro_Player extends DamageableEntityBase {
                     if(direction != cachedDirection)
                     {
                         cachedDirection = direction;
-                        if(direction != DirectionalPadEnum.NONE)
+                        if(direction != DirectionalEnum.NONE)
                         {
                             primaryDirection = direction;
                         }
@@ -227,6 +227,7 @@ public class Pro_Player extends DamageableEntityBase {
             lightButtonCache = controller.getRightShoulder();
         }
 
+        RadiantLightProducer.produceLight(world,x,y,5);
     }
 
     @Override
@@ -274,7 +275,22 @@ public class Pro_Player extends DamageableEntityBase {
             switch(bodyState)
             {
                 case LIGHT_ON:
-                    body += "_Light_On";
+                    double timePassed = ((System.currentTimeMillis() - lightChangeTime)/1000.0);
+                    if(timePassed < 0.03)
+                    {
+                        body += "_Light_Away";
+                    }
+                    else
+                    {
+                        if(timePassed < 0.05)
+                        {
+                            body += "_Light_Off";
+                        }
+                        else
+                        {
+                            body += "_Light_On";
+                        }
+                    }
                     break;
                 case LIGHT_OFF:
                     body += "_Light_Off";
@@ -288,7 +304,7 @@ public class Pro_Player extends DamageableEntityBase {
             }
             String leg = legType + "_" + direction + "_";
             if(entityState == ProPlayerStateEnum.ATTEMPTING_MOVE || entityState == ProPlayerStateEnum.MOVING) {
-                switch((int)(System.currentTimeMillis() / (moveTime/5) % 5 ))
+                switch((int)( (System.currentTimeMillis() / 100) % 4 ))
                     {
                     case 0:
                         leg += "Legs_1";
