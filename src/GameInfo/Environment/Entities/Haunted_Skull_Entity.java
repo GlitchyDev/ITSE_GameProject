@@ -67,6 +67,23 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
             switch(currentState)
             {
                 case INACTIVE:
+                    switch(direction)
+                    {
+                        case NORTH:
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"),gc,x,y+1,5,3,true);
+                            break;
+                        case EAST:
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Right"),gc,x,y+1,5,3,true);
+                            break;
+                        case SOUTH:
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"),gc,x,y+1,5,3,true);
+                            break;
+                        case WEST:
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Left"),gc,x,y+1,5,3,true);
+                            break;
+                    }
+
+                    /*
                     double timePassed = ((System.currentTimeMillis() - this.creationTime)%8000)/1000;
 
                     switch((int)timePassed)
@@ -104,7 +121,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                             //gc.drawImage(globalGameData.getSprite("Skull_Forward_Right_Diagnal"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull_Backwards"))), (int) (World.getScaledUpSquareSize() * (y+1) + 0.5 + 1));
                             break;
                     }
-
+                    */
 
                     break;
                 case ACTIVATE:

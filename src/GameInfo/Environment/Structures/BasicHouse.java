@@ -1,6 +1,7 @@
 package GameInfo.Environment.Structures;
 
 import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.HouseWall;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Blocks.DoorBlock;
 import GameInfo.Environment.World;
@@ -30,49 +31,37 @@ public class BasicHouse extends StructureBase {
                 //Sets correct sprite for each block (top/bottom sides, left/right sides, corners)
                 //First the left wall and right walls, then the top and bottom, including the corners and door
                 if ((x == 0 || x == structureWidth - 1) && (y > 1 && y < structureHeight - 1)) {
-                    WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                    HouseWall b = new HouseWall(globalGameData);
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
-                    b.setSprite(globalGameData, "House_Wall_V");
-                    b.setSecondarySprite(globalGameData, "House_Wall_Top_V");
                 }
                 //now top and bottom rows, which all have same sprite but door block
                 else if ((y == structureHeight - 1 || y == 1)) {
 
                     if (y == 1 && x == (int) Math.ceil(structureWidth / 2)) {
-                        DoorBlock b = new DoorBlock(globalGameData, BlockTypeEnum.DOOR_CLOSED);
+                        DoorBlock b = new DoorBlock(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
                     } else if (y == structureHeight - 1 && x == 0) {
-                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        HouseWall b = new HouseWall(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
-                        b.setSprite(globalGameData, "House_Wall_R");
-                        b.setSecondarySprite(globalGameData, "House_Wall_Top_UR");
                     } else if (y == 1 && x == 0) {
-                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        HouseWall b = new HouseWall(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
-                        b.setSprite(globalGameData, "House_Wall_R");
-                        b.setSecondarySprite(globalGameData, "House_Wall_Top_LR");
                     } else if (y == 1 && x == structureWidth - 1) {
-                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        HouseWall b = new HouseWall(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
-                        b.setSprite(globalGameData, "House_Wall_L");
-                        b.setSecondarySprite(globalGameData, "House_Wall_Top_LL");
                     }  else if (y == structureHeight - 1 && x == structureWidth - 1) {
-                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        HouseWall b = new HouseWall(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
-                        b.setSprite(globalGameData, "House_Wall_L");
-                        b.setSecondarySprite(globalGameData, "House_Wall_Top_UL");
                     } else {
-                        WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                        HouseWall b = new HouseWall(globalGameData);
                         world.setBlockFromCords(structureX + x, structureY + y, b);
                         affectedBlocks.add(b);
-                        b.setSprite(globalGameData, "House_Wall_H");
-                        b.setSecondarySprite(globalGameData, "House_Wall_Top_H");
                     }
                 }
                 //fills inside of house and bottom row with floor

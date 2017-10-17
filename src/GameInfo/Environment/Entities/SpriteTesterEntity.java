@@ -76,7 +76,7 @@ public class SpriteTesterEntity extends EntityBase {
             Image image = globalGameData.getSprite(p.getUuid().toString() + "|" + head + "|" + body + "|" + legs);
             //System.out.println(p.getUuid().toString() + "|" + head + "|" + body + "|" + legs);
 
-            drawSpriteAtXY(image,gc,x,y,1.5,(World.getScaledUpSquareSize()-70-World.getScaledUpSquareSize()/2));
+            drawSpriteAtXY(image,gc,x,y,1.5,(World.getScaledUpSquareSize()-70-World.getScaledUpSquareSize()/2),true);
 
         }
 

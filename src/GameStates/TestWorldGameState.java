@@ -128,6 +128,10 @@ public class TestWorldGameState extends GameStateBase {
 
         gc.setFill(Color.BLUE);
         gc.fillText("Used Memory: " + usedMemory + " MB",350,80);
+        if(usedMemory > 100)
+        {
+            System.gc();
+        }
 
     }
 
@@ -191,6 +195,7 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     public void exitState(GameStateEnum lastState) {
+        backgroundMusic.stop();
         client.getPlayers().get(0).getPlayerCharacter().setX(5);
         client.getPlayers().get(0).getPlayerCharacter().setY(5);
     }

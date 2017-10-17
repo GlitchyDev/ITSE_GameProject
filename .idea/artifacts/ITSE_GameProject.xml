@@ -1,20 +1,20 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" name="ITSE_GameProject">
+  <artifact type="javafx" build-on-make="true" name="ITSE_GameProject">
     <output-path>$PROJECT_DIR$/out/artifacts/ITSE_GameProject</output-path>
     <properties id="javafx-properties">
       <options>
         <option name="appClass" value="sample.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
-        <option name="nativeBundle" value="all" />
-        <option name="title" value="ITSE_GameProject" />
-        <option name="vendor" value="ITSE_Group" />
-        <option name="version" value="Alpha" />
+        <option name="title" value="I WANT DEATH" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
       </options>
     </properties>
     <root id="root">
       <element id="archive" name="ITSE_GameProject.jar">
         <element id="module-output" name="ITSE_GameProject" />
+        <element id="library" level="project" name="jinput" />
       </element>
     </root>
   </artifact>

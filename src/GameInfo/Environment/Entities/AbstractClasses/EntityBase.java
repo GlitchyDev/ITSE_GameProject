@@ -5,6 +5,8 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Viewport;
+import RenderingHelpers.LightSpriteCreatorHelper;
+import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -140,9 +142,17 @@ public abstract class EntityBase {
         return true;
     }
 
-    public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset)
+    public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5) + xOffset + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5) + yOffset + Viewport.heightBuffer  );
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+        if(useLight)
+        {
+            Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
+            gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(world.getBlockFromCords(this.x,this.y).getPreviousLightLevel()));
+            gc.drawImage(shadow,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+            gc.setGlobalAlpha(1.0);
+
+        }
     }
 
     public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)

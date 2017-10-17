@@ -228,9 +228,12 @@ public class GlobalGameData {
 
     public void resetWorld()
     {
+        gameStates.get("TestWorld").exitState(GameStateEnum.MainMenu);
+        gameStates.get("MainMenu").enterState(GameStateEnum.TestWorld);
         gameStates.remove("TestWorld");
         gameStates.put("TestWorld",new TestWorldGameState(this,primaryStage,canvas));
-        getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
+        getGameState("TestWorld").enterState(GameStateEnum.MainMenu);
+        System.gc();
     }
 
     public Image getSprite(String sprite)

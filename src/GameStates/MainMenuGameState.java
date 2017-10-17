@@ -95,7 +95,7 @@ public class MainMenuGameState extends GameStateBase {
         }
         gc.setGlobalAlpha(1.0);
 
-        Image sprite = globalGameData.getSprite("Gear_1");
+        Image sprite = globalGameData.getSprite("Gear");
         gc.save();
         gc.translate(50, 35);
         gc.translate(sprite.getWidth()/2, sprite.getHeight()/2);

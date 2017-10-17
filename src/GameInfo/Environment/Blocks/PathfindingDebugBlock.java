@@ -32,6 +32,7 @@ public class PathfindingDebugBlock extends BlockBase {
             drawRectangleAtXY(gc,x,y,0,0,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
             //gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
         }
+        recalculateLight();
 
         /*
         if(renderLayer == 4) {

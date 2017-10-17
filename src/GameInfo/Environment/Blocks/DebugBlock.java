@@ -19,7 +19,7 @@ public class DebugBlock extends BlockBase {
     public DebugBlock()
     {
         this.blockType = BlockTypeEnum.DEBUG_BLOCK;
-        c = Color.BLUE;
+        c = Color.GRAY;
     }
 
     @Override
@@ -34,8 +34,7 @@ public class DebugBlock extends BlockBase {
         if(renderLayer == 0) {
             gc.setFill(c);
             drawRectangleAtXY(gc,x,y,0,0,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
-
-            //gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
+            recalculateLight();
         }
     }
 

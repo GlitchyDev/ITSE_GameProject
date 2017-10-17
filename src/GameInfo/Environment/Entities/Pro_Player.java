@@ -6,6 +6,7 @@ import GameInfo.Environment.Entities.Enums.*;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
+import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
@@ -160,6 +161,8 @@ public class Pro_Player extends DamageableEntityBase {
                 break;
         }
         RadiantLightProducer.produceLight(world,x,y,lightLevel);
+        RadiantLightProducer.produceLight(world,x,y,4);
+
     }
 
     public void buttonInput()
@@ -208,10 +211,9 @@ public class Pro_Player extends DamageableEntityBase {
         // Lighting
         if(lightButtonCache != controller.getRightShoulder())
         {
-            if(controller.getRightShoulder())
-            {
-                System.out.println("Button has been Pressed Again");
 
+            if(controller.getRightShoulder() && (bodyState == ProPlayerBodyState.NONE || bodyState == ProPlayerBodyState.LIGHT_ON))
+            {
                 if(bodyState == ProPlayerBodyState.LIGHT_ON)
                 {
                     bodyState = ProPlayerBodyState.LIGHT_OFF;
@@ -227,7 +229,11 @@ public class Pro_Player extends DamageableEntityBase {
             lightButtonCache = controller.getRightShoulder();
         }
 
-        RadiantLightProducer.produceLight(world,x,y,5);
+        if(controller.getBack())
+        {
+            globalGameData.resetWorld();
+        }
+
     }
 
     @Override
@@ -237,26 +243,23 @@ public class Pro_Player extends DamageableEntityBase {
             double yOffset = 0;
 
             String direction = "Front";
-            if(entityState == ProPlayerStateEnum.MOVING)
-            {
-                switch(primaryDirection)
-                {
+            if (entityState == ProPlayerStateEnum.MOVING) {
+                switch (primaryDirection) {
                     case NORTH:
-                        yOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        yOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime) / 1000.0) / moveTime * (World.getScaledUpSquareSize());
                         break;
                     case SOUTH:
-                        yOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * (World.getScaledUpSquareSize());
+                        yOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime) / 1000.0) / moveTime * (World.getScaledUpSquareSize());
                         break;
                     case EAST:
-                        xOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        xOffset = -World.getScaledUpSquareSize() + ((System.currentTimeMillis() - stateStartTime) / 1000.0) / moveTime * World.getScaledUpSquareSize();
                         break;
                     case WEST:
-                        xOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime)/1000.0)/moveTime * World.getScaledUpSquareSize();
+                        xOffset = World.getScaledUpSquareSize() - ((System.currentTimeMillis() - stateStartTime) / 1000.0) / moveTime * World.getScaledUpSquareSize();
                         break;
                 }
             }
-            switch(primaryDirection)
-            {
+            switch (primaryDirection) {
                 case NORTH:
                     direction = "Back";
                     break;
@@ -272,22 +275,15 @@ public class Pro_Player extends DamageableEntityBase {
             }
             String head = headType + "_" + direction + "_Head";
             String body = bodyType + "_" + direction + "_Body";
-            switch(bodyState)
-            {
+            switch (bodyState) {
                 case LIGHT_ON:
-                    double timePassed = ((System.currentTimeMillis() - lightChangeTime)/1000.0);
-                    if(timePassed < 0.03)
-                    {
+                    double timePassed = ((System.currentTimeMillis() - lightChangeTime) / 1000.0);
+                    if (timePassed < 0.03) {
                         body += "_Light_Away";
-                    }
-                    else
-                    {
-                        if(timePassed < 0.05)
-                        {
+                    } else {
+                        if (timePassed < 0.05) {
                             body += "_Light_Off";
-                        }
-                        else
-                        {
+                        } else {
                             body += "_Light_On";
                         }
                     }
@@ -303,9 +299,8 @@ public class Pro_Player extends DamageableEntityBase {
                     break;
             }
             String leg = legType + "_" + direction + "_";
-            if(entityState == ProPlayerStateEnum.ATTEMPTING_MOVE || entityState == ProPlayerStateEnum.MOVING) {
-                switch((int)( (System.currentTimeMillis() / 100) % 4 ))
-                    {
+            if (entityState == ProPlayerStateEnum.ATTEMPTING_MOVE || entityState == ProPlayerStateEnum.MOVING) {
+                switch ((int) ((System.currentTimeMillis() / 100) % 4)) {
                     case 0:
                         leg += "Legs_1";
                         break;
@@ -319,19 +314,18 @@ public class Pro_Player extends DamageableEntityBase {
                         leg += "Legs_3";
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 leg += "Legs_1";
             }
 
-            Image image = globalGameData.getSprite(player.getUuid().toString() + "|" + head + "|" + body + "|" + leg);
-           // gc.setGlobalAlpha(0.2);
-           // drawSpriteAtXY(image, gc, x, y+1, 1.5 + (xOffset/2.0), (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + (yOffset/2.0));
-            gc.setGlobalAlpha(1.0);
-            drawSpriteAtXY(image, gc, x, y+1, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize()/2 ) + yOffset);
-        }
+            Image sprite = globalGameData.getSprite(player.getUuid().toString() + "|" + head + "|" + body + "|" + leg);
 
+            gc.setGlobalAlpha(1.0);
+            drawSpriteAtXY(sprite, gc, x, y + 1, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + yOffset,true);
+
+
+
+        }
 
     }
 

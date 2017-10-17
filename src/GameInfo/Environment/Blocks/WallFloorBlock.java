@@ -22,7 +22,6 @@ public class WallFloorBlock extends BlockBase {
     // The assigned Sprite, Wall or Floor
     private Image sprite;
     // For Wall, it requires a secondary sprite in order to work
-    private Image secondarySprite;
 
     public WallFloorBlock(GlobalGameData globalGameData)
     {
@@ -30,8 +29,7 @@ public class WallFloorBlock extends BlockBase {
         if(globalGameData.getRandom().nextInt(6) == 1)
         {
             blockType = BlockTypeEnum.TEST_WALL;
-            sprite = globalGameData.getSprite("Test_Wall_Modified");
-            secondarySprite = globalGameData.getSprite("Test_Wall_Top");
+            sprite = globalGameData.getSprite("Test_Wall");
         }
         else
         {
@@ -47,8 +45,7 @@ public class WallFloorBlock extends BlockBase {
         if(type == BlockTypeEnum.TEST_WALL)
         {
             blockType = BlockTypeEnum.TEST_WALL;
-            sprite = globalGameData.getSprite("Test_Wall_Modified");
-            secondarySprite = globalGameData.getSprite("Test_Wall_Top");
+            sprite = globalGameData.getSprite("Test_Wall");
         }
         else
         {
@@ -62,6 +59,9 @@ public class WallFloorBlock extends BlockBase {
     public void tickBlock(World world)
     {
 
+
+
+
     }
 
     @Override
@@ -69,45 +69,23 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 0)
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
+                drawSpriteAtXY(sprite, gc, x, y, 0, 0,true);
 
-
-                drawAtXY(sprite, gc, x, y, 0, 0);
-
-                gc.setFill(Color.BLACK);
-                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(currentLightLevel));
-                drawRectangleAtXY(gc,x,y, 0,0,World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
-                gc.setGlobalAlpha(1.0);
-
-                if(entities.size() > 0)
-                {
+                if(entities.size() > 0) {
+                    gc.setGlobalAlpha(0.1);
                     gc.setFill(Color.BLUE);
-                    drawRectangleAtXY(gc,x,y,0,0,40,40);
+                    drawRectangleAtXY(gc, x, y, 0, 0, 40, 40);
+                    gc.setGlobalAlpha(1.0);
                 }
-
-                if(isCurrentlyLit) {
-                    isCurrentlyLit = false;
-                    currentLightLevel = 0;
-                }
-
+                recalculateLight();
 
             }
         }
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
 
-                drawAtXY(sprite, gc, x, y, 0, World.getScaledUpSquareSize() / 4);
-                drawAtXY(secondarySprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3);
-
-                gc.setFill(Color.BLACK);
-                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(currentLightLevel));
-                drawRectangleAtXY(gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, World.getScaledUpSquareSize(), World.getScaledUpSquareSize() / 4 * 7);
-                gc.setGlobalAlpha(1.0);
-
-                if(isCurrentlyLit) {
-                    isCurrentlyLit = false;
-                    currentLightLevel = 0;
-                }
-
+                drawSpriteAtXY(sprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3 + 2,true);
+                recalculateLight();
             }
         }
 
@@ -134,11 +112,6 @@ public class WallFloorBlock extends BlockBase {
     public void setSprite(GlobalGameData globalGameData, String spriteName)
     {
         sprite = globalGameData.getSprite(spriteName);
-    }
-
-    public void setSecondarySprite(GlobalGameData globalGameData, String spriteName)
-    {
-        secondarySprite = globalGameData.getSprite(spriteName);
     }
 
     @Override

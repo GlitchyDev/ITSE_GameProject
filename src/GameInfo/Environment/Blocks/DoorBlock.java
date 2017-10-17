@@ -22,6 +22,7 @@ public class DoorBlock extends BlockBase {
     // The assigned sprites
     private Image spriteOpen;
     private Image spriteClosed;
+    private Image floorSprite;
 
     public DoorBlock(GlobalGameData globalGameData)
     {
@@ -29,6 +30,8 @@ public class DoorBlock extends BlockBase {
         blockType = BlockTypeEnum.DOOR_CLOSED;
         spriteClosed = globalGameData.getSprite("Test_Door_Closed");
         spriteOpen = globalGameData.getSprite("Test_Door_Open");
+        floorSprite = globalGameData.getSprite("Test_Floor");
+
     }
 
     public DoorBlock(GlobalGameData globalGameData, BlockTypeEnum type)
@@ -47,12 +50,17 @@ public class DoorBlock extends BlockBase {
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
-            if (blockType == BlockTypeEnum.DOOR_OPEN)
-                drawAtXY(spriteOpen,gc,x,y,0,-World.getScaledUpSquareSize() / 4 * 3);
-                //gc.drawImage(spriteOpen, (int) (x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer) - World.getScaledUpSquareSize() / 4 * 3);
-            else
-                drawAtXY(spriteClosed,gc,x,y,0,-World.getScaledUpSquareSize() / 4 * 3);
-                //gc.drawImage(spriteClosed, (int) (x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer) - World.getScaledUpSquareSize() / 4 * 3);
+            drawSpriteAtXY(floorSprite, gc, x, y, 0, 0,true);
+
+            if (blockType == BlockTypeEnum.DOOR_OPEN) {
+                drawSpriteAtXY(spriteOpen,gc,x,y,0,-spriteOpen.getHeight() + World.getScaledUpSquareSize(),true);
+            }
+            else {
+                drawSpriteAtXY(spriteClosed, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, true);
+            }
+            gc.setFill(Color.BLUE);
+            gc.fillText("Light: " + currentLightLevel,x,y);
+            recalculateLight();
         }
     }
 

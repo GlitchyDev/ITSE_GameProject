@@ -4,9 +4,12 @@ import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Viewport;
+import RenderingHelpers.LightSpriteCreatorHelper;
+import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Created by Robert on 8/27/2017.
@@ -18,6 +21,7 @@ import javafx.scene.image.Image;
 public abstract class BlockBase {
     protected BlockTypeEnum blockType;
     protected int currentLightLevel;
+    protected int previousLightLevel;
     protected boolean isCurrentlyLit;
 
 
@@ -26,6 +30,7 @@ public abstract class BlockBase {
 
         blockType = BlockTypeEnum.TEST_FLOOR;
         currentLightLevel = 0;
+        previousLightLevel = 0;
         isCurrentlyLit = false;
 
     }
@@ -33,6 +38,14 @@ public abstract class BlockBase {
 
     public abstract void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
 
+    public void recalculateLight()
+    {
+        previousLightLevel = currentLightLevel;
+        if(isCurrentlyLit) {
+            isCurrentlyLit = false;
+            currentLightLevel = 0;
+        }
+    }
 
 
 
@@ -65,10 +78,6 @@ public abstract class BlockBase {
     }
 
 
-    public void setCurrentLightLevel(int currentLightLevel) {
-        this.currentLightLevel = currentLightLevel;
-    }
-
     public void setCurrentlyLit(boolean currentlyLit) {
         isCurrentlyLit = currentlyLit;
     }
@@ -78,16 +87,51 @@ public abstract class BlockBase {
         return isCurrentlyLit;
     }
 
+    public void setCurrentLightLevel(int currentLightLevel) {
+
+        this.currentLightLevel = currentLightLevel;
+    }
+
     public int getCurrentLightLevel()
     {
         return currentLightLevel;
     }
 
-    public void drawAtXY(Image sprite, GraphicsContext gc, double x, double y, int xOffset, int yOffset)
+    public int getPreviousLightLevel()
     {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer);
-
+        return previousLightLevel;
     }
+
+    public void setPreviousLightLevel(int previousLightLevel)
+    {
+        this.previousLightLevel = previousLightLevel;
+    }
+
+
+    public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
+    {
+        if(useLight)
+        {
+            if(previousLightLevel != 0) {
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+                Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
+                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(previousLightLevel));
+                gc.drawImage(shadow, (int) (x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer));
+                gc.setGlobalAlpha(1.0);
+            }
+            else
+            {
+                gc.setFill(Color.BLACK);
+                drawRectangleAtXY(gc,x,y,0,0,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
+            }
+        }
+        else
+        {
+            gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+
+        }
+    }
+
 
     public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
     {

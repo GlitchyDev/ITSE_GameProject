@@ -2,10 +2,7 @@ package RenderingHelpers;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import Pathfinding.Position;
 import GameInfo.Environment.World;
-
-import java.util.ArrayList;
 
 public class RadiantLightProducer {
 
@@ -14,9 +11,11 @@ public class RadiantLightProducer {
     public static void produceLight(World world, int x, int y, int initLightAmount)
     {
         BlockBase b = world.getBlockFromCords(x,y);
-        b.setCurrentlyLit(true);
-        b.setCurrentLightLevel(initLightAmount);
-        expandLightMap(world,x,y,initLightAmount);
+        if(b.getCurrentLightLevel() < initLightAmount) {
+            b.setCurrentlyLit(true);
+            b.setCurrentLightLevel(initLightAmount);
+            expandLightMap(world, x, y, initLightAmount);
+        }
         //blocksLookedAt.clear();
 
 
@@ -31,7 +30,7 @@ public class RadiantLightProducer {
         BlockBase b = world.getBlockFromCords(x, y + 1);
         if(BlockTypeEnum.caculateLightCost(b.getBlockType(),initLightAmount) > 0) {
             if (BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount) >= 0) {
-                if (betterLight(world, x, y+1, initLightAmount)) {
+                if (hasBetterLight(world, x, y+1, initLightAmount)) {
                     b.setCurrentlyLit(true);
                     b.setCurrentLightLevel(BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount));
                     if(!BlockTypeEnum.isOpaque(b.getBlockType())) {
@@ -47,7 +46,7 @@ public class RadiantLightProducer {
         if(BlockTypeEnum.caculateLightCost(b.getBlockType(),initLightAmount) > 0) {
 
             if (BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount) >= 0) {
-                if (betterLight(world, x, y-1, initLightAmount)) {
+                if (hasBetterLight(world, x, y-1, initLightAmount)) {
                     b.setCurrentlyLit(true);
                     b.setCurrentLightLevel(BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount));
                     if(!BlockTypeEnum.isOpaque(b.getBlockType())) {
@@ -62,7 +61,7 @@ public class RadiantLightProducer {
         if(BlockTypeEnum.caculateLightCost(b.getBlockType(),initLightAmount) > 0) {
 
             if (BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount) >= 0) {
-                if (betterLight(world, x+1, y, initLightAmount)) {
+                if (hasBetterLight(world, x+1, y, initLightAmount)) {
                     b.setCurrentlyLit(true);
                     b.setCurrentLightLevel(BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount));
                     if(!BlockTypeEnum.isOpaque(b.getBlockType())) {
@@ -76,7 +75,7 @@ public class RadiantLightProducer {
         if(BlockTypeEnum.caculateLightCost(b.getBlockType(),initLightAmount) > 0) {
 
             if (BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount) >= 0) {
-                if (betterLight(world, x-1, y, initLightAmount)) {
+                if (hasBetterLight(world, x-1, y, initLightAmount)) {
                     b.setCurrentlyLit(true);
                     b.setCurrentLightLevel(BlockTypeEnum.caculateLightCost(b.getBlockType(), initLightAmount));
                     if(!BlockTypeEnum.isOpaque(b.getBlockType())) {
@@ -109,7 +108,7 @@ public class RadiantLightProducer {
 
 
 
-    private static boolean betterLight(World world, int x, int y, int light)
+    private static boolean hasBetterLight(World world, int x, int y, int light)
     {
 
         BlockBase b = world.getBlockFromCords(x,y);
@@ -125,7 +124,39 @@ public class RadiantLightProducer {
     public static double determineDarkness(int lightLevel)
     {
         //return 0.0;
-
+        switch(lightLevel)
+        {
+            case 15:
+                return 1 - 1.0;
+            case 14:
+                return 1 - 1.0;
+            case 13:
+                return 1 - 1.0;
+            case 11:
+                return 1 - 1.0;
+            case 10:
+                return 1 - 1.0;
+            case 9:
+                return 1 - 0.9;
+            case 8:
+                return 1 - 0.85;
+            case 7:
+                return 1 - 0.7;
+            case 6:
+                return 1 - 0.6;
+            case 5:
+                return 1 - 0.5;
+            case 4:
+                return 1 - 0.4;
+            case 3:
+                return 1 - 0.3;
+            case 2:
+                return 1 - 0.2;
+            case 1:
+                return 1 - 0.1;
+            case 0:
+                return 1 - 0.026;
+        }
             if (lightLevel > 10) {
                 return 0.0;
             } else {
