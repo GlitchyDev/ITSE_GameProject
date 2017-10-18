@@ -10,7 +10,9 @@ import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 
@@ -29,8 +31,8 @@ import java.util.Scanner;
  */
 public class GlobalGameData {
     private HashMap<String, GameStateBase> gameStates;
-    private HashMap<String, Image> sprites;
-    private HashMap<String, Media> sounds;
+    private HashMap<String, Image> spriteAssets;
+    private HashMap<String, Media> soundAssets;
     private Stage primaryStage;
     private Canvas canvas;
 
@@ -39,12 +41,14 @@ public class GlobalGameData {
     private ArrayList<Player> connectedPlayers;
     private Random random;
 
+    private HashMap<String,MediaPlayer> currentSounds;
+
     public GlobalGameData(GameStateEnum startingState,Stage primaryStage, Canvas canvas)
     {
         System.out.println("Global Gamestate: Creating Global GameState");
         gameStates = new HashMap<>();
-        sprites = new HashMap<>();
-        sounds = new HashMap<>();
+        spriteAssets = new HashMap<>();
+        soundAssets = new HashMap<>();
         this.currentGameState = startingState;
         this.primaryStage = primaryStage;
         this.canvas = canvas;
@@ -52,6 +56,7 @@ public class GlobalGameData {
         connectedControllers = new ArrayList<>();
         connectedPlayers = new ArrayList<>();
 
+        currentSounds = new HashMap<>();
         connectedControllers.addAll(scanForControllers());
 
         loadAssets();
@@ -83,7 +88,7 @@ public class GlobalGameData {
             {
                 String spritePath = spriteScanner.nextLine();
                 String[] parsed = spritePath.split("/");
-                sprites.put(parsed[parsed.length-1].replace(".png",""),ImageRenderHelper.resample(new Image(getClass().getResourceAsStream("/Sprites" + spritePath)),2,false));
+                spriteAssets.put(parsed[parsed.length-1].replace(".png",""),ImageRenderHelper.resample(new Image(getClass().getResourceAsStream("/Sprites" + spritePath)),2,false));
                 System.out.println("    -" + parsed[parsed.length-1].replace(".png",""));
 
             }
@@ -95,7 +100,7 @@ public class GlobalGameData {
             {
                 String soundPath = soundScanner.nextLine();
                 String[] parsed = soundPath.split("/");
-                sounds.put(parsed[parsed.length-1].replace(".mp3",""),new Media(getClass().getResource("/Sounds" + soundPath).toString()));
+                soundAssets.put(parsed[parsed.length-1].replace(".mp3",""),new Media(getClass().getResource("/Sounds" + soundPath).toString()));
                 System.out.println("    -" + parsed[parsed.length-1].replace(".mp3",""));
 
             }
@@ -120,7 +125,7 @@ public class GlobalGameData {
                         {
                             if(sprite.getName().contains(".png")) {
                                 Image newSprite = new Image(getClass().getResource("/Sprites/" + innerFolders.getName() + "/" + sprite.getName()).toString());
-                                sprites.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
+                                spriteAssets.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
                                 writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
                                 System.out.println("    -" + sprite.getName().replace(".png", ""));
                             }
@@ -147,7 +152,7 @@ public class GlobalGameData {
                             if(sound.getName().contains(".mp3")) {
 
                                 Media media = new Media(getClass().getResource("/Sounds/" + innerFolders.getName() + "/" + sound.getName()).toString());
-                                sounds.put(sound.getName().replace(".mp3", ""), media);
+                                soundAssets.put(sound.getName().replace(".mp3", ""), media);
                                 writer.println("/" + innerFolders.getName() + "/" + sound.getName());
                                 System.out.println("    -" + sound.getName().replace(".mp3", ""));
                             }
@@ -238,9 +243,9 @@ public class GlobalGameData {
 
     public Image getSprite(String sprite)
     {
-        if(sprites.containsKey(sprite))
+        if(spriteAssets.containsKey(sprite))
         {
-            return sprites.get(sprite);
+            return spriteAssets.get(sprite);
         }
         else
         {
@@ -249,15 +254,53 @@ public class GlobalGameData {
         return null;
     }
 
-    public HashMap<String,Image> getSprites()
+    public void playSound(String sound,boolean repeat,double volume)
     {
-        return sprites;
+        Media media = getSound(sound);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+         if(repeat) {
+            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+        }
+        else
+        {
+            mediaPlayer.setOnEndOfMedia(() -> currentSounds.remove(sound));
+        }
+        mediaPlayer.setVolume(volume);
+        mediaPlayer.play();
+        currentSounds.put(sound,mediaPlayer);
+    }
+    public void playSound(String sound,boolean repeat)
+    {
+        Media media = getSound(sound);
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        if(repeat) {
+            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+        }
+        else
+        {
+            mediaPlayer.setOnEndOfMedia(() -> currentSounds.remove(sound));
+        }
+        mediaPlayer.play();
+        currentSounds.put(sound,mediaPlayer);
+    }
+
+    public void stopSound(String sound)
+    {
+        if(currentSounds.containsKey(sound))
+        {
+            currentSounds.remove(sound);
+        }
+    }
+
+    public HashMap<String,Image> getSpriteAssets()
+    {
+        return spriteAssets;
     }
 
 
     public Media getSound(String sound)
     {
-        return sounds.get(sound);
+        return soundAssets.get(sound);
     }
 
     public GameStateEnum getCurrentGameState() {

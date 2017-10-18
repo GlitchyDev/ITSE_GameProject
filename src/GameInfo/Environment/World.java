@@ -55,6 +55,31 @@ public class World {
 
     }
 
+    public void clearArea(int x, int y, int radius)
+    {
+        for(int x1 = x-radius/2; x1 < x+radius/2; x1++)
+        {
+            for(int y1 = y-radius/2; y1 < y+radius/2; y1++)
+            {
+                WallFloorBlock block = new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR);
+                setBlockFromCords(x1,y1,block);
+            }
+        }
+    }
+
+    public ArrayList<EntityBase> findEntitiesWithinRadius(int x, int y, int radius)
+    {
+        ArrayList<EntityBase> entities = new ArrayList<>();
+
+        for(int x1 = x-radius/2; x1 < x+radius/2; x1++)
+        {
+            for(int y1 = y-radius/2; y1 < y+radius/2; y1++)
+            {
+                entities.addAll(getEntitiesAtPos(x1,y1));
+            }
+        }
+        return entities;
+    }
 
     /**
      * Grabs the Starting Position of the Chunk Number specified
@@ -357,6 +382,7 @@ public class World {
 
 
             base.moveAbsolute(x1, y1);
+            base.advancedMoveRelative(0,0,true,true,true,true);
             addEntityToWorld(base);
         }
         else
@@ -368,6 +394,7 @@ public class World {
 
             }
             base.moveAbsolute(x, y);
+            base.advancedMoveRelative(0,0,true,true,true,true);
             addEntityToWorld(base);
         }
 

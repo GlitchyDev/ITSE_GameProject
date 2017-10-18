@@ -183,11 +183,14 @@ public class TestWorldGameState extends GameStateBase {
         world.attemptSpawn(test,3,3,true,globalGameData);
         //world.addEntityToWorld(test);
 
+        globalGameData.playSound("CaveWaterDrops",true,0.2);
+        /*
 
         Media sound = globalGameData.getSound("CaveWaterDrops");
         backgroundMusic = new MediaPlayer(sound);
         backgroundMusic.setOnEndOfMedia(() -> backgroundMusic.seek(Duration.ZERO));
         backgroundMusic.play();
+        */
 
 
     }
@@ -198,6 +201,8 @@ public class TestWorldGameState extends GameStateBase {
         backgroundMusic.stop();
         client.getPlayers().get(0).getPlayerCharacter().setX(5);
         client.getPlayers().get(0).getPlayerCharacter().setY(5);
+        globalGameData.stopSound("CaveWaterDrops");
+
     }
 
     public Viewport getViewport() {

@@ -75,7 +75,7 @@ public class PlayerSkinCreator {
                                     addSpriteToBase(base, globalGameData.getSprite(headType + "_" + mode + "_" + head));
                                 }
 
-                                globalGameData.getSprites().put(name,base);
+                                globalGameData.getSpriteAssets().put(name,base);
                             }
                         }
                     }

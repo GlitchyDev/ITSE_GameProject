@@ -218,11 +218,13 @@ public class Pro_Player extends DamageableEntityBase {
                 {
                     bodyState = ProPlayerBodyState.LIGHT_OFF;
                     lightChangeTime = System.currentTimeMillis();
+                    globalGameData.stopSound("elecHum");
                 }
                 else {
                     if (bodyState == ProPlayerBodyState.NONE) {
                         bodyState = ProPlayerBodyState.LIGHT_ON;
                         lightChangeTime = System.currentTimeMillis();
+                        globalGameData.playSound("elecHum",true);
                     }
                 }
             }

@@ -44,6 +44,7 @@
 /P1Custom/P1_Right_Legs_1.png
 /P1Custom/P1_Right_Legs_2.png
 /P1Custom/P1_Right_Legs_3.png
+/Skull_Entity/Alert.png
 /Skull_Entity/Skull.png
 /Skull_Entity/Skull_Backwards.png
 /Skull_Entity/Skull_Backwards_Left_Diagnal.png
