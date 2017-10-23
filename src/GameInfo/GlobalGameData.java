@@ -61,6 +61,7 @@ public class GlobalGameData {
         currentSounds = new HashMap<>();
         connectedControllers.addAll(scanForControllers());
 
+
         loadAssets();
 
         createGameStates();

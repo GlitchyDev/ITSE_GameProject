@@ -48,7 +48,7 @@ public class RenewJarUUID {
     }
 
 
-    private static String renewJarUUID()
+    public static String renewJarUUID()
     {
         System.out.println("JarUUID: Renewing JarUUID");
         File jarUUIDFile = new File("GameAssets/JarUUID.txt");
