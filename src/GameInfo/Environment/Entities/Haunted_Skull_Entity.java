@@ -9,6 +9,8 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import HardwareAdaptors.DirectionalEnum;
 import Pathfinding.LineOfSightHelper;
+import Pathfinding.PathfindingHelper;
+import Pathfinding.Position;
 import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,14 +31,14 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private long stateStartTime;
     private DamageableEntityBase currentTarget;
     private DirectionalEnum currentDirection;
-    private DirectionalEnum previousDirection;
 
     private final double activateStateLength = 0.3;
+    private ArrayList<Position> currentPath;
 
 
     public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y) {
         super(world, globalGameData, x, y);
-        entityType = EntityType.SCATTER_SKULL;
+        entityType = EntityType.HAUNTED_SKULL;
 
         stateStartTime = System.currentTimeMillis();
         currentState = HauntedSkullStateEnum.INACTIVE;
@@ -45,7 +47,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
         currentTarget = null;
 
         currentDirection = DirectionalEnum.randomDirection(globalGameData);
-        previousDirection = currentDirection;
+        currentPath = new ArrayList<>();
 
 
     }
@@ -89,10 +91,30 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
             case ACTIVATE:
                 if(System.currentTimeMillis() > stateStartTime + activateStateLength*1000)
                 {
-                    currentState = HauntedSkullStateEnum.INACTIVE;
+                    currentState = HauntedSkullStateEnum.NAVIGATE_TO_TARGET;
                     stateStartTime = System.currentTimeMillis();
                 }
+                DirectionalEnum targetDirection = DirectionalEnum.determineDirection(x,y, currentTarget.getX(),currentTarget.getY());
+                if(currentDirection != targetDirection)
+                {
+                    currentDirection = targetDirection;
+                }
+                //System.out.println(DirectionalEnum.determineDirection(x,y, currentTarget.getX(),currentTarget.getY()));
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
+                break;
+            case NAVIGATE_TO_TARGET:
+                /*
+                if(distanceFromEntity(currentTarget) > 1) {
+
+                    currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY(), 100);
+
+                    if (System.currentTimeMillis() > stateStartTime + 1000) {
+                        advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+                        stateStartTime = System.currentTimeMillis();
+                    }
+                }
+                */
+                // No requirements
                 break;
         }
 
@@ -112,14 +134,15 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
             {
                 case INACTIVE:
                     switch(currentDirection) {
+
                         case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
                             break;
                         case EAST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
                             break;
                         case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
                             break;
                         case WEST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
@@ -129,17 +152,19 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 case ACTIVATE:
                     switch(currentDirection) {
                         case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
                             break;
                         case EAST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
                             break;
                         case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
                             break;
                         case WEST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
                             break;
+                        default:
+                            System.out.println(currentDirection);
                     }
 
                     double passedTime = (System.currentTimeMillis() - (stateStartTime + activateStateLength))/1000.0;
@@ -155,13 +180,13 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 default:
                     switch(currentDirection) {
                         case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
                             break;
                         case EAST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
                             break;
                         case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
                             break;
                         case WEST:
                             drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
@@ -174,72 +199,8 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
 
         }
-            /*
-            case INACTIVE:
-                    gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
-                    break;
-                case ACTIVATE:
-                    double activatePercentage;
-                    double activationLength = 2;
-                    if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= activationLength)
-                    {
-                        activatePercentage = 1.0 / (activationLength * 1000.0) * (System.currentTimeMillis() - stateStartTime);
-                    }
-                    else
-                    {
-                        activatePercentage = 1;
-                    }
-                    // gc.drawImage(globalGameData.getSprite("Skull"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
-                    gc.drawImage(globalGameData.getSprite("Skull_Activate_" + (int)(1+(activatePercentage*2))), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull"))), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
-                    //Image activationGlitchStatic = ImageRenderHelper.resample(ImageRenderHelper.generateRandomStatic(15,15),2,false);
-                    gc.setGlobalAlpha(0.4 * activatePercentage);
-                    //gc.drawImage(ImageRenderHelper.adjustImage(activationGlitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + ImageRenderHelper.findCenterXMod(activationGlitchStatic)), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1));
-                    gc.setGlobalAlpha(1.0);
-                    // After X time passes, enter "Erupt, dealing X damage to all nearby
-                    break;
-                case ERUPT:
-                    double eruptPercentage;
-                    double eruptLength = 1.5;
-                    if((System.currentTimeMillis() - stateStartTime) / 1000.0 <= eruptLength)
-                    {
-                        eruptPercentage = 1.0 / (eruptLength * 1000.0) * (System.currentTimeMillis() - stateStartTime);
-                    }
-                    else
-                    {
-                        eruptPercentage = 1;
-                    }
 
-                    double yOffset = Math.sin(eruptPercentage * Math.PI/2) * 100.0;
-                    double xOffset = Math.sin(eruptPercentage * Math.PI) * 10;
 
-                    for(int i = 0; i < eruptPercentage * (100/14); i++)
-                    {
-                        xOffset = Math.sin(((System.currentTimeMillis() - stateStartTime)/1000.0 + 0.5*i) * Math.PI ) * 5;
-                        gc.drawImage(globalGameData.getSprite("Spine_Part"), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Spine_Part")) + xOffset), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset + 30 + i*14));
-                        gc.setGlobalAlpha(0.3);
-                        //Image eruptGlitchStatic = ImageRenderHelper.resample(ImageRenderHelper.generateRandomStatic(14,7),2,false);
-                        //gc.drawImage(ImageRenderHelper.adjustImage(eruptGlitchStatic,globalGameData.getSprite("Spine_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + ImageRenderHelper.findCenterXMod(eruptGlitchStatic)) + xOffset, (int) (World.getScaledUpSquareSize() *  y + 0.5 + 1 - yOffset + 30 + i*14));
-                        gc.setGlobalAlpha(1.0);
-
-                    }
-                    xOffset = Math.sin(eruptPercentage * Math.PI) * 10;
-                    gc.drawImage(globalGameData.getSprite("Skull_Activate_" + (int)(3+(eruptPercentage*5))), (int) (World.getScaledUpSquareSize() * x + 0.5 +  ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Skull")) + xOffset), (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset));
-                    //Image eruptGlitchStatic = ImageRenderHelper.resample(ImageRenderHelper.generateRandomStatic(19,17),2,false);
-                    gc.setGlobalAlpha(0.4);
-                    //gc.drawImage(ImageRenderHelper.adjustImage(eruptGlitchStatic,globalGameData.getSprite("Skull_Map")),(int)(World.getScaledUpSquareSize() * x + 0.5 + ImageRenderHelper.findCenterXMod(eruptGlitchStatic)) + xOffset, (int) (World.getScaledUpSquareSize() * y + 0.5 + 1 - yOffset) - 2);
-                    gc.setGlobalAlpha(1.0);
-
-                    break;
-                case WOBBLE:
-                    // Idle, search for nearby targets
-                    break;
-                case ATTACK:
-                    // Throw head towards nearest target until hits wall, spawns new Scatter skull,
-                    // Enters new mode
-                    break;
-                case RETREAT:
-                    break;
-             */
 
     }
 

@@ -110,23 +110,20 @@ public class MainMenuGameState extends GameStateBase {
         gc.drawImage(sprite, -sprite.getWidth()/2, -sprite.getHeight()/2);
         gc.restore();
 
-        /*
 
-        for(int i = 0; i < 5; i++) {
-            //Image sprite = globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1));
-
-            Image sprite = globalGameData.getSprite("Gear_1");
-            gc.save(); // saves the current state on stack, including the current transform
-            gc.rotate(45 * (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1));
-            gc.drawImage(sprite,i * 50,0);
-            gc.restore(); // back to original state (before rotation)
-
-
-
-            //gc.drawImage(globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 0) % 8 + 1)), 0, 0);
-            //gc.drawImage(globalGameData.getSprite("Gear_" + (((int) (System.currentTimeMillis() % 8000.0) / 1000 + 3 * i) % 8 + 1)), 30 * i, 0);
+        String text = "ABC 123 !?,.:_";
+        int charNum = 0;
+        for(char c: text.toUpperCase().toCharArray())
+        {
+            if(c != ' ')
+            {
+                Image let = globalGameData.getSprite(String.valueOf(c));
+                gc.drawImage(let,10 + charNum*8,80);
+            }
+            charNum++;
         }
-        */
+
+
 
 
     }

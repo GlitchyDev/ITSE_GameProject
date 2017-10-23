@@ -24,19 +24,22 @@ public class PlayerSkinCreator {
 
     public static void generateSkin(Player player, GlobalGameData globalGameData){
         // Determine Skin Type from Player using Connection
-        String[] args = player.getSkinID().split(",");
-        String headType = args[0];
-        String bodyType = args[1];
-        String legType = args[2];
 
-        System.out.println(player.getSkinID() + "~" + player.getSkinID().split("|"));
+        if(!skinsCreated.contains(player.getUuid())) {
+            String[] args = player.getSkinID().split(",");
+            String headType = args[0];
+            String bodyType = args[1];
+            String legType = args[2];
 
-        createSprites(player.getUuid(),"Front",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Back",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Left",headType,bodyType,legType, globalGameData);
-        createSprites(player.getUuid(),"Right",headType,bodyType,legType, globalGameData);
+            System.out.println("Skin Creator: Created skin for " + player.getUuid().toString() + " Skin Mode " + headType + "|" + bodyType + "|" + legType);
 
+            createSprites(player.getUuid(), "Front", headType, bodyType, legType, globalGameData);
+            createSprites(player.getUuid(), "Back", headType, bodyType, legType, globalGameData);
+            createSprites(player.getUuid(), "Left", headType, bodyType, legType, globalGameData);
+            createSprites(player.getUuid(), "Right", headType, bodyType, legType, globalGameData);
 
+            skinsCreated.add(player.getUuid());
+        }
 
     }
 
@@ -61,7 +64,7 @@ public class PlayerSkinCreator {
                                 name += "|" + headType + "_" + mode + "_" + head;
                                 name += "|" + bodyType + "_" + mode + "_" + body;
                                 name += "|" + legType + "_" + mode + "_" + legs;
-                                System.out.println(name);
+                                //System.out.println(name);
 
                                 if(!mode.equals("Back")) {
                                     addSpriteToBase(base, globalGameData.getSprite(legType + "_" + mode + "_" + legs));

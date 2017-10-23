@@ -10,11 +10,13 @@ public class RadiantLightProducer {
 
     public static void produceLight(World world, int x, int y, int initLightAmount)
     {
-        BlockBase b = world.getBlockFromCords(x,y);
-        if(b.getCurrentLightLevel() < initLightAmount) {
-            b.setCurrentlyLit(true);
-            b.setCurrentLightLevel(initLightAmount);
-            expandLightMap(world, x, y, initLightAmount);
+        if(initLightAmount > 0) {
+            BlockBase b = world.getBlockFromCords(x, y);
+            if (b.getCurrentLightLevel() < initLightAmount) {
+                b.setCurrentlyLit(true);
+                b.setCurrentLightLevel(initLightAmount);
+                expandLightMap(world, x, y, initLightAmount);
+            }
         }
         //blocksLookedAt.clear();
 

@@ -69,6 +69,7 @@
 /Terrain/Test_Floor_5.png
 /Terrain/Test_Floor_6.png
 /Terrain/Test_Wall.png
+/TestSprites/Alphabet.png
 /TestSprites/Gear.png
 /TestSprites/Rock_Test.png
 /TestSprites/Standing_Mirror.png

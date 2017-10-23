@@ -7,5 +7,5 @@ public enum EntityType {
     DEBUG,
     PLAYER,
     ROCK,
-    SCATTER_SKULL
+    HAUNTED_SKULL
 }

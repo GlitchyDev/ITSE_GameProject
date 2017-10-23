@@ -14,6 +14,7 @@ import java.util.UUID;
  */
 public class Player {
     private XBoxController controller;
+    private String displayName;
     private UUID uuid;
     private EntityBase playerCharacter;
 
@@ -21,6 +22,14 @@ public class Player {
     {
         this.controller = controller;
         uuid = UUID.randomUUID();
+        displayName = uuid.toString().substring(0,3);
+        this.playerCharacter = playerCharacter;
+    }
+    public Player(XBoxController controller,EntityBase playerCharacter, UUID uuid, String displayName)
+    {
+        this.controller = controller;
+        this.uuid = uuid;
+        this.displayName = displayName;
         this.playerCharacter = playerCharacter;
     }
 
@@ -43,5 +52,9 @@ public class Player {
     public String getSkinID()
     {
         return "P1,P1,P1";
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }

@@ -1,6 +1,7 @@
 package Pathfinding;
 
 import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.PathfindingDebugBlock;
 import GameInfo.Environment.World;
 
 import java.util.ArrayList;
@@ -68,6 +69,14 @@ public class PathfindingHelper
                 }
             }
             Collections.reverse(positionList);
+            for(PathfindingNode node: closedList)
+            {
+                world.setBlockFromCords(node.getX(),node.getY(),new PathfindingDebugBlock(node));
+            }
+            for(PathfindingNode node: openList)
+            {
+                world.setBlockFromCords(node.getX(),node.getY(),new PathfindingDebugBlock(node));
+            }
             return positionList;
         }
         else
@@ -76,7 +85,7 @@ public class PathfindingHelper
         }
     }
 
-    public static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
+    private static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
     {
         currentTime++;
         if(currentTime >= timeOut)
@@ -85,7 +94,7 @@ public class PathfindingHelper
             return currentNode;
         }
         PathfindingHelper.openList.addAll(PathfindingHelper.getConnectedTiles(world,currentNode,xTarget,yTarget));
-        int leastF = Integer.MAX_VALUE;
+        double leastF = Integer.MAX_VALUE;
 
         PathfindingNode newNode = currentNode;
         for(PathfindingNode node: PathfindingHelper.openList)
@@ -125,7 +134,7 @@ public class PathfindingHelper
     }
 
 
-    public static ArrayList<PathfindingNode> getConnectedTiles(World world, PathfindingNode parentNode, int targetX, int targetY)
+    private static ArrayList<PathfindingNode> getConnectedTiles(World world, PathfindingNode parentNode, int targetX, int targetY)
     {
         ArrayList<PathfindingNode> paths = new ArrayList<>();
         int x = parentNode.getX();
@@ -160,7 +169,7 @@ public class PathfindingHelper
     }
 
 
-    public static boolean alreadyAddedToList(int x, int y)
+    private static boolean alreadyAddedToList(int x, int y)
     {
         for(PathfindingNode node: openList)
         {

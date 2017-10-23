@@ -9,6 +9,8 @@ import HardwareAdaptors.XBoxController;
 import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -79,7 +81,7 @@ public class GlobalGameData {
         String link = "/Sprites/Old/Pro_Test_Darker.png";
         InputStream stream = getClass().getResourceAsStream(link);
         Image image = null;
-        if("true".equals(System.getProperty("isJar"))) {
+        if(System.getProperty("isJar").equals("true")) {
             System.out.println("Load Assets: Jar Asset Loading Mode");
             System.out.println("Load Assets: Loading Sprites");
             InputStream inputSprites = getClass().getResourceAsStream("/Sprites/SpriteAssetList.txt");
@@ -88,10 +90,18 @@ public class GlobalGameData {
             {
                 String spritePath = spriteScanner.nextLine();
                 String[] parsed = spritePath.split("/");
-                spriteAssets.put(parsed[parsed.length-1].replace(".png",""),ImageRenderHelper.resample(new Image(getClass().getResourceAsStream("/Sprites" + spritePath)),2,false));
-                System.out.println("    -" + parsed[parsed.length-1].replace(".png",""));
+                Image sprite = new Image(getClass().getResourceAsStream("/Sprites" + spritePath));
+                if(parsed[parsed.length-1].replace(".png","").contains("Alphabet"))
+                {
+                    createLetters(sprite);
+                }
+                else {
+                    spriteAssets.put(parsed[parsed.length - 1].replace(".png", ""), ImageRenderHelper.resample(sprite, 2, false));
+                    System.out.println("    -" + parsed[parsed.length - 1].replace(".png", ""));
+                }
 
             }
+
 
             System.out.println("Load Assets: Loading Sounds");
             InputStream inputSound = getClass().getResourceAsStream("/Sounds/SoundsAssetList.txt");
@@ -125,9 +135,15 @@ public class GlobalGameData {
                         {
                             if(sprite.getName().contains(".png")) {
                                 Image newSprite = new Image(getClass().getResource("/Sprites/" + innerFolders.getName() + "/" + sprite.getName()).toString());
-                                spriteAssets.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
-                                writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
-                                System.out.println("    -" + sprite.getName().replace(".png", ""));
+                                if(sprite.getName().contains("Alphabet")) {
+                                    createLetters(newSprite);
+                                    writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
+                                }
+                                else {
+                                    spriteAssets.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
+                                    writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
+                                    System.out.println("    -" + sprite.getName().replace(".png", ""));
+                                }
                             }
                         }
                     }
@@ -164,6 +180,95 @@ public class GlobalGameData {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void createLetters(Image image)
+    {
+
+        System.out.println("***" + (image==null));
+        for(int letterCount = 0; letterCount < 45; letterCount++)
+        {
+            WritableImage letterSprite = new WritableImage(8,10);
+            PixelReader reader = image.getPixelReader();
+            for(int x = 0; x < 7; x++)
+            {
+                for(int y = 0; y < 10; y++)
+                {
+                    letterSprite.getPixelWriter().setColor(x,y,reader.getColor(x + letterCount*8,y));
+                }
+            }
+            char letter = (char)('A' + letterCount);
+            //System.out.println(letterCount);
+
+            if(letterCount >= 26)
+            {
+                switch(letterCount)
+                {
+                    case 26:
+                        letter = '1';
+                        break;
+                    case 27:
+                        letter = '2';
+                        break;
+                    case 28:
+                        letter = '3';
+                        break;
+                    case 29:
+                        letter = '4';
+                        break;
+                    case 30:
+                        letter = '5';
+                        break;
+                    case 31:
+                        letter = '6';
+                        break;
+                    case 32:
+                        letter = '7';
+                        break;
+                    case 33:
+                        letter = '8';
+                        break;
+                    case 34:
+                        letter = '9';
+                        break;
+                    case 35:
+                        letter = '0';
+                        break;
+                    case 36:
+                        letter = '!';
+                        break;
+                    case 37:
+                        letter = '.';
+                        break;
+                    case 38:
+                        letter = '?';
+                        break;
+                    case 39:
+                        letter = ',';
+                        break;
+                    case 40:
+                        letter = ':';
+                        break;
+                    case 41:
+                        letter = '_';
+                        break;
+                    case 42:
+                        letter = '[';
+                        break;
+                    case 43:
+                        letter = ']';
+                        break;
+                    case 44:
+                        letter = '*';
+                        break;
+                }
+            }
+            spriteAssets.put(String.valueOf(letter),letterSprite);
+            //System.out.println("Placed letter " + letter);
+
+        }
+
+
     }
 
 
@@ -249,7 +354,7 @@ public class GlobalGameData {
         }
         else
         {
-            System.out.println("Image " + sprite + " was not found");
+            //System.out.println("Image " + sprite + " was not found");
         }
         return null;
     }
@@ -274,7 +379,7 @@ public class GlobalGameData {
         Media media = getSound(sound);
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         if(repeat) {
-            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+            mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(new Duration(0.3)));
         }
         else
         {
@@ -288,6 +393,7 @@ public class GlobalGameData {
     {
         if(currentSounds.containsKey(sound))
         {
+            currentSounds.get(sound).stop();
             currentSounds.remove(sound);
         }
     }

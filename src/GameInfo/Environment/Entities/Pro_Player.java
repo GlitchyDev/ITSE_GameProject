@@ -9,6 +9,7 @@ import GameInfo.Player;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -36,6 +37,7 @@ public class Pro_Player extends DamageableEntityBase {
     private boolean lightButtonCache = false;
     private long lightChangeTime = 0;
     private int lightLevel = -2;
+    private final int maxLightLevel = 8;
 
 
     private ProPlayerEmotion emotion = ProPlayerEmotion.NONE;
@@ -57,7 +59,6 @@ public class Pro_Player extends DamageableEntityBase {
         entityState = ProPlayerStateEnum.IDLE;
         stateStartTime = System.currentTimeMillis();
         lightChangeTime = System.currentTimeMillis();
-        System.out.println("Player is calling  this");
         PlayerSkinCreator.generateSkin(player,globalGameData);
         String[] args = player.getSkinID().split(",");
         headType = args[0];
@@ -119,26 +120,23 @@ public class Pro_Player extends DamageableEntityBase {
             case LIGHT_ON:
                 if((System.currentTimeMillis() - lightChangeTime)/500.0 <= 1)
                 {
-                    lightLevel = (int)(((System.currentTimeMillis() - lightChangeTime)/500.0)*10);
+                    lightLevel = (int)(((System.currentTimeMillis() - lightChangeTime)/500.0)*maxLightLevel);
                 }
-                else
-                {
-                    switch((int)(Math.random() * 100))
-                    {
+                else {
+                    lightLevel = maxLightLevel;
+                    switch ((int) (Math.random() * 100)) {
                         case 0:
-                            lightLevel = 5;
+                            lightLevel -= 3;
                             break;
                         case 1:
-                            lightLevel = 6;
+                            lightLevel -= 2;
                             break;
                         case 2:
-                            lightLevel = 7;
-                            break;
-                        default:
-                            lightLevel = 10;
+                            lightLevel -= 1;
                             break;
                     }
                 }
+
                 break;
             case LIGHT_OFF:
                 if((System.currentTimeMillis() - lightChangeTime)/1000.0 >= 0.3)
@@ -148,7 +146,7 @@ public class Pro_Player extends DamageableEntityBase {
                 }
                 else
                 {
-                    lightLevel = 10 - (int)(((System.currentTimeMillis() - lightChangeTime)/200.0)*10);
+                    lightLevel = maxLightLevel - (int)(((System.currentTimeMillis() - lightChangeTime)/200.0)*maxLightLevel);
 
                 }
                 break;
@@ -324,6 +322,8 @@ public class Pro_Player extends DamageableEntityBase {
 
             gc.setGlobalAlpha(1.0);
             drawSpriteAtXY(sprite, gc, x, y + 1, 1.5 + xOffset, (World.getScaledUpSquareSize() - 70 - World.getScaledUpSquareSize() / 2) + yOffset,true);
+            //TextRenderHelper.drawCenteredText((int)x,(int)y+10,player.getDisplayName(),gc,globalGameData);
+            TextRenderHelper.drawViewportCenteredText("[" + player.getDisplayName() + "]",gc,globalGameData,x,y,xOffset + World.getScaledUpSquareSize()/2,yOffset-20);
 
 
 

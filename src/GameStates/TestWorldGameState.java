@@ -198,7 +198,6 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     public void exitState(GameStateEnum lastState) {
-        backgroundMusic.stop();
         client.getPlayers().get(0).getPlayerCharacter().setX(5);
         client.getPlayers().get(0).getPlayerCharacter().setY(5);
         globalGameData.stopSound("CaveWaterDrops");

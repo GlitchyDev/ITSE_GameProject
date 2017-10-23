@@ -59,7 +59,6 @@ public class DoorBlock extends BlockBase {
                 drawSpriteAtXY(spriteClosed, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, true);
             }
             gc.setFill(Color.BLUE);
-            gc.fillText("Light: " + currentLightLevel,x,y);
             recalculateLight();
         }
     }
