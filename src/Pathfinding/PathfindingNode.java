@@ -7,7 +7,8 @@ public class PathfindingNode {
 
     private int g;
     private int h;
-    private int f;
+
+    public boolean openList = true;
 
     public PathfindingNode(PathfindingNode parentNode, int x, int y, int g, int targetX, int targetY)
     {
@@ -15,9 +16,9 @@ public class PathfindingNode {
         this.x = x;
         this.y = y;
         this.g = g;
-        h = 10*(Math.abs(x-targetX) + Math.abs(y-targetY));
-        f = g + h;
+        h = (Math.abs(x-targetX) + Math.abs(y-targetY));
     }
+
 
     public PathfindingNode getParentNode()
     {
@@ -31,17 +32,15 @@ public class PathfindingNode {
 
     public void recalculateH(int targetX, int targetY)
     {
+        h = (Math.abs(x-targetX) + Math.abs(y-targetY));
+    }
 
-        h = 14*(Math.abs(x-targetX) + Math.abs(y-targetY));
-        if(Math.abs(x-targetX) == 0)
-        {
-            h -= 0.1;
-        }
-        if(Math.abs(y-targetY) == 0)
-        {
-            h -= 0.1;
-        }
-        f = g + h;
+    public void setG(int g) {
+        this.g = g;
+    }
+
+    public void setNextNode(PathfindingNode parentNode) {
+        this.parentNode = parentNode;
     }
 
     public int getX() {
@@ -61,6 +60,11 @@ public class PathfindingNode {
     }
 
     public int getF() {
-        return f;
+        return g + h;
+    }
+
+    @Override
+    public String toString() {
+        return "Node: " + x + " " + y;
     }
 }

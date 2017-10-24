@@ -26,7 +26,7 @@ import net.java.games.input.Version;
 public class Main extends Application {
     private GlobalGameData globalGameData;
 
-    private static boolean cache = false;
+    //private static boolean cache = false;
 
 
     @Override
@@ -54,22 +54,14 @@ public class Main extends Application {
         primaryStage.show();
 
 
-        globalGameData.setCurrentGameState(GameStateEnum.TestWorld);
-        globalGameData.getGameState("TestWorld").enterState(GameStateEnum.TestWorld);
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(!primaryStage.isIconified()) {
-                    globalGameData.getConnectedControllers().get(0).poll();
-                    if(!cache && globalGameData.getConnectedControllers().get(0).getStart())
-                    {
-                        cache = true;
-                    }
-                    if(cache) {
-                        globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas, gc);
-                        globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas, gc);
-                        cache = false;
-                    }
+
+                    globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas, gc);
+                    globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas, gc);
+
                 }
             }
         }.start();
