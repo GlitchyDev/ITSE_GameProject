@@ -45,7 +45,9 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
 
-        primaryStage.setTitle("Endless Days " + RenewJarUUID.getJarUUID());
+
+        //primaryStage.setTitle("Endless Days "/*+ RenewJarUUID.getJarUUID()*/);
+        primaryStage.setTitle("Endless Days");
         primaryStage.setResizable(true);
 
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu,primaryStage,canvas);
