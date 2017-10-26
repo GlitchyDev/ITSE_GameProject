@@ -103,17 +103,15 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
                 break;
             case NAVIGATE_TO_TARGET:
-                /*
+
                 if(distanceFromEntity(currentTarget) > 1) {
-
-                    currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY(), 100);
-
                     if (System.currentTimeMillis() > stateStartTime + 1000) {
+                        currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY());
                         advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
                         stateStartTime = System.currentTimeMillis();
                     }
                 }
-                */
+
                 // No requirements
                 break;
         }

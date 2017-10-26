@@ -5,6 +5,7 @@ import GameInfo.Environment.Blocks.PathfindingDebugBlock;
 import GameInfo.Environment.World;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -21,9 +22,7 @@ public class PathfindingHelper
     private static ArrayList<PathfindingNode> openList = new ArrayList<>();
     private static ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private static PathfindingNode firstNode;
-    private static int timeOut = 0;
-    private static int currentTime = 0;
-    private static boolean timedOut = false;
+
 
 
     /**
@@ -35,139 +34,92 @@ public class PathfindingHelper
      * @param yTarget
      * @return A List of Positions of the best path towards the player
      */
-
-
-    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget, int timeOut)
+    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
     {
         openList.clear();
         closedList.clear();
-        PathfindingHelper.timeOut = timeOut;
-        PathfindingHelper.timedOut = false;
-        currentTime = 0;
-        firstNode = null;
-        if(xStart == xTarget && yStart == yTarget)
-        {
-            ArrayList<Position> p = new ArrayList<>();
-            p.add(new Position(xStart,yStart));
-            return p;
-        }
-        firstNode = new PathfindingNode(null,xStart,yStart,0,xStart,yTarget);
+        firstNode = new PathfindingNode(null,xStart,yStart,0,xTarget, yTarget);
+
+
         PathfindingNode finalNode = proccessPathfindingNode(world,firstNode,xTarget,yTarget);
-
-        if(!timedOut) {
-
-
-            ArrayList<Position> positionList = new ArrayList<>();
-            PathfindingNode n = finalNode;
-            while (!finalNode.isPrimaryNode()) {
-                if (n != null) {
-                    positionList.add(new Position(n.getX(), n.getY()));
-                    n = n.getParentNode();
-                } else {
-                    //System.out.println("Broken node is " + temp );
-                    break;
-                }
-            }
-            Collections.reverse(positionList);
-            for(PathfindingNode node: closedList)
-            {
-                world.setBlockFromCords(node.getX(),node.getY(),new PathfindingDebugBlock(node));
-            }
-            for(PathfindingNode node: openList)
-            {
-                world.setBlockFromCords(node.getX(),node.getY(),new PathfindingDebugBlock(node));
-            }
-            return positionList;
-        }
-        else
+        ArrayList<Position> positions = new ArrayList<>();
+        PathfindingNode cacheNode = finalNode;
+        while(cacheNode.getParentNode() != null)
         {
-            return null;
+            positions.add(new Position(cacheNode.getX(),cacheNode.getY()));
+            cacheNode = cacheNode.getParentNode();
         }
+        Collections.reverse(positions);
+
+        return positions;
     }
 
     private static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
     {
-        currentTime++;
-        if(currentTime >= timeOut)
+        openList.remove(currentNode);
+        closedList.add(currentNode);
+        getConnectedTiles(world,currentNode,xTarget,yTarget);
+        int lowestF = Integer.MAX_VALUE;
+        PathfindingNode nextNode = currentNode;
+        for(PathfindingNode node : openList)
         {
-            timedOut = true;
-            return currentNode;
-        }
-        PathfindingHelper.openList.addAll(PathfindingHelper.getConnectedTiles(world,currentNode,xTarget,yTarget));
-        double leastF = Integer.MAX_VALUE;
-
-        PathfindingNode newNode = currentNode;
-        for(PathfindingNode node: PathfindingHelper.openList)
-        {
-            node.recalculateH(xTarget,yTarget);
-            if(node.getF() < leastF)
+            if(node.getF() < lowestF)
             {
-                currentNode = node;
-                leastF = newNode.getF();
+                lowestF = node.getF();
+                nextNode = node;
             }
         }
 
-        PathfindingHelper.openList.remove(currentNode);
-        PathfindingHelper.closedList.add(currentNode);
-
-        /*
-        PathfindingDebugBlock b1 = new PathfindingDebugBlock(currentNode);
-        world.setBlockFromCords(currentNode.getX(), currentNode.getY(), b1);
-        */
-
-        //System.out.println();
-       //System.out.println("Current Node " + currentNode.getX() + " " + currentNode.getY());
-       // System.out.println("Target Player " +  xTarget + " " + yTarget);
-        if(currentNode.getX() == xTarget && currentNode.getY() == yTarget)
+        if(nextNode.getX() == xTarget && nextNode.getY() == yTarget)
         {
-           // System.out.println("You win!");
-            return newNode;
+            return nextNode;
         }
         else
         {
-            return proccessPathfindingNode(world,currentNode,xTarget,yTarget);
+            return proccessPathfindingNode(world,nextNode,xTarget,yTarget);
         }
-
-
-
-
     }
 
 
-    private static ArrayList<PathfindingNode> getConnectedTiles(World world, PathfindingNode parentNode, int targetX, int targetY)
+    private static void getConnectedTiles(World world, PathfindingNode parentNode, int targetX, int targetY)
     {
-        ArrayList<PathfindingNode> paths = new ArrayList<>();
+        openList.remove(parentNode);
+        closedList.add(parentNode);
         int x = parentNode.getX();
         int y = parentNode.getY();
-        int cost = 5;
-        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x+1,y).getBlockType()))
-        {
-            //System.out.println("Found Right");
-            if(!alreadyAddedToList(x+1,y))
-            paths.add(new PathfindingNode(parentNode, x+1,y,parentNode.getG() + cost, targetX,targetY));
-        }
-        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x-1,y).getBlockType()))
-        {
-           //System.out.println("Found Left");
-            if(!alreadyAddedToList(x-1,y))
-                paths.add(new PathfindingNode(parentNode, x-1,y,parentNode.getG() + cost,targetX,targetY));
-        }
-        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x,y+1).getBlockType()))
-        {
-            //System.out.println("Found North");
-            if(!alreadyAddedToList(x,y+1))
-                paths.add(new PathfindingNode(parentNode, x,y+1,parentNode.getG() + cost, targetX,targetY));
-        }
-        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x,y-1).getBlockType()))
-        {
-            //System.out.println("Found South");
-            if(!alreadyAddedToList(x,y-1))
-                paths.add(new PathfindingNode(parentNode, x,y-1,parentNode.getG() + cost,targetX,targetY));
-        }
-
-        return paths;
+        checkTile(x,y+1,targetX, targetY, world,parentNode);
+        checkTile(x,y-1,targetX, targetY,world,parentNode);
+        checkTile(x+1,y,targetX, targetY,world,parentNode);
+        checkTile(x-1,y,targetX, targetY,world,parentNode);
     }
 
+    private static void checkTile(int x, int y, int targetX, int targetY, World world, PathfindingNode parentNode)
+    {
+        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x,y).getBlockType()))
+        {
+            if(isOnOpenList(x,y))
+            {
+                PathfindingNode node =  getNode(x,y,openList);
+                if(parentNode.getG() + 5 < node.getG())
+                {
+                    System.out.println("Recalculated G");
+                    node.setG(parentNode.getG() + 5);
+                    node.setNextNode(parentNode);
+                }
+            }
+            else
+            {
+                if(!isOnClosedList(x,y))
+                {
+                    openList.add(new PathfindingNode(parentNode,x,y,parentNode.getG() + 5,targetX,targetY));
+                }
+                else
+                {
+
+                }
+            }
+        }
+    }
 
     private static boolean alreadyAddedToList(int x, int y)
     {
@@ -181,6 +133,44 @@ public class PathfindingHelper
         for(PathfindingNode node: closedList)
         {
             if(x == node.getX() && y == node.getY())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static PathfindingNode getNode(int x, int y, ArrayList<PathfindingNode> nodes)
+    {
+        for(PathfindingNode node: nodes)
+        {
+            if(node.getX() == x && node.getY() == y)
+            {
+                return node;
+            }
+        }
+        return null;
+    }
+
+
+    public static boolean isOnOpenList(int x, int y)
+    {
+        for(PathfindingNode node: openList)
+        {
+            if(node.getX() == x && node.getY() == y)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isOnClosedList(int x, int y)
+    {
+        for(PathfindingNode node: closedList)
+        {
+            if(node.getX() == x && node.getY() == y)
             {
                 return true;
             }

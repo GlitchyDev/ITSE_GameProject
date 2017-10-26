@@ -26,6 +26,7 @@ import net.java.games.input.Version;
 public class Main extends Application {
     private GlobalGameData globalGameData;
 
+    //private static boolean cache = false;
 
 
     @Override
@@ -45,6 +46,7 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         canvas.setCache(true);
 
+        RenewJarUUID.renewJarUUID();
         primaryStage.setTitle("Endless Days " + RenewJarUUID.getJarUUID());
         primaryStage.setResizable(true);
 
@@ -52,11 +54,14 @@ public class Main extends Application {
         primaryStage.show();
 
 
+
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(!primaryStage.isIconified()) {
+
                     globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas, gc);
                     globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas, gc);
+
                 }
             }
         }.start();
