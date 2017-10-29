@@ -83,6 +83,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
                         currentState = HauntedSkullStateEnum.ACTIVATE;
                         stateStartTime = System.currentTimeMillis();
+                        globalGameData.playSound("AlertSFX",false,0.2);
                     }
 
                 }
@@ -103,6 +104,17 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
                 break;
             case NAVIGATE_TO_TARGET:
+
+                DirectionalEnum playerDirection = DirectionalEnum.determineDirection(x,y, currentTarget.getX(),currentTarget.getY());
+                if(currentPath.size() > 1)
+                {
+                    DirectionalEnum nextSpotDirection = DirectionalEnum.determineDirection(x,y, currentPath.get(1).getX() ,currentPath.get(1).getY());
+                    currentDirection = nextSpotDirection;
+                }
+                else
+                {
+                    currentDirection = playerDirection;
+                }
 
                 if(distanceFromEntity(currentTarget) > 1) {
                     if (System.currentTimeMillis() > stateStartTime + 1000) {

@@ -1,9 +1,7 @@
 package GameInfo;
 
-import GameStates.DebugControlsGameState;
-import GameStates.GameStateBase;
-import GameStates.MainMenuGameState;
-import GameStates.TestWorldGameState;
+import GameStates.*;
+import GameStates.Enums.GameStateEnum;
 import HardwareAdaptors.DebugController;
 import HardwareAdaptors.XBoxController;
 import RenderingHelpers.ImageRenderHelper;
@@ -72,6 +70,8 @@ public class GlobalGameData {
         gameStates.put("MainMenu", new MainMenuGameState(this));
         gameStates.put("TestWorld", new TestWorldGameState(this,primaryStage,canvas));
         gameStates.put("DebugControls", new DebugControlsGameState(this));
+        gameStates.put("TitleScreen", new TitleScreenGameState(this));
+
     }
 
 
@@ -187,7 +187,7 @@ public class GlobalGameData {
     {
 
         System.out.println("***" + (image==null));
-        for(int letterCount = 0; letterCount < 45; letterCount++)
+        for(int letterCount = 0; letterCount < 46; letterCount++)
         {
             WritableImage letterSprite = new WritableImage(8,10);
             PixelReader reader = image.getPixelReader();
@@ -261,6 +261,9 @@ public class GlobalGameData {
                         break;
                     case 44:
                         letter = '*';
+                        break;
+                    case 45:
+                        letter = '<';
                         break;
                 }
             }

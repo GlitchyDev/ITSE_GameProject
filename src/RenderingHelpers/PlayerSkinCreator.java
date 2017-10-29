@@ -43,6 +43,26 @@ public class PlayerSkinCreator {
 
     }
 
+    public static void generateSkin(UUID uuid, GlobalGameData globalGameData){
+        // Determine Skin Type from Player using Connection
+
+        if(!skinsCreated.contains(uuid)) {
+            String headType = "P1";
+            String bodyType = "P1";
+            String legType = "P1";
+
+            System.out.println("Skin Creator: Created skin for " + uuid + " Skin Mode " + headType + "|" + bodyType + "|" + legType);
+
+            createSprites(uuid, "Front", headType, bodyType, legType, globalGameData);
+            createSprites(uuid, "Back", headType, bodyType, legType, globalGameData);
+            createSprites(uuid, "Left", headType, bodyType, legType, globalGameData);
+            createSprites(uuid, "Right", headType, bodyType, legType, globalGameData);
+
+            skinsCreated.add(uuid);
+        }
+
+    }
+
 
     private static void createSprites(UUID uuid, String mode, String headType, String bodyType, String legType, GlobalGameData globalGameData)
     {

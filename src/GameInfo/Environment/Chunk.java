@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * Stores big areas of Blocks and Ticks the Entities Inside, and ticks the entities
  * Stores/Spawns Structures involved inside the chunk
- * Viewport can grab Blocks of them to render
+ * WorldViewport can grab Blocks of them to render
  *
  */
 public class Chunk {

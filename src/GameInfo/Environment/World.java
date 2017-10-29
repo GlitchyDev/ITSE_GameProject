@@ -227,7 +227,7 @@ public class World {
 
     /**
      * This adds all blocks inside the specified square to their relative positions in the 2D array
-     * - Best used for Pathfinding and Viewport Rendering
+     * - Best used for Pathfinding and WorldViewport Rendering
      * @param chunk
      * @param chunkX
      * @param chunkY
@@ -278,7 +278,7 @@ public class World {
 
     /**
      * This adds all blocks inside the specified square to their relative positions in the 2D array
-     * - Best used for Pathfinding and Viewport Rendering
+     * - Best used for Pathfinding and WorldViewport Rendering
      * @param chunk
      * @param chunkX
      * @param chunkY

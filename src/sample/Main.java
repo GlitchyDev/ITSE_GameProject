@@ -1,20 +1,16 @@
 package sample;
 
 import GameInfo.Environment.World;
-import GameInfo.GameStateEnum;
+import GameInfo.WorldViewport;
+import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
-import GameStates.TestWorldGameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import net.java.games.input.Version;
 
 /**
  * This class is meant to
@@ -31,8 +27,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setWidth(World.getScaledUpSquareSize() * Viewport.widthBuffer + 16);
-        primaryStage.setHeight(World.getScaledUpSquareSize() * Viewport.heightBuffer + 39);
+        primaryStage.setWidth(World.getScaledUpSquareSize() * WorldViewport.widthBuffer + 16);
+        primaryStage.setHeight(World.getScaledUpSquareSize() * WorldViewport.heightBuffer + 39);
 
         primaryStage.setMinWidth(World.getScaledUpSquareSize() * 15 + 16);
         primaryStage.setMinHeight(World.getScaledUpSquareSize() * 15 + 39);

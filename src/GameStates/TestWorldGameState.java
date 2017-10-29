@@ -8,42 +8,28 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.Entities.SpriteTesterEntity;
-import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
-import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
-import javafx.scene.Node;
+import GameStates.Enums.GameStateEnum;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import HardwareAdaptors.XBoxController;
-import sample.RenderingTest;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.SplittableRandom;
 
 /**
  * The "World of the Game", keepping track of the World, viewport, and the Client
  * Created by Robert on 8/28/2017.
  */
 public class TestWorldGameState extends GameStateBase {
-    private final WritablePixelFormat<IntBuffer> pixelFormat =
-            PixelFormat.getIntArgbPreInstance();
-
     private World world;
-    private Viewport viewport;
+    private WorldViewport viewport;
     private Client client;
-    private MediaPlayer backgroundMusic;
     private Stage primaryStage;
     private Canvas canvas;
+    private double stateStart;
 
 
 
@@ -51,9 +37,10 @@ public class TestWorldGameState extends GameStateBase {
     {
         super(globalGameData);
         world = new World(globalGameData);
-        viewport = new Viewport(client,world,primaryStage,canvas);
+        viewport = new WorldViewport(client,world,primaryStage,canvas);
         this.primaryStage = primaryStage;
         this.canvas = canvas;
+        this.stateStart = System.currentTimeMillis();
 
     }
 
@@ -98,6 +85,9 @@ public class TestWorldGameState extends GameStateBase {
         Runtime instance = Runtime.getRuntime();
         double usedMemory = (instance.totalMemory() - instance.freeMemory()) / mb;
 
+
+        double passedSeconds = (System.currentTimeMillis() - stateStart)/1000.0;
+        TextRenderHelper.drawText(100,50,String.valueOf(passedSeconds),gc,globalGameData);
 
         gc.setFill(Color.BLUE);
         if(lastFPS <= 57)
@@ -169,7 +159,7 @@ public class TestWorldGameState extends GameStateBase {
         }
 
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
-        viewport = new Viewport(client,world,primaryStage,canvas);
+        viewport = new WorldViewport(client,world,primaryStage,canvas);
 
 
         //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
@@ -204,7 +194,7 @@ public class TestWorldGameState extends GameStateBase {
 
     }
 
-    public Viewport getViewport() {
+    public WorldViewport getViewport() {
         return viewport;
     }
 }

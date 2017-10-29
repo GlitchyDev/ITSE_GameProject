@@ -1,6 +1,6 @@
 package GameStates;
 
-import GameInfo.GameStateEnum;
+import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

@@ -73,3 +73,8 @@
 /TestSprites/Gear.png
 /TestSprites/Rock_Test.png
 /TestSprites/Standing_Mirror.png
+/TestSprites/Static_1.png
+/TestSprites/Static_2.png
+/TestSprites/Static_3.png
+/TestSprites/Static_4.png
+/TestSprites/TitleIcon.png

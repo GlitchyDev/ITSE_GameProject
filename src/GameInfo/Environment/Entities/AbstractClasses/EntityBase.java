@@ -4,7 +4,7 @@ import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
+import GameInfo.WorldViewport;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
@@ -92,10 +92,6 @@ public abstract class EntityBase {
     public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
-        if (oldChunk != newChunk) {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
-        }
         if (doCheckColisions) {
             if (doStructureEvents) {
                 if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
@@ -118,6 +114,10 @@ public abstract class EntityBase {
                     return false;
                 }
             }
+        }
+        if (oldChunk != newChunk) {
+            newChunk.getEntities().add(this);
+            oldChunk.getEntities().remove(this);
         }
         if (doGenerateEnterEvent) {
             if (doStructureEvents) {
@@ -144,12 +144,12 @@ public abstract class EntityBase {
 
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
         if(useLight)
         {
             Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
             gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(world.getBlockFromCords(this.x,this.y).getPreviousLightLevel()));
-            gc.drawImage(shadow,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+            gc.drawImage(shadow,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
             gc.setGlobalAlpha(1.0);
 
         }
@@ -157,7 +157,7 @@ public abstract class EntityBase {
 
     public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
     {
-        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer,width,height  );
+        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + WorldViewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + WorldViewport.heightBuffer,width,height  );
     }
 
 

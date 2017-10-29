@@ -1,7 +1,6 @@
 package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import GameInfo.Viewport;
 import Pathfinding.PathfindingNode;
 import GameInfo.Environment.World;
 import javafx.scene.canvas.Canvas;
@@ -30,7 +29,7 @@ public class PathfindingDebugBlock extends BlockBase {
         if(renderLayer == 0) {
             gc.setFill(color);
             drawRectangleAtXY(gc,x,y,0,0,World.getScaledUpSquareSize(),World.getScaledUpSquareSize());
-            //gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + Viewport.heightBuffer), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
+            //gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + WorldViewport.heightBuffer), World.getScaledUpSquareSize(), World.getScaledUpSquareSize());
         }
 
 
