@@ -50,13 +50,13 @@ public class DoorBlock extends BlockBase {
     @Override
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1) {
-            drawSpriteAtXY(floorSprite, gc, x, y, 0, 0,true);
+            drawSpriteAtXY(floorSprite, gc, x, y, 0, 0,false);
 
             if (blockType == BlockTypeEnum.DOOR_OPEN) {
-                drawSpriteAtXY(spriteOpen,gc,x,y,0,-spriteOpen.getHeight() + World.getScaledUpSquareSize(),true);
+                drawSpriteAtXY(spriteOpen,gc,x,y,0,-spriteOpen.getHeight() + World.getScaledUpSquareSize(),false);
             }
             else {
-                drawSpriteAtXY(spriteClosed, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, true);
+                drawSpriteAtXY(spriteClosed, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3, false);
             }
             gc.setFill(Color.BLUE);
             recalculateLight();

@@ -25,7 +25,7 @@ public class HouseWall extends BlockBase {
     public void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         if(renderLayer == 1)
         {
-            drawSpriteAtXY(sprite,gc,x,y,0,-sprite.getHeight() + World.getScaledUpSquareSize(),true);
+            drawSpriteAtXY(sprite,gc,x,y,0,-sprite.getHeight() + World.getScaledUpSquareSize(),false);
 
 
             recalculateLight();

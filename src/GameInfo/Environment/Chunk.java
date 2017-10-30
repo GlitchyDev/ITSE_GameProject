@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.TestRockEntity;
 import GameInfo.Environment.Structures.BasicHouse;
 import GameInfo.Environment.Structures.DirtBlobStructure;
 import GameInfo.Environment.Structures.StructureBase;
+import GameInfo.Environment.Structures.Dungeon;
 import GameInfo.GlobalGameData;
 
 import java.util.ArrayList;
@@ -66,6 +67,16 @@ public class Chunk {
      */
     public void generateStructures(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
+
+        // Spawn dungeons (up to 5, unlikely 5 will succeed)
+        for (int i = 0; i < 5; i++) {
+            Dungeon d = new Dungeon(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX) + globalGameData.getRandom().nextInt(World.getChunkSize() - 22), World.getPosNumFromChunkNum(relativeChunkY) + globalGameData.getRandom().nextInt(World.getChunkSize() - 22));
+
+            if (d.attemptBuildStructure()) {
+                world.getStructures().add(d);
+                structures.add(d);
+            }
+        }
 
         // Spawn houses first b/c of more difficult placement requirements (i.e. door)
         for (int i = 0; i < 75; i++) {
