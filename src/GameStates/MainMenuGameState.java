@@ -3,6 +3,7 @@ package GameStates;
 import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.MainMenuPhaseEnum;
+import GameStates.Enums.MainWorldMiniState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,7 +23,6 @@ public class MainMenuGameState extends GameStateBase {
         phaseEnum = MainMenuPhaseEnum.MMGPE_Constructor;
 
         controller = globalGameData.getConnectedControllers().get(0);
-
 
     }
 
@@ -129,13 +129,11 @@ public class MainMenuGameState extends GameStateBase {
 
 
 
-
     }
 
 
     @Override
     public void enterState(GameStateEnum previousState) {
-
     }
 
     @Override

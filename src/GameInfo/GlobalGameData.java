@@ -393,6 +393,12 @@ public class GlobalGameData {
         currentSounds.put(sound,mediaPlayer);
     }
 
+    public void setSoundVolume(String sound,double volume)
+    {
+        MediaPlayer mediaPlayer = currentSounds.get(sound);
+        mediaPlayer.setVolume(volume);
+    }
+
     public void stopSound(String sound)
     {
         if(currentSounds.containsKey(sound))

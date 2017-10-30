@@ -4,12 +4,10 @@ import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
 import GameInfo.Environment.Blocks.HouseWall;
 import GameInfo.Environment.Blocks.WallFloorBlock;
-import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
-import GameInfo.Environment.Entities.Enums.ProPlayerStateEnum;
 import GameInfo.Environment.World;
-import GameInfo.WorldViewport;
-import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
+import GameStates.Enums.GameStateEnum;
+import GameStates.Enums.TitleSceenMiniState;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
@@ -19,23 +17,29 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import javax.xml.soap.Text;
 import java.util.UUID;
 
 
 public class TitleScreenGameState extends GameStateBase {
     private BlockBase[][] blocks;
     private long stateStartTime;
+    private long lastMoveTime;
     private final double movementLength = 0.8;
+    private final double loadingLength = 2;
+    private final double buttonLoadTime = 1;
+    private final double exitLength = 2;
     private int viewportSize = 15;
     private int viewportBufer = 5;
     private final UUID uuid = UUID.randomUUID();
+    private TitleSceenMiniState state;
 
 
     public TitleScreenGameState(GlobalGameData globalGameData) {
         super(globalGameData);
         blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];
         stateStartTime = 0;
+        lastMoveTime = 0;
+        state = TitleSceenMiniState.TS_LOADING;
     }
 
     @Override
@@ -44,9 +48,41 @@ public class TitleScreenGameState extends GameStateBase {
         {
             stateStartTime = System.currentTimeMillis();
         }
-        if(System.currentTimeMillis() > stateStartTime + movementLength*1000)
+
+        switch(state)
         {
-            stateStartTime = System.currentTimeMillis();
+            case TS_LOADING:
+                if(System.currentTimeMillis() > (stateStartTime + loadingLength*1000.0))
+                {
+                    state = TitleSceenMiniState.TS_IDLE;
+                    stateStartTime = System.currentTimeMillis();
+                }
+                break;
+            case TS_IDLE:
+                double progress = 1.0/buttonLoadTime * ((System.currentTimeMillis() - stateStartTime)/1000.0);
+                if(progress > 1)
+                {
+                    globalGameData.getConnectedControllers().get(0).poll();
+                    if(globalGameData.getConnectedControllers().get(0).isAnyThingPressed())
+                    {
+                        state = TitleSceenMiniState.TS_CLICK;
+                        stateStartTime = System.currentTimeMillis();
+                    }
+                }
+
+                break;
+            case TS_CLICK:
+                if(System.currentTimeMillis() > (stateStartTime + exitLength*1000))
+                {
+                    globalGameData.switchGameState(GameStateEnum.TestWorld);
+                }
+                break;
+        }
+
+
+        if(System.currentTimeMillis() > lastMoveTime + movementLength*1000.0)
+        {
+            lastMoveTime = System.currentTimeMillis();
             moveBlocks(1,0);
         }
         for(int x = 0; x < viewportSize + viewportBufer*2; x++)
@@ -69,7 +105,7 @@ public class TitleScreenGameState extends GameStateBase {
             for (int y = 0; y < blocks[0].length; y++) {
                 for (int x = 0; x < blocks.length; x++) {
 
-                    double xBuffer = (System.currentTimeMillis() - (stateStartTime + movementLength*1000))/(movementLength*1000);
+                    double xBuffer = (System.currentTimeMillis() - (lastMoveTime + movementLength*1000))/(movementLength*1000);
                     blocks[x][y].renderBlock(canvas, gc, (x - viewportBufer) + xBuffer, y + 1 - viewportBufer, renderLayer);
 
                     if(renderLayer == 1 && y == viewportBufer + 7)
@@ -103,13 +139,46 @@ public class TitleScreenGameState extends GameStateBase {
         gc.drawImage(globalGameData.getSprite("Static_" + random),0,0);
         gc.setGlobalAlpha(1.0);
 
-        if((int)(System.currentTimeMillis()/1000.0)%2 == 0) {
-            TextRenderHelper.drawText(265, 400, "Continue? <", gc, globalGameData);
-        }
-        else {
-            TextRenderHelper.drawText(265, 400, "Continue?  <", gc, globalGameData);
+
+        if(state == TitleSceenMiniState.TS_IDLE) {
+            double progress = 1.0/buttonLoadTime * ((System.currentTimeMillis() - stateStartTime)/1000.0);
+            if(progress < 1) {
+                gc.setGlobalAlpha(progress);
+            }
+            if ((int) (System.currentTimeMillis() / 1000.0) % 2 == 0) {
+                TextRenderHelper.drawText(265, 400, "Continue? <", gc, globalGameData);
+            } else {
+                TextRenderHelper.drawText(265, 400, "Continue?  <", gc, globalGameData);
+            }
+            gc.setGlobalAlpha(1.0);
         }
 
+        if(state == TitleSceenMiniState.TS_LOADING)
+        {
+            double progress = 1 - 1.0/loadingLength * ((System.currentTimeMillis() - stateStartTime)/1000.0);
+            if(progress < 0)
+            {
+                progress = 1;
+            }
+            gc.setGlobalAlpha(progress);
+            gc.setFill(Color.BLACK);
+            gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+            gc.setGlobalAlpha(1.0);
+        }
+
+        if(state == TitleSceenMiniState.TS_CLICK)
+        {
+            double progress = 1.0/exitLength * ((System.currentTimeMillis() - stateStartTime)/1000.0);
+            if(progress < 0)
+            {
+                progress = 1;
+            }
+            globalGameData.setSoundVolume("MainTheme",1-progress);
+            gc.setGlobalAlpha(progress);
+            gc.setFill(Color.BLACK);
+            gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+            gc.setGlobalAlpha(1.0);
+        }
     }
 
 
@@ -131,7 +200,7 @@ public class TitleScreenGameState extends GameStateBase {
 
     @Override
     public void exitState(GameStateEnum newState) {
-
+        globalGameData.stopSound("MainTheme");
     }
 
     //*********************************************************************************

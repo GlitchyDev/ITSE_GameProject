@@ -10,6 +10,7 @@ import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.Entities.SpriteTesterEntity;
 import GameInfo.Environment.World;
 import GameStates.Enums.GameStateEnum;
+import GameStates.Enums.MainWorldMiniState;
 import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -30,6 +31,9 @@ public class TestWorldGameState extends GameStateBase {
     private Stage primaryStage;
     private Canvas canvas;
     private double stateStart;
+    private MainWorldMiniState state;
+    private final double fadeIn = 2.0;
+    private final double fadeOut = 2.0;
 
 
 
@@ -41,11 +45,13 @@ public class TestWorldGameState extends GameStateBase {
         this.primaryStage = primaryStage;
         this.canvas = canvas;
         this.stateStart = System.currentTimeMillis();
+        state = MainWorldMiniState.ENTER;
 
     }
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
+        
         for(Player p : client.getPlayers())
         {
             p.getPlayerCharacter().tickEntity();
@@ -68,6 +74,16 @@ public class TestWorldGameState extends GameStateBase {
 
         }
 
+        if(state == MainWorldMiniState.ENTER)
+        {
+            double progress = 1.0/fadeIn * ((System.currentTimeMillis() - stateStart)/1000.0);
+            if(progress > 1)
+            {
+                state = MainWorldMiniState.IDLE;
+                stateStart = System.currentTimeMillis();
+            }
+
+        }
     }
 
     @Override
@@ -123,6 +139,20 @@ public class TestWorldGameState extends GameStateBase {
             System.gc();
         }
 
+
+        if(state == MainWorldMiniState.ENTER)
+        {
+            double progress = 1.0 - 1.0/fadeIn * ((System.currentTimeMillis() - stateStart)/1000.0);
+            if(progress < 1)
+            {
+                gc.setGlobalAlpha(progress);
+                gc.setFill(Color.BLACK);
+                gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+                gc.setGlobalAlpha(1);
+            }
+
+        }
+
     }
 
     @Override
@@ -161,27 +191,14 @@ public class TestWorldGameState extends GameStateBase {
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
         viewport = new WorldViewport(client,world,primaryStage,canvas);
 
-
-        //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
-        //world.addEntityToWorld(pathfindingDebug);
-
         Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
         world.attemptSpawn(skullEntity,7,7,true,globalGameData);
-        //world.addEntityToWorld(skullEntity);
 
         SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
         world.attemptSpawn(test,3,3,true,globalGameData);
-        //world.addEntityToWorld(test);
-
         globalGameData.playSound("CaveWaterDrops",true,0.2);
-        /*
 
-        Media sound = globalGameData.getSound("CaveWaterDrops");
-        backgroundMusic = new MediaPlayer(sound);
-        backgroundMusic.setOnEndOfMedia(() -> backgroundMusic.seek(Duration.ZERO));
-        backgroundMusic.play();
-        */
-
+        stateStart = System.currentTimeMillis();
 
     }
 
