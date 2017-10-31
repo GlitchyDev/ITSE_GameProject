@@ -186,7 +186,7 @@ public class GlobalGameData {
     public void createLetters(Image image)
     {
 
-        System.out.println("***" + (image==null));
+        System.out.println("    ~Created Font");
         for(int letterCount = 0; letterCount < 46; letterCount++)
         {
             WritableImage letterSprite = new WritableImage(8,10);

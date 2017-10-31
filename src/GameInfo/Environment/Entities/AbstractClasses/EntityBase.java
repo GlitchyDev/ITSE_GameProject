@@ -22,7 +22,6 @@ public abstract class EntityBase {
     protected long creationTime;
     protected int x;
     protected int y;
-    protected boolean isDamageable;
 
     public EntityBase(World world, GlobalGameData globalGameData, int x, int y)
     {
@@ -31,7 +30,6 @@ public abstract class EntityBase {
         this.x = x;
         this.y = y;
         creationTime = System.currentTimeMillis();
-        isDamageable = false;
     }
 
 
@@ -53,8 +51,8 @@ public abstract class EntityBase {
         }
         else
         {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
+            newChunk.removeEntity(this);
+            oldChunk.addEntity(this);
             x += relativeX;
             y += relativeY;
         }
@@ -72,8 +70,8 @@ public abstract class EntityBase {
         }
         else
         {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
             x = absoluteX;
             y = absoluteY;
         }
@@ -116,8 +114,8 @@ public abstract class EntityBase {
             }
         }
         if (oldChunk != newChunk) {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
         }
         if (doGenerateEnterEvent) {
             if (doStructureEvents) {
@@ -174,8 +172,9 @@ public abstract class EntityBase {
     public int getY(){return y;}
     public void setX(int x){this.x = x;}
     public void setY(int y){this.y = y;}
+
     public boolean isDamageable() {
-        return isDamageable;
+        return false;
     }
 
     public EntityType getEntityType() {

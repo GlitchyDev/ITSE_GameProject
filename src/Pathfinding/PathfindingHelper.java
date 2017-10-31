@@ -95,7 +95,7 @@ public class PathfindingHelper
 
     private static void checkTile(int x, int y, int targetX, int targetY, World world, PathfindingNode parentNode)
     {
-        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x,y).getBlockType()))
+        if(BlockTypeEnum.isWalkable(world.getBlockFromCords(x,y).getBlockType()) && (world.getEntitiesAtPos(x,y).isEmpty() || (x == targetX) && (y==targetY)))
         {
             if(isOnOpenList(x,y))
             {

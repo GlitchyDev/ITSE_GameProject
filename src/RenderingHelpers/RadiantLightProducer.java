@@ -112,11 +112,7 @@ public class RadiantLightProducer {
 
         BlockBase b = world.getBlockFromCords(x,y);
 
-        if(b.getCurrentLightLevel() < BlockTypeEnum.caculateLightCost(b.getBlockType(),light)) {
-            return true;
-
-        }
-        return false;
+        return b.getCurrentLightLevel() < BlockTypeEnum.caculateLightCost(b.getBlockType(), light);
 
     }
 
@@ -270,11 +266,7 @@ public class RadiantLightProducer {
     {
         BlockBase b = blocks[x][y];
 
-        if(b.getCurrentLightLevel() < BlockTypeEnum.caculateLightCost(b.getBlockType(),light)) {
-            return true;
-
-        }
-        return false;
+        return b.getCurrentLightLevel() < BlockTypeEnum.caculateLightCost(b.getBlockType(), light);
 
     }
 

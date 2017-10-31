@@ -140,8 +140,16 @@ public class TitleScreenGameState extends GameStateBase {
         gc.setGlobalAlpha(1.0);
 
 
-        if(state == TitleSceenMiniState.TS_IDLE) {
-            double progress = 1.0/buttonLoadTime * ((System.currentTimeMillis() - stateStartTime)/1000.0);
+        if(state == TitleSceenMiniState.TS_IDLE || state == TitleSceenMiniState.TS_CLICK) {
+            double progress = 0;
+            if(state == TitleSceenMiniState.TS_IDLE) {
+                progress = 1.0 / exitLength * ((System.currentTimeMillis() - stateStartTime) / 1000.0);
+            }
+            else
+            {
+                progress = 1- 1.0 / buttonLoadTime * ((System.currentTimeMillis() - stateStartTime) / 1000.0);
+            }
+
             if(progress < 1) {
                 gc.setGlobalAlpha(progress);
             }
@@ -165,6 +173,7 @@ public class TitleScreenGameState extends GameStateBase {
             gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
             gc.setGlobalAlpha(1.0);
         }
+
 
         if(state == TitleSceenMiniState.TS_CLICK)
         {
@@ -201,6 +210,10 @@ public class TitleScreenGameState extends GameStateBase {
     @Override
     public void exitState(GameStateEnum newState) {
         globalGameData.stopSound("MainTheme");
+        blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];
+        stateStartTime = 0;
+        lastMoveTime = 0;
+        state = TitleSceenMiniState.TS_LOADING;
     }
 
     //*********************************************************************************

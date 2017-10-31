@@ -45,6 +45,10 @@
 /P1Custom/P1_Right_Legs_2.png
 /P1Custom/P1_Right_Legs_3.png
 /Skull_Entity/Alert.png
+/Skull_Entity/P_Skull_Backwards.png
+/Skull_Entity/P_Skull_Forward.png
+/Skull_Entity/P_Skull_Left.png
+/Skull_Entity/P_Skull_Right.png
 /Skull_Entity/Skull.png
 /Skull_Entity/Skull_Backwards.png
 /Skull_Entity/Skull_Backwards_Left_Diagnal.png
@@ -70,7 +74,12 @@
 /Terrain/Test_Floor_6.png
 /Terrain/Test_Wall.png
 /TestSprites/Alphabet.png
+/TestSprites/Face_Static_1.png
+/TestSprites/Face_Static_2.png
+/TestSprites/Face_Static_3.png
+/TestSprites/Face_Static_4.png
 /TestSprites/Gear.png
+/TestSprites/Icon.png
 /TestSprites/Rock_Test.png
 /TestSprites/Standing_Mirror.png
 /TestSprites/Static_1.png
@@ -78,3 +87,6 @@
 /TestSprites/Static_3.png
 /TestSprites/Static_4.png
 /TestSprites/TitleIcon.png
+/TestSprites/WindowIcon.png
+/TestSprites/WindowIcon_Blink_1.png
+/TestSprites/WindowIcon_Blink_2.png

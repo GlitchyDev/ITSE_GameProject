@@ -25,14 +25,13 @@ public class Chunk {
     private ArrayList<EntityBase> entities;
     private ArrayList<StructureBase> structures;
 
+    private ArrayList<EntityBase> removeNextTick;
+    private ArrayList<EntityBase> addNextTick;
+
+
 
     // A "Dummy" Constructor for if we wish to specifiy all behaviors inside
-    public Chunk(GlobalGameData globalGameData, BlockBase[][] blockBaseList, ArrayList<EntityBase> entities, World world, int relativeChunkX, int relativeChunkY)
-    {
-        this.blockBaseList = blockBaseList;
-        this.entities = entities;
-        this.structures = new ArrayList<>();
-    }
+
 
     // Default Constructor, creates random terrain and spawns structures
     public Chunk(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
@@ -53,6 +52,8 @@ public class Chunk {
 
 
         this.structures = new ArrayList<>();
+        this.removeNextTick = new ArrayList<>();
+        this.addNextTick = new ArrayList<>();
 
     }
 
@@ -101,10 +102,30 @@ public class Chunk {
     /*
     Adds the Blocks contained within the specified grid to the Array
      */
-    public ArrayList<EntityBase> getEntities() {
+
+
+    public ArrayList<EntityBase> getAllEntities() {
         return entities;
     }
 
+
+    public void updateChunk()
+    {
+        entities.removeAll(removeNextTick);
+        entities.addAll(addNextTick);
+        removeNextTick.clear();
+        addNextTick.clear();
+
+    }
+
+    public void removeEntity(EntityBase entity)
+    {
+        removeNextTick.add(entity);
+    }
+    public void addEntity(EntityBase entity)
+    {
+        addNextTick.add(entity);
+    }
 
     /**
      * Checks if a Structure exists at the X,Y Specified

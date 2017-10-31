@@ -40,10 +40,13 @@ public class World {
     public static int getScaledUpSquareSize() {
         return scaleUpPercent * standardSquareSize;
     }
-
     public static int getChunkSize() {
         return chunkSize;
     }
+
+
+
+
 
     public World(GlobalGameData globalGameData)
     {
@@ -298,7 +301,7 @@ public class World {
                 {
                     if(y1 >= y && y2 <= y)
                     {
-                        ArrayList<EntityBase> entitiesInChunk = chunk.getEntities();
+                        ArrayList<EntityBase> entitiesInChunk = chunk.getAllEntities();
                         for(EntityBase entity: entitiesInChunk)
                         {
                             if(entity.getX() == x)
@@ -317,13 +320,13 @@ public class World {
 
     public void addEntityToWorld(EntityBase entityBase)
     {
-       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).getEntities().add(entityBase);
+       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).addEntity(entityBase);
     }
 
     public boolean isEntityAtPos(int x, int y)
     {
         Chunk chunk = getChunkFromCordXY(x,y);
-        for(EntityBase entity: chunk.getEntities())
+        for(EntityBase entity: chunk.getAllEntities())
         {
             if(entity.getX() == x && entity.getY() == y)
             {
@@ -333,11 +336,26 @@ public class World {
         return false;
     }
 
+    public ArrayList<Chunk> getChunksFromPosWithRadius(int x, int y, int radius)
+    {
+        ArrayList<Chunk> list = new ArrayList<>();
+
+        for(int chunkX = getChunkNumfromCordNum(x) - (radius/2); chunkX <= getChunkNumfromCordNum(x) + (radius/2); chunkX++)
+        {
+            for(int chunkY = getChunkNumfromCordNum(y) - (radius/2); chunkY <= getChunkNumfromCordNum(y) + (radius/2); chunkY++)
+            {
+                list.add(getChunkFromChunkXY(chunkX,chunkY));
+            }
+        }
+
+        return list;
+    }
+
     public ArrayList<EntityBase> getEntitiesAtPos(int x, int y)
     {
         Chunk chunk = getChunkFromCordXY(x,y);
         ArrayList<EntityBase> entities = new ArrayList<>();
-        for(EntityBase entity: chunk.getEntities())
+        for(EntityBase entity: chunk.getAllEntities())
         {
             if(entity.getX() == x && entity.getY() == y)
             {

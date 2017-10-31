@@ -85,8 +85,13 @@ public class DebugController extends XBoxController {
     }
 
     @Override
+    public boolean getLeftShoulder() {
+        return keyboard.isKeyDown(Component.Identifier.Key._1);
+    }
+
+    @Override
     public boolean getRightShoulder() {
-        return keyboard.isKeyDown(Component.Identifier.Key._9);
+        return keyboard.isKeyDown(Component.Identifier.Key._0);
     }
 
     @Override

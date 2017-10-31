@@ -12,6 +12,7 @@ import Pathfinding.LineOfSightHelper;
 import Pathfinding.PathfindingHelper;
 import Pathfinding.Position;
 import RenderingHelpers.ImageRenderHelper;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -32,11 +33,13 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private DamageableEntityBase currentTarget;
     private DirectionalEnum currentDirection;
 
+    private boolean wasPlayer = false;
+
     private final double activateStateLength = 0.3;
     private ArrayList<Position> currentPath;
 
 
-    public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y) {
+    public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y, boolean wasPlayer) {
         super(world, globalGameData, x, y);
         entityType = EntityType.HAUNTED_SKULL;
 
@@ -45,15 +48,20 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
         world.clearArea(x,y,5);
 
         currentTarget = null;
+        this.wasPlayer = wasPlayer;
 
         currentDirection = DirectionalEnum.randomDirection(globalGameData);
         currentPath = new ArrayList<>();
-
-
     }
 
     @Override
     public void tickEntity() {
+        if(currentTarget != null && currentTarget.isDead())
+        {
+            stateStartTime = System.currentTimeMillis();
+            currentState = HauntedSkullStateEnum.INACTIVE;
+            currentTarget = null;
+        }
         switch(currentState)
         {
             case INACTIVE:
@@ -63,7 +71,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     EntityBase target = null;
                     for(EntityBase entity: possibleTargets)
                     {
-                        if(entity.getEntityType() == EntityType.PLAYER)
+                        if(entity.getEntityType() == EntityType.PLAYER && entity.isDamageable() && !((DamageableEntityBase)entity).isDead())
                         {
                             if(target == null) {
                                 target = entity;
@@ -116,10 +124,16 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     currentDirection = playerDirection;
                 }
 
-                if(distanceFromEntity(currentTarget) > 1) {
-                    if (System.currentTimeMillis() > stateStartTime + 1000) {
+
+                if (System.currentTimeMillis() > stateStartTime + 1000) {
+                    if(distanceFromEntity(currentTarget) > 1) {
                         currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY());
                         advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+                        stateStartTime = System.currentTimeMillis();
+                    }
+                    else
+                    {
+                        currentTarget.takeDamage(this,DamageType.BLUNT,1);
                         stateStartTime = System.currentTimeMillis();
                     }
                 }
@@ -137,46 +151,55 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
         boolean answer = LineOfSightHelper.lineOfSight(world,this.x,this.y,10, currentDirection);
         gc.setGlobalAlpha(1.0);
         gc.setFill(Color.BLUE);
-        gc.fillText("Can see " + answer,50,50);
+        TextRenderHelper.drawText(50,30,"Can see " + answer,gc,globalGameData);
 
         if(renderLayer == 1) {
+            switch(currentDirection) {
+
+                case NORTH:
+                    if(!wasPlayer) {
+                        drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+                    }
+                    else
+                    {
+                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+
+                    }
+                    break;
+                case EAST:
+                    if(!wasPlayer) {
+                        drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
+                    }
+                    else
+                    {
+                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Right"), gc, x, y + 1, 5, 3, true);
+
+                    }                break;
+                case SOUTH:
+                    if(!wasPlayer) {
+                        drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
+                    }
+                    else
+                    {
+                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Forward"), gc, x, y + 1, 5, 3, true);
+
+                    }                break;
+                case WEST:
+                    if(!wasPlayer) {
+                        drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
+                    }
+                    else
+                    {
+                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Left"), gc, x, y + 1, 5, 3, true);
+
+                    }                break;
+            }
+
             switch(currentState)
             {
                 case INACTIVE:
-                    switch(currentDirection) {
-
-                        case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case EAST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case WEST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
-                            break;
-                    }
                     break;
                 case ACTIVATE:
-                    switch(currentDirection) {
-                        case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case EAST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case WEST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        default:
-                            System.out.println(currentDirection);
-                    }
-
                     double passedTime = (System.currentTimeMillis() - (stateStartTime + activateStateLength))/1000.0;
                     double progress = passedTime/activateStateLength;
                     double alpha = Math.sin(passedTime/activateStateLength * Math.PI);
@@ -188,20 +211,6 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     gc.setGlobalAlpha(1.0);
                     break;
                 default:
-                    switch(currentDirection) {
-                        case NORTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case EAST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case SOUTH:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
-                            break;
-                        case WEST:
-                            drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
-                            break;
-                    }
                     break;
             }
 

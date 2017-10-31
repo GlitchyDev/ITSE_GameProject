@@ -16,7 +16,15 @@ public abstract class DamageableEntityBase extends EntityBase {
     public DamageableEntityBase(World world, GlobalGameData globalGameData, int x, int y)
     {
         super(world,globalGameData,x,y);
-        isDamageable = true;
+    }
+
+    @Override
+    public boolean isDamageable() {
+        return true;
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 
     /**

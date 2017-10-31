@@ -51,29 +51,6 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
-        
-        for(Player p : client.getPlayers())
-        {
-            p.getPlayerCharacter().tickEntity();
-            Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
-            for(BlockBase[] b : c.getBlockBaseList())
-            {
-                for(BlockBase block : b)
-                {
-                    block.tickBlock(world);
-                }
-            }
-            for(EntityBase entity: c.getEntities())
-            {
-                if(entity.getEntityType() != EntityType.PLAYER)
-                {
-                    entity.tickEntity();
-                }
-            }
-
-
-        }
-
         if(state == MainWorldMiniState.ENTER)
         {
             double progress = 1.0/fadeIn * ((System.currentTimeMillis() - stateStart)/1000.0);
@@ -84,6 +61,31 @@ public class TestWorldGameState extends GameStateBase {
             }
 
         }
+
+        for(Player p : client.getPlayers())
+        {
+            p.getPlayerCharacter().tickEntity();
+
+            for(Chunk c: world.getChunksFromPosWithRadius(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY(),2)) {
+                //Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
+                for (BlockBase[] b : c.getBlockBaseList()) {
+                    for (BlockBase block : b) {
+                        block.tickBlock(world);
+                    }
+                }
+
+
+                c.updateChunk();
+                for (EntityBase entity : c.getAllEntities()) {
+                    if (entity.getEntityType() != EntityType.PLAYER) {
+                        entity.tickEntity();
+                    }
+                }
+
+            }
+        }
+
+
     }
 
     @Override
@@ -162,7 +164,6 @@ public class TestWorldGameState extends GameStateBase {
         if(globalGameData.getConnectedControllers().size() > 1)
         {
             System.out.println("Test World: Detected Multiple Controllers! Creating Multiple Player Objects!");
-
             int i = 0;
             ArrayList<Player> players = new ArrayList<>();
             for(XBoxController controller: globalGameData.getConnectedControllers())
@@ -173,11 +174,8 @@ public class TestWorldGameState extends GameStateBase {
                 players.add(p);
                 //world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
                 world.attemptSpawn(p.getPlayerCharacter(),i+5,i+5,true,globalGameData);
-
-
             }
             client = new Client(players);
-
         }
         else
         {
@@ -191,7 +189,7 @@ public class TestWorldGameState extends GameStateBase {
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
         viewport = new WorldViewport(client,world,primaryStage,canvas);
 
-        Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
+        Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7,false);
         world.attemptSpawn(skullEntity,7,7,true,globalGameData);
 
         SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);

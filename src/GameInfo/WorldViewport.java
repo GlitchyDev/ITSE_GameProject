@@ -173,7 +173,7 @@ public class WorldViewport {
         // Debug Test Information
         gc.setFill(Color.BLUE);
         gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),350,10);
-        gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
+        gc.fillText("Chunk: " + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
     }
 
 
