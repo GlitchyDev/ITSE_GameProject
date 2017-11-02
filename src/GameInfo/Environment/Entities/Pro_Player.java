@@ -1,5 +1,7 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.*;
@@ -23,27 +25,35 @@ import HardwareAdaptors.XBoxController;
  * - Implement Controls for the Player
  */
 public class Pro_Player extends DamageableEntityBase {
+    // Controller Associations
     private Player player;
     private XBoxController controller;
 
+    // Direction Helpers
     private DirectionalEnum cachedDirection;
     private DirectionalEnum primaryDirection;
 
+    // State helpers
     private ProPlayerStateEnum entityState;
     private long stateStartTime;
+
+    // Movement Helpers
     private final double holdDownTime = 0.1;
     private final double moveTime = 0.2;
 
-
+    // Light Emissions
     private boolean lightButtonCache = false;
     private long lightChangeTime = 0;
     private int lightLevel = -2;
     private final int maxLightLevel = 8;
 
 
+
+    // Rendering Helpers
     private ProPlayerEmotion emotion = ProPlayerEmotion.NONE;
     private long emotionStartTime = 0;
 
+    // Death helpers
     private long deathStartTime = 0;
 
 
@@ -276,18 +286,26 @@ public class Pro_Player extends DamageableEntityBase {
                     bodyState = ProPlayerBodyState.LIGHT_OFF;
                     lightChangeTime = System.currentTimeMillis();
                     globalGameData.playSound("flashLightOff",false);
-                    globalGameData.stopSound("elecHum");
+                    globalGameData.stopSound("elecHumExtended");
                 }
                 else {
                     if (bodyState == ProPlayerBodyState.NONE) {
                         bodyState = ProPlayerBodyState.LIGHT_ON;
                         lightChangeTime = System.currentTimeMillis();
-                        globalGameData.playSound("elecHum",true);
+                        globalGameData.playSound("elecHumExtended",true);
                         globalGameData.playSound("flashLightOn",false);
                     }
                 }
             }
             lightButtonCache = controller.getRightShoulder();
+        }
+
+        if(controller.getLeftShoulder())
+        {
+            world.setBlockFromCords(x,y+1,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_WALL));
+            world.setBlockFromCords(x,y-1,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_WALL));
+            world.setBlockFromCords(x+1,y,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_WALL));
+            world.setBlockFromCords(x-1,y,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_WALL));
         }
 
 

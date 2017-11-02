@@ -23,6 +23,7 @@ public class PathfindingHelper
     private static ArrayList<PathfindingNode> closedList = new ArrayList<>();
     private static PathfindingNode firstNode;
 
+    private static int maxSearchCheck = 0;
 
 
     /**
@@ -34,16 +35,21 @@ public class PathfindingHelper
      * @param yTarget
      * @return A List of Positions of the best path towards the player
      */
-    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget)
+    public static ArrayList<Position> findPathNonDiagnal(World world, int xStart, int yStart, int xTarget, int yTarget, int maxSearchCheck)
     {
         openList.clear();
         closedList.clear();
         firstNode = new PathfindingNode(null,xStart,yStart,0,xTarget, yTarget);
+        PathfindingHelper.maxSearchCheck = maxSearchCheck;
 
 
-        PathfindingNode finalNode = proccessPathfindingNode(world,firstNode,xTarget,yTarget);
+        PathfindingNode finalNode = proccessPathfindingNode(world,firstNode,xTarget,yTarget,0);
         ArrayList<Position> positions = new ArrayList<>();
         PathfindingNode cacheNode = finalNode;
+        if(finalNode == null)
+        {
+            return null;
+        }
         while(cacheNode.getParentNode() != null)
         {
             positions.add(new Position(cacheNode.getX(),cacheNode.getY()));
@@ -54,8 +60,12 @@ public class PathfindingHelper
         return positions;
     }
 
-    private static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget)
+    private static PathfindingNode proccessPathfindingNode(World world, PathfindingNode currentNode, int xTarget, int yTarget, int index)
     {
+        if(index > maxSearchCheck)
+        {
+            return null;
+        }
         openList.remove(currentNode);
         closedList.add(currentNode);
         getConnectedTiles(world,currentNode,xTarget,yTarget);
@@ -76,7 +86,7 @@ public class PathfindingHelper
         }
         else
         {
-            return proccessPathfindingNode(world,nextNode,xTarget,yTarget);
+            return proccessPathfindingNode(world,nextNode,xTarget,yTarget,index+1);
         }
     }
 

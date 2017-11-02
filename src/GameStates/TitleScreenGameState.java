@@ -276,19 +276,16 @@ public class TitleScreenGameState extends GameStateBase {
         if(blocks[x][y] == null) {
 
             if (y <= viewportSize / 2 + viewportBufer - 3 || y > viewportSize / 2 + viewportBufer) {
-                int index = (int) (Math.random() * 4);
+                int index = (int) (Math.random() * 6);
                 switch (index) {
                     case 0:
                         blocks[x][y] = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
                         break;
                     case 1:
-                        blocks[x][y] = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
-                        break;
-                    case 2:
-                        blocks[x][y] = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
-                        break;
-                    case 3:
                         blocks[x][y] = new HouseWall(globalGameData);
+                        break;
+                    default:
+                        blocks[x][y] = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
                         break;
                 }
             } else {

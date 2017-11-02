@@ -67,7 +67,6 @@ public class DoorBlock extends BlockBase {
 
         if(blockType == BlockTypeEnum.DOOR_CLOSED) {
             blockType = BlockTypeEnum.DOOR_OPEN;
-            System.out.println("Door opened");
             return false;
         } else {
             return true;

@@ -2,7 +2,6 @@ package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Structures.StructureBase;
@@ -118,8 +117,11 @@ public class World {
     {
         if(!chunks.containsKey(x + "," + y))
         {
+            System.out.println("Created Chunk " + x + " " + y);
            chunks.put(x + "," + y, new Chunk(globalGameData, this, x, y));
            chunks.get(x + "," + y).generateStructures(globalGameData, this, x, y);
+           chunks.get(x + "," + y).spawnEntities(globalGameData, this, x, y);
+
         }
         return chunks.get(x + "," + y);
     }
@@ -365,13 +367,13 @@ public class World {
         return entities;
     }
 
-    public boolean isChunkCreatedFromPos(int x, int y)
+    public boolean isChunkGeneratedAtCords(int x, int y)
     {
-        return isChunkCreatedFromRelative(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
+        return isChunkGeneratedFromRelative(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
     }
 
 
-    public boolean isChunkCreatedFromRelative(int x, int y)
+    public boolean isChunkGeneratedFromRelative(int x, int y)
     {
         return chunks.containsKey(x + "," + y);
     }
@@ -381,44 +383,13 @@ public class World {
         return structures;
     }
 
-    public void attemptSpawn(EntityBase base, int x, int y,boolean absoluteSpawn, GlobalGameData globalGameData){
-
-
-        if(!absoluteSpawn) {
-            final int range = 5;
-            int x1 = x + -range / 2 + globalGameData.getRandom().nextInt(6);
-            int y1 = y + -range / 2 + globalGameData.getRandom().nextInt(6);
-            while (!BlockTypeEnum.isWalkable(getBlockFromCords(x, y).getBlockType())) {
-                x1 = x + -range / 2 + globalGameData.getRandom().nextInt(6);
-                y1 = y + -range / 2 + globalGameData.getRandom().nextInt(6);
-                if (isChunkCreatedFromPos(x1, y1)) {
-                    if (BlockTypeEnum.isWalkable(getBlockFromCords(x1, y1).getBlockType())) {
-                        return;
-                    }
-                }
-            }
-
-
-            base.moveAbsolute(x1, y1);
-            base.advancedMoveRelative(0,0,true,true,true,true);
-            addEntityToWorld(base);
-        }
-        else
+    public void attemptSpawn(EntityBase base, GlobalGameData globalGameData){
+        if(BlockTypeEnum.isOpaque(getBlockFromCords(base.getX(),base.getY()).getBlockType()))
         {
-            if(!BlockTypeEnum.isWalkable(getBlockFromCords(x, y).getBlockType()))
-            {
-                //setBlockFromCords(x,y,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR));
-                setBlockFromCords(x,y,new DebugBlock());
-
-            }
-            base.moveAbsolute(x, y);
-            base.advancedMoveRelative(0,0,true,true,true,true);
-            addEntityToWorld(base);
+            setBlockFromCords(base.getX(),base.getY(),new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR));
         }
-
-
-
-
+        getChunkFromCordXY(base.getX(), base.getY()).addEntity(base);
+        base.advancedMoveRelative(0, 0, true, true, true, true);
     }
 
 

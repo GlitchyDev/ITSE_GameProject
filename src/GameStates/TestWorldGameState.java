@@ -66,6 +66,7 @@ public class TestWorldGameState extends GameStateBase {
         {
             p.getPlayerCharacter().tickEntity();
 
+
             for(Chunk c: world.getChunksFromPosWithRadius(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY(),2)) {
                 //Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
                 for (BlockBase[] b : c.getBlockBaseList()) {
@@ -73,16 +74,17 @@ public class TestWorldGameState extends GameStateBase {
                         block.tickBlock(world);
                     }
                 }
-
-
                 c.updateChunk();
-                for (EntityBase entity : c.getAllEntities()) {
-                    if (entity.getEntityType() != EntityType.PLAYER) {
-                        entity.tickEntity();
-                    }
-                }
-
             }
+            for (EntityBase e: world.getAllEntitiesBetweenPoints(p.getPlayerCharacter().getX() + 25,p.getPlayerCharacter().getY() + 25,p.getPlayerCharacter().getX() - 25,p.getPlayerCharacter().getY() - 25)) {
+                e.tickEntity();
+            }
+
+
+
+
+
+
         }
 
 
@@ -161,6 +163,8 @@ public class TestWorldGameState extends GameStateBase {
     public void enterState(GameStateEnum previousState) {
         System.out.println("Test World: Loading State");
 
+
+        /*
         if(globalGameData.getConnectedControllers().size() > 1)
         {
             System.out.println("Test World: Detected Multiple Controllers! Creating Multiple Player Objects!");
@@ -173,7 +177,7 @@ public class TestWorldGameState extends GameStateBase {
                 i++;
                 players.add(p);
                 //world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
-                world.attemptSpawn(p.getPlayerCharacter(),i+5,i+5,true,globalGameData);
+                world.attemptSpawn(p.getPlayerCharacter(),globalGameData);
             }
             client = new Client(players);
         }
@@ -181,19 +185,24 @@ public class TestWorldGameState extends GameStateBase {
         {
             Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
             p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,5,5));
-            world.attemptSpawn(p1.getPlayerCharacter(),5,5,true,globalGameData);
+            world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
             //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }
+        */
+
+        Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
+        p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,globalGameData.getRandom().nextInt(500)-250,globalGameData.getRandom().nextInt(500)-250));
+        world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
+        //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
+        client = new Client(p1);
+
 
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
         viewport = new WorldViewport(client,world,primaryStage,canvas);
 
-        Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7,false);
-        world.attemptSpawn(skullEntity,7,7,true,globalGameData);
-
-        SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
-        world.attemptSpawn(test,3,3,true,globalGameData);
+        //SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
+        //.attemptSpawn(test,globalGameData);
         globalGameData.playSound("CaveWaterDrops",true,0.2);
 
         stateStart = System.currentTimeMillis();

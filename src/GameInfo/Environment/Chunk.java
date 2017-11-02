@@ -3,6 +3,7 @@ package GameInfo.Environment;
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.Entities.TestRockEntity;
 import GameInfo.Environment.Structures.BasicHouse;
 import GameInfo.Environment.Structures.DirtBlobStructure;
@@ -49,15 +50,30 @@ public class Chunk {
         this.entities = new ArrayList<>();
         this.entities.add(new TestRockEntity(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX),World.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
 
-
-
         this.structures = new ArrayList<>();
         this.removeNextTick = new ArrayList<>();
         this.addNextTick = new ArrayList<>();
 
+
+
     }
 
 
+    public void spawnEntities(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
+    {
+        final int totalEntities = 100;
+
+        final int chunkX = World.getPosNumFromChunkNum(relativeChunkX);
+        final int chunkY = World.getPosNumFromChunkNum(relativeChunkY);
+
+        for(int i = 0; i < totalEntities; i++)
+        {
+            int xOffset = globalGameData.getRandom().nextInt(World.getChunkSize());
+            int yOffset = globalGameData.getRandom().nextInt(World.getChunkSize());
+            world.attemptSpawn(new Haunted_Skull_Entity(world,globalGameData,chunkX + xOffset,chunkY + yOffset,false),globalGameData);
+        }
+
+    }
     /**
      * This Method generates structures involved in ALL chunks, will be changed eventually to a managing class
      * @param globalGameData

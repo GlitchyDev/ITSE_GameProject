@@ -1,5 +1,8 @@
 package GameInfo.Environment.Entities;
 
+import GameInfo.Environment.Blocks.BlockBase;
+import GameInfo.Environment.Blocks.BlockTypeEnum;
+import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
@@ -28,15 +31,33 @@ import java.util.ArrayList;
  * RENAME at earliest convinience
  */
 public class Haunted_Skull_Entity extends DamageableEntityBase {
+    // State Manager
     private HauntedSkullStateEnum currentState;
     private long stateStartTime;
+
+    // Targeting and current direction
     private DamageableEntityBase currentTarget;
     private DirectionalEnum currentDirection;
 
+    // If it was previously a player
     private boolean wasPlayer = false;
 
-    private final double activateStateLength = 0.3;
+    private long lastSeen;
+    private final double averageRememberTime = 3.0;
+
+    private final double moveTime = 0.63;
+
+    // The current Path
     private ArrayList<Position> currentPath;
+
+    // How long it takes to activate
+    private final double activateStateLength = 0.3;
+    // The Max it should be able to see in a direction
+    private final int maxPathFindingRange = 5;
+    private final int maxVisionRange = 5;
+
+
+    private String lostReason = "";
 
 
     public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y, boolean wasPlayer) {
@@ -45,7 +66,8 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
         stateStartTime = System.currentTimeMillis();
         currentState = HauntedSkullStateEnum.INACTIVE;
-        world.clearArea(x,y,5);
+
+        lastSeen = 0;
 
         currentTarget = null;
         this.wasPlayer = wasPlayer;
@@ -73,15 +95,8 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     {
                         if(entity.getEntityType() == EntityType.PLAYER && entity.isDamageable() && !((DamageableEntityBase)entity).isDead())
                         {
-                            if(target == null) {
+                            if(target == null && canSeeEntity(entity)) {
                                 target = entity;
-                            }
-                            else
-                            {
-                                if(globalGameData.getRandom().nextInt(3) == 0)
-                                {
-                                    target = entity;
-                                }
                             }
                         }
                     }
@@ -112,9 +127,8 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 // After X time passes, enter "Erupt, dealing X damage to all nearby
                 break;
             case NAVIGATE_TO_TARGET:
-
                 DirectionalEnum playerDirection = DirectionalEnum.determineDirection(x,y, currentTarget.getX(),currentTarget.getY());
-                if(currentPath.size() > 1)
+                if(currentPath != null && currentPath.size() > 1)
                 {
                     DirectionalEnum nextSpotDirection = DirectionalEnum.determineDirection(x,y, currentPath.get(1).getX() ,currentPath.get(1).getY());
                     currentDirection = nextSpotDirection;
@@ -125,11 +139,19 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 }
 
 
-                if (System.currentTimeMillis() > stateStartTime + 1000) {
+                if (System.currentTimeMillis() > stateStartTime + moveTime*1000.0) {
                     if(distanceFromEntity(currentTarget) > 1) {
-                        currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY());
-                        advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
-                        stateStartTime = System.currentTimeMillis();
+                        currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY(),500);
+                        if(currentPath != null && canSeeEntity(currentTarget)) {
+                            advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+                            stateStartTime = System.currentTimeMillis();
+                        }
+                        else
+                        {
+                            currentState = HauntedSkullStateEnum.INACTIVE;
+                            stateStartTime = System.currentTimeMillis();
+                            currentTarget = null;
+                        }
                     }
                     else
                     {
@@ -146,55 +168,126 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     }
 
+    public boolean canSeeEntity(EntityBase entity)
+    {
+
+        if(entity == null)
+        {
+            lostReason = "NO TARGET";
+            return false;
+        }
+        int xMod = 0;
+        int yMod = 0;
+        switch(currentDirection)
+        {
+            case NORTH:
+                yMod = 1;
+                break;
+            case EAST:
+                xMod = -1;
+                break;
+            case SOUTH:
+                yMod = -1;
+                break;
+            case WEST:
+                xMod = 1;
+                break;
+        }
+
+        for(int i = 0; i < maxVisionRange; i++)
+        {
+            BlockBase b = world.getBlockFromCords(x + xMod*i,y + yMod*i);
+            if(!BlockTypeEnum.isOpaque(b.getBlockType()))
+            {
+                if(b.getPreviousLightLevel() > 0) {
+                    if (distanceFromEntity(entity) < maxPathFindingRange)
+                    {
+                        lastSeen = System.currentTimeMillis();
+                        lostReason = "CAN SEE LIGHT";
+                        return true;
+                    }
+                }
+            }
+        }
+
+        for(BlockBase[] row: world.getAllBlocksBetweenPoints(x-3,y-3,x+3,y+3))
+        {
+            for(BlockBase block: row)
+            {
+                if(block != null) {
+                    if (block.isCurrentlyLit()) {
+                        if (distanceFromEntity(entity) < maxPathFindingRange)
+                        {
+                            lastSeen = System.currentTimeMillis();
+                            lostReason = "LIGHT AROUND!";
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(System.currentTimeMillis() < lastSeen + averageRememberTime * 1000.0)
+        {
+            lostReason = "REMEMBER";
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     @Override
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
-        boolean answer = LineOfSightHelper.lineOfSight(world,this.x,this.y,10, currentDirection);
         gc.setGlobalAlpha(1.0);
         gc.setFill(Color.BLUE);
-        TextRenderHelper.drawText(50,30,"Can see " + answer,gc,globalGameData);
+        TextRenderHelper.drawText(50,30,"Can see " + canSeeEntity(currentTarget) + " " + lostReason,gc,globalGameData);
 
+        String modifier = "";
+        if(wasPlayer)
+        {
+            modifier += "P_";
+        }
+        if(currentState == HauntedSkullStateEnum.NAVIGATE_TO_TARGET)
+        {
+            modifier += "Active_";
+        }
         if(renderLayer == 1) {
-            switch(currentDirection) {
+            if(world.getBlockFromCords(this.x,this.y).getPreviousLightLevel() != 0) {
+                switch (currentDirection) {
 
-                case NORTH:
-                    if(!wasPlayer) {
-                        drawSpriteAtXY(globalGameData.getSprite("Skull_Backwards"), gc, x, y + 1, 5, 3, true);
-                    }
-                    else
-                    {
-                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Backwards"), gc, x, y + 1, 5, 3, true);
-
-                    }
-                    break;
-                case EAST:
-                    if(!wasPlayer) {
-                        drawSpriteAtXY(globalGameData.getSprite("Skull_Right"), gc, x, y + 1, 5, 3, true);
-                    }
-                    else
-                    {
-                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Right"), gc, x, y + 1, 5, 3, true);
-
-                    }                break;
-                case SOUTH:
-                    if(!wasPlayer) {
-                        drawSpriteAtXY(globalGameData.getSprite("Skull_Forward"), gc, x, y + 1, 5, 3, true);
-                    }
-                    else
-                    {
-                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Forward"), gc, x, y + 1, 5, 3, true);
-
-                    }                break;
-                case WEST:
-                    if(!wasPlayer) {
-                        drawSpriteAtXY(globalGameData.getSprite("Skull_Left"), gc, x, y + 1, 5, 3, true);
-                    }
-                    else
-                    {
-                        drawSpriteAtXY(globalGameData.getSprite("P_Skull_Left"), gc, x, y + 1, 5, 3, true);
-
-                    }                break;
+                    case NORTH:
+                        drawSpriteAtXY(globalGameData.getSprite(modifier + "Skull_Backwards"), gc, x, y + 1, 5, 3, true);
+                        break;
+                    case EAST:
+                        drawSpriteAtXY(globalGameData.getSprite(modifier + "Skull_Right"), gc, x, y + 1, 5, 3, true);
+                        break;
+                    case SOUTH:
+                        drawSpriteAtXY(globalGameData.getSprite(modifier + "Skull_Forward"), gc, x, y + 1, 5, 3, true);
+                        break;
+                    case WEST:
+                        drawSpriteAtXY(globalGameData.getSprite(modifier + "Skull_Left"), gc, x, y + 1, 5, 3, true);
+                        break;
+                }
             }
 
+            if(currentState == HauntedSkullStateEnum.NAVIGATE_TO_TARGET) {
+                switch (currentDirection) {
+                case NORTH:
+                    drawSpriteAtXY(globalGameData.getSprite("Active_Backwards"), gc, x, y + 1, 5, 3, false);
+                    break;
+                case EAST:
+                    drawSpriteAtXY(globalGameData.getSprite("Active_Right"), gc, x, y + 1, 5, 3, false);
+                    break;
+                case SOUTH:
+                    drawSpriteAtXY(globalGameData.getSprite("Active_Forward"), gc, x, y + 1, 5, 3, false);
+                    break;
+                case WEST:
+                    drawSpriteAtXY(globalGameData.getSprite("Active_Left"), gc, x, y + 1, 5, 3, false);
+                    break;
+
+            }            }
             switch(currentState)
             {
                 case INACTIVE:
@@ -218,6 +311,8 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
 
         }
+
+
 
 
 

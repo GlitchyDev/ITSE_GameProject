@@ -57,7 +57,7 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
 
                 if(distanceFromEntity(targetPlayer) != 1) {
                     if (cachePositionList.size() == 0 || cacheNum >= 5) {
-                        ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world, x, y, targetPlayer.getX(), targetPlayer.getY());
+                        ArrayList<Position> positionList = PathfindingHelper.findPathNonDiagnal(world, x, y, targetPlayer.getX(), targetPlayer.getY(),5000);
                         cachePositionList.clear();
 
                         if(positionList != null) {

@@ -18,7 +18,7 @@ public class DebugBlock extends BlockBase {
     public DebugBlock()
     {
         this.blockType = BlockTypeEnum.DEBUG_BLOCK;
-        c = Color.GRAY;
+        c = Color.RED;
     }
 
     @Override
