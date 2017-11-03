@@ -157,6 +157,8 @@ public class TestWorldGameState extends GameStateBase {
 
         }
 
+        gc.drawImage(globalGameData.getSprite("TheEye"),200,100);
+
     }
 
     @Override
