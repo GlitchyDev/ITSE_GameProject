@@ -17,7 +17,7 @@ public class linkToDatabase {
 
     }
 
-    public static void insert (int uuid, String PlayerName, int PlayerScore){
+    public static void insert (String uuid, String PlayerName, int PlayerScore){
 
     try{
         URL url = new URL("http://www.classprojectfall.com/insertDataNew.php");
@@ -54,7 +54,7 @@ public class linkToDatabase {
 
 
 
-    public static String getScore(int uuid) throws Exception{
+    public static String getScore(String uuid) throws Exception{
          String Playerscore = "";
 
         URL oracle = new URL("http://www.classprojectfall.com/getDataNew.php");
