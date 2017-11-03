@@ -3,12 +3,10 @@
  */
 
 package GameInfo.Environment.Structures;
-import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.DoorBlock;
-import GameInfo.Environment.Blocks.HouseWall;
-import GameInfo.Environment.Blocks.WallFloorBlock;
+import GameInfo.Environment.Blocks.*;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -17,8 +15,8 @@ public class Dungeon extends StructureBase {
 
     public Dungeon(World world, GlobalGameData globalGameData, int structureX, int structureY) {
         super(world, globalGameData, structureX, structureY);
-        structureWidth = 22;
-        structureHeight = 22;
+        structureWidth = 21;
+        structureHeight = 21;
     }
 
     @Override
@@ -32,10 +30,10 @@ public class Dungeon extends StructureBase {
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
 
-                    if ((x % 4 == 2 || y % 4 == 2) && Math.random() > .5) { //50% chance of building door on every wall
-                        DoorBlock d = new DoorBlock(globalGameData);
-                        world.setBlockFromCords(structureX + x, structureY + y, d);
-                        affectedBlocks.add(d);
+                    if ((x % 4 == 2 || y % 4 == 2) && Math.random() > .5) { //65% chance of building door on each wall
+                        WallFloorBlock b2 = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                        world.setBlockFromCords(structureX + x, structureY + y, b2);
+                        affectedBlocks.add(b2);
                     }
                 } else { //fill interior with floors (3x3 rooms)
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
@@ -47,36 +45,74 @@ public class Dungeon extends StructureBase {
 
         for (int x = 0; x < structureWidth; x += 4) { //check that all rooms have at least one entrance and add one (on random side) if none
             for (int y = 0; y < structureHeight; y += 4) {
-                if (world.getBlockFromCords(structureX + x, structureY + y + 2).getBlockType() != BlockTypeEnum.DOOR_CLOSED  //check each wall for a door - doors should always start closed
-                    && world.getBlockFromCords(structureX + x + 4, structureY + y + 2).getBlockType() != BlockTypeEnum.DOOR_CLOSED
-                    && world.getBlockFromCords(structureX + x + 2, structureY + y).getBlockType() != BlockTypeEnum.DOOR_CLOSED
-                    && world.getBlockFromCords(structureX + x + 2, structureY + y + 4).getBlockType() != BlockTypeEnum.DOOR_CLOSED)
+                if (world.getBlockFromCords(structureX + x, structureY + y + 2).getBlockType() != BlockTypeEnum.TEST_FLOOR  //check each wall for an opening
+                    && world.getBlockFromCords(structureX + x + 4, structureY + y + 2).getBlockType() != BlockTypeEnum.TEST_FLOOR
+                    && world.getBlockFromCords(structureX + x + 2, structureY + y).getBlockType() != BlockTypeEnum.TEST_FLOOR
+                    && world.getBlockFromCords(structureX + x + 2, structureY + y + 4).getBlockType() != BlockTypeEnum.TEST_FLOOR)
                 {
-                    int temp = (int)(Math.random() * 4);
-                    switch (temp) {
+                    switch (globalGameData.getRandom().nextInt(4)) {
                         case 0:
-                            DoorBlock d1 = new DoorBlock(globalGameData);
-                            world.setBlockFromCords(structureX + x, structureY + y + 2, d1);
-                            affectedBlocks.add(d1);
+                            WallFloorBlock b1 = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                            world.setBlockFromCords(structureX + x + 2, structureY + y, b1);
+                            affectedBlocks.add(b1);
                             break;
                         case 1:
-                            DoorBlock d2 = new DoorBlock(globalGameData);
-                            world.setBlockFromCords(structureX + x + 4, structureY + y + 2, d2);
-                            affectedBlocks.add(d2);
+                            WallFloorBlock b2 = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                            world.setBlockFromCords(structureX + x + 2, structureY + y + 4, b2);
+                            affectedBlocks.add(b2);
                             break;
                         case 2:
-                            DoorBlock d3 = new DoorBlock(globalGameData);
-                            world.setBlockFromCords(structureX + x + 2, structureY + y, d3);
-                            affectedBlocks.add(d3);
+                            WallFloorBlock b3 = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                            world.setBlockFromCords(structureX + x, structureY + y + 2, b3);
+                            affectedBlocks.add(b3);
                             break;
                         case 3:
-                            DoorBlock d4 = new DoorBlock(globalGameData);
-                            world.setBlockFromCords(structureX + x + 2, structureY + y + 4, d4);
-                            affectedBlocks.add(d4);
+                            WallFloorBlock b4 = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                            world.setBlockFromCords(structureX + x + 2, structureY + y + 4, b4);
+                            affectedBlocks.add(b4);
                             break;
                     }
                 }
             }
+        }
+
+        //break down some walls to make "ruins"
+        switch (globalGameData.getRandom().nextInt(4)) {
+            case 0:
+                //large circle
+                int centerX = globalGameData.getRandom().nextInt(structureWidth - 10) + 5;
+                int centerY = globalGameData.getRandom().nextInt(structureHeight - 10) + 5;
+                buildFloorCircle(centerX, centerY, 5);
+                break;
+
+            case 1:
+                //medium and small circle
+                int centerX1 = globalGameData.getRandom().nextInt(structureWidth - 8) + 4;
+                int centerY1 = globalGameData.getRandom().nextInt(structureHeight - 8) + 4;
+                buildFloorCircle(centerX1, centerY1, 4);
+
+                int centerX2 = globalGameData.getRandom().nextInt(structureWidth - 6) + 3;
+                int centerY2 = globalGameData.getRandom().nextInt(structureHeight - 6) + 3;
+                buildFloorCircle(centerX2, centerY2, 3);
+                break;
+
+            case 2:
+                //small circles
+                for (int i = 0; i < 3; i++) {
+                    int centerX3 = globalGameData.getRandom().nextInt(structureWidth - 6) + 3;
+                    int centerY3 = globalGameData.getRandom().nextInt(structureHeight - 6) + 3;
+                    buildFloorCircle(centerX3, centerY3, 3);
+                }
+                break;
+
+            case 3:
+                //nothing
+                DebugBlock d = new DebugBlock(); //temporary, for testing
+                d.setColor(Color.BLUE);
+                world.setBlockFromCords(structureX + 11, structureY + 11, d);
+                affectedBlocks.add(d);
+                break;
+
         }
 
     }
@@ -119,5 +155,18 @@ public class Dungeon extends StructureBase {
     public void exitEvent(int x, int y) {
 
 
+    }
+
+    private void buildFloorCircle(int centerX, int centerY, int radius) {
+        for (int x = centerX - radius; x <= centerX + radius; x++) {
+            for (int y = centerY - radius; y <= centerY + radius; y++) {
+                if (Math.hypot(x - centerX, y - centerY) < radius) //uses distance formula to find whether block is in circle radius
+                {
+                    WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
+                    world.setBlockFromCords(structureX + x, structureY + y, b);
+                    affectedBlocks.add(b);
+                }
+            }
+        }
     }
 }
