@@ -43,6 +43,8 @@ public class PlayerSkinCreator {
 
     }
 
+
+
     public static void generateSkin(UUID uuid, GlobalGameData globalGameData){
         // Determine Skin Type from Player using Connection
 

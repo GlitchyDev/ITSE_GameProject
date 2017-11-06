@@ -82,6 +82,8 @@ public class Pro_Player extends DamageableEntityBase {
         bodyType = args[1];
         legType = args[2];
 
+        world.attemptSpawn(new Alsi_Entity(world,globalGameData,x,y,this),globalGameData);
+
     }
 
     @Override
@@ -440,6 +442,7 @@ public class Pro_Player extends DamageableEntityBase {
         {
             isDead = true;
             deathStartTime = System.currentTimeMillis();
+            entityState = ProPlayerStateEnum.DAMAGED;
         }
         return true;
     }
