@@ -68,12 +68,12 @@ public class DebugController extends XBoxController {
 
     @Override
     public boolean getBack() {
-        return keyboard.isKeyDown(Component.Identifier.Key.BACK);
+        return keyboard.isKeyDown(Component.Identifier.Key.ESCAPE);
     }
 
     @Override
     public boolean getStart() {
-        return keyboard.isKeyDown(Component.Identifier.Key.INSERT);
+        return keyboard.isKeyDown(Component.Identifier.Key.END);
     }
 
     @Override
@@ -85,8 +85,13 @@ public class DebugController extends XBoxController {
     }
 
     @Override
+    public boolean getLeftShoulder() {
+        return keyboard.isKeyDown(Component.Identifier.Key._1);
+    }
+
+    @Override
     public boolean getRightShoulder() {
-        return keyboard.isKeyDown(Component.Identifier.Key._9);
+        return keyboard.isKeyDown(Component.Identifier.Key._0);
     }
 
     @Override
@@ -100,5 +105,16 @@ public class DebugController extends XBoxController {
         information += "Back: " + keyboard.isKeyDown(Component.Identifier.Key.BACK) + "\n";
 
         return information;
+    }
+
+    @Override
+    public boolean isXBoxController() {
+        return false;
+    }
+
+    @Override
+    public boolean isAnyThingPressed()
+    {
+        return getDirectionalPad() != DirectionalEnum.NONE || getButtonA() || getButtonB() || getButtonX() || getButtonY() || getRightShoulder() || getRightShoulder() || getStart();
     }
 }

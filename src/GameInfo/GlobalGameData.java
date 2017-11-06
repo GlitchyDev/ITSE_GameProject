@@ -1,9 +1,7 @@
 package GameInfo;
 
-import GameStates.DebugControlsGameState;
-import GameStates.GameStateBase;
-import GameStates.MainMenuGameState;
-import GameStates.TestWorldGameState;
+import GameStates.*;
+import GameStates.Enums.GameStateEnum;
 import HardwareAdaptors.DebugController;
 import HardwareAdaptors.XBoxController;
 import RenderingHelpers.ImageRenderHelper;
@@ -61,6 +59,7 @@ public class GlobalGameData {
         currentSounds = new HashMap<>();
         connectedControllers.addAll(scanForControllers());
 
+
         loadAssets();
 
         createGameStates();
@@ -71,6 +70,8 @@ public class GlobalGameData {
         gameStates.put("MainMenu", new MainMenuGameState(this));
         gameStates.put("TestWorld", new TestWorldGameState(this,primaryStage,canvas));
         gameStates.put("DebugControls", new DebugControlsGameState(this));
+        gameStates.put("TitleScreen", new TitleScreenGameState(this));
+
     }
 
 
@@ -185,8 +186,8 @@ public class GlobalGameData {
     public void createLetters(Image image)
     {
 
-        System.out.println("***" + (image==null));
-        for(int letterCount = 0; letterCount < 45; letterCount++)
+        System.out.println("    ~Created Font");
+        for(int letterCount = 0; letterCount < 46; letterCount++)
         {
             WritableImage letterSprite = new WritableImage(8,10);
             PixelReader reader = image.getPixelReader();
@@ -260,6 +261,9 @@ public class GlobalGameData {
                         break;
                     case 44:
                         letter = '*';
+                        break;
+                    case 45:
+                        letter = '<';
                         break;
                 }
             }
@@ -387,6 +391,12 @@ public class GlobalGameData {
         }
         mediaPlayer.play();
         currentSounds.put(sound,mediaPlayer);
+    }
+
+    public void setSoundVolume(String sound,double volume)
+    {
+        MediaPlayer mediaPlayer = currentSounds.get(sound);
+        mediaPlayer.setVolume(volume);
     }
 
     public void stopSound(String sound)

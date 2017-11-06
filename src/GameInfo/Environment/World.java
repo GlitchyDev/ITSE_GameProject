@@ -2,7 +2,6 @@ package GameInfo.Environment;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Structures.StructureBase;
@@ -40,10 +39,13 @@ public class World {
     public static int getScaledUpSquareSize() {
         return scaleUpPercent * standardSquareSize;
     }
-
     public static int getChunkSize() {
         return chunkSize;
     }
+
+
+
+
 
     public World(GlobalGameData globalGameData)
     {
@@ -115,8 +117,11 @@ public class World {
     {
         if(!chunks.containsKey(x + "," + y))
         {
+            System.out.println("Created Chunk " + x + " " + y);
            chunks.put(x + "," + y, new Chunk(globalGameData, this, x, y));
            chunks.get(x + "," + y).generateStructures(globalGameData, this, x, y);
+           chunks.get(x + "," + y).spawnEntities(globalGameData, this, x, y);
+
         }
         return chunks.get(x + "," + y);
     }
@@ -227,7 +232,7 @@ public class World {
 
     /**
      * This adds all blocks inside the specified square to their relative positions in the 2D array
-     * - Best used for Pathfinding and Viewport Rendering
+     * - Best used for Pathfinding and WorldViewport Rendering
      * @param chunk
      * @param chunkX
      * @param chunkY
@@ -278,7 +283,7 @@ public class World {
 
     /**
      * This adds all blocks inside the specified square to their relative positions in the 2D array
-     * - Best used for Pathfinding and Viewport Rendering
+     * - Best used for Pathfinding and WorldViewport Rendering
      * @param chunk
      * @param chunkX
      * @param chunkY
@@ -298,7 +303,7 @@ public class World {
                 {
                     if(y1 >= y && y2 <= y)
                     {
-                        ArrayList<EntityBase> entitiesInChunk = chunk.getEntities();
+                        ArrayList<EntityBase> entitiesInChunk = chunk.getAllEntities();
                         for(EntityBase entity: entitiesInChunk)
                         {
                             if(entity.getX() == x)
@@ -317,13 +322,13 @@ public class World {
 
     public void addEntityToWorld(EntityBase entityBase)
     {
-       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).getEntities().add(entityBase);
+       getChunkFromCordXY(entityBase.getX(),entityBase.getY()).addEntity(entityBase);
     }
 
     public boolean isEntityAtPos(int x, int y)
     {
         Chunk chunk = getChunkFromCordXY(x,y);
-        for(EntityBase entity: chunk.getEntities())
+        for(EntityBase entity: chunk.getAllEntities())
         {
             if(entity.getX() == x && entity.getY() == y)
             {
@@ -333,11 +338,26 @@ public class World {
         return false;
     }
 
+    public ArrayList<Chunk> getChunksFromPosWithRadius(int x, int y, int radius)
+    {
+        ArrayList<Chunk> list = new ArrayList<>();
+
+        for(int chunkX = getChunkNumfromCordNum(x) - (radius/2); chunkX <= getChunkNumfromCordNum(x) + (radius/2); chunkX++)
+        {
+            for(int chunkY = getChunkNumfromCordNum(y) - (radius/2); chunkY <= getChunkNumfromCordNum(y) + (radius/2); chunkY++)
+            {
+                list.add(getChunkFromChunkXY(chunkX,chunkY));
+            }
+        }
+
+        return list;
+    }
+
     public ArrayList<EntityBase> getEntitiesAtPos(int x, int y)
     {
         Chunk chunk = getChunkFromCordXY(x,y);
         ArrayList<EntityBase> entities = new ArrayList<>();
-        for(EntityBase entity: chunk.getEntities())
+        for(EntityBase entity: chunk.getAllEntities())
         {
             if(entity.getX() == x && entity.getY() == y)
             {
@@ -347,13 +367,13 @@ public class World {
         return entities;
     }
 
-    public boolean isChunkCreatedFromPos(int x, int y)
+    public boolean isChunkGeneratedAtCords(int x, int y)
     {
-        return isChunkCreatedFromRelative(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
+        return isChunkGeneratedFromRelative(getChunkNumfromCordNum(x),getChunkNumfromCordNum(y));
     }
 
 
-    public boolean isChunkCreatedFromRelative(int x, int y)
+    public boolean isChunkGeneratedFromRelative(int x, int y)
     {
         return chunks.containsKey(x + "," + y);
     }
@@ -363,44 +383,13 @@ public class World {
         return structures;
     }
 
-    public void attemptSpawn(EntityBase base, int x, int y,boolean absoluteSpawn, GlobalGameData globalGameData){
-
-
-        if(!absoluteSpawn) {
-            final int range = 5;
-            int x1 = x + -range / 2 + globalGameData.getRandom().nextInt(6);
-            int y1 = y + -range / 2 + globalGameData.getRandom().nextInt(6);
-            while (!BlockTypeEnum.isWalkable(getBlockFromCords(x, y).getBlockType())) {
-                x1 = x + -range / 2 + globalGameData.getRandom().nextInt(6);
-                y1 = y + -range / 2 + globalGameData.getRandom().nextInt(6);
-                if (isChunkCreatedFromPos(x1, y1)) {
-                    if (BlockTypeEnum.isWalkable(getBlockFromCords(x1, y1).getBlockType())) {
-                        return;
-                    }
-                }
-            }
-
-
-            base.moveAbsolute(x1, y1);
-            base.advancedMoveRelative(0,0,true,true,true,true);
-            addEntityToWorld(base);
-        }
-        else
+    public void attemptSpawn(EntityBase base, GlobalGameData globalGameData){
+        if(BlockTypeEnum.isOpaque(getBlockFromCords(base.getX(),base.getY()).getBlockType()))
         {
-            if(!BlockTypeEnum.isWalkable(getBlockFromCords(x, y).getBlockType()))
-            {
-                //setBlockFromCords(x,y,new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR));
-                setBlockFromCords(x,y,new DebugBlock());
-
-            }
-            base.moveAbsolute(x, y);
-            base.advancedMoveRelative(0,0,true,true,true,true);
-            addEntityToWorld(base);
+            setBlockFromCords(base.getX(),base.getY(),new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR));
         }
-
-
-
-
+        getChunkFromCordXY(base.getX(), base.getY()).addEntity(base);
+        base.advancedMoveRelative(0, 0, true, true, true, true);
     }
 
 

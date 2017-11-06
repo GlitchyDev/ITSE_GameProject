@@ -1,15 +1,12 @@
 package GameStates;
 
-import GameInfo.GameStateEnum;
+import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
-import RenderingHelpers.BufferedRenderingContext;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import HardwareAdaptors.ControllerType;
 import HardwareAdaptors.XBoxController;
-
-import java.util.Random;
 
 /**
  * Created by Robert on 8/26/2017.

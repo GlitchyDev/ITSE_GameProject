@@ -2,7 +2,6 @@ package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
-import GameInfo.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -19,7 +18,7 @@ public class DebugBlock extends BlockBase {
     public DebugBlock()
     {
         this.blockType = BlockTypeEnum.DEBUG_BLOCK;
-        c = Color.GRAY;
+        c = Color.RED;
     }
 
     @Override

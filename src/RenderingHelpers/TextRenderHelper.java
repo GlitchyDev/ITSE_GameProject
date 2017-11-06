@@ -2,12 +2,27 @@ package RenderingHelpers;
 
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
+import GameInfo.WorldViewport;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class TextRenderHelper {
 
+
+    public static void drawText(int x, int y, String text, GraphicsContext gc, GlobalGameData globalGameData)
+    {
+
+        int charNum = 0;
+        for(char c: text.toUpperCase().toCharArray())
+        {
+            if(c != ' ')
+            {
+                Image let = globalGameData.getSprite(String.valueOf(c));
+                gc.drawImage(let,x + charNum*8,y);
+            }
+            charNum++;
+        }
+    }
 
     public static void drawCenteredText(int x, int y, String text, GraphicsContext gc, GlobalGameData globalGameData)
     {
@@ -36,7 +51,7 @@ public class TextRenderHelper {
             if(c != ' ')
             {
                 Image let = globalGameData.getSprite(String.valueOf(c));
-                gc.drawImage(let,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer - width/2 + 2 + 8 * charNum), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+                gc.drawImage(let,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer - width/2 + 2 + 8 * charNum), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
             }
             charNum++;
         }

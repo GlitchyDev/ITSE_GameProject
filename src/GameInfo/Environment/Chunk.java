@@ -3,6 +3,7 @@ package GameInfo.Environment;
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
+import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.Entities.TestRockEntity;
 import GameInfo.Environment.Structures.BasicHouse;
 import GameInfo.Environment.Structures.DirtBlobStructure;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  *
  * Stores big areas of Blocks and Ticks the Entities Inside, and ticks the entities
  * Stores/Spawns Structures involved inside the chunk
- * Viewport can grab Blocks of them to render
+ * WorldViewport can grab Blocks of them to render
  *
  */
 public class Chunk {
@@ -26,14 +27,13 @@ public class Chunk {
     private ArrayList<EntityBase> entities;
     private ArrayList<StructureBase> structures;
 
+    private ArrayList<EntityBase> removeNextTick;
+    private ArrayList<EntityBase> addNextTick;
+
+
 
     // A "Dummy" Constructor for if we wish to specifiy all behaviors inside
-    public Chunk(GlobalGameData globalGameData, BlockBase[][] blockBaseList, ArrayList<EntityBase> entities, World world, int relativeChunkX, int relativeChunkY)
-    {
-        this.blockBaseList = blockBaseList;
-        this.entities = entities;
-        this.structures = new ArrayList<>();
-    }
+
 
     // Default Constructor, creates random terrain and spawns structures
     public Chunk(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
@@ -51,13 +51,30 @@ public class Chunk {
         this.entities = new ArrayList<>();
         this.entities.add(new TestRockEntity(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX),World.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
 
-
-
         this.structures = new ArrayList<>();
+        this.removeNextTick = new ArrayList<>();
+        this.addNextTick = new ArrayList<>();
+
+
 
     }
 
 
+    public void spawnEntities(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
+    {
+        final int totalEntities = 100;
+
+        final int chunkX = World.getPosNumFromChunkNum(relativeChunkX);
+        final int chunkY = World.getPosNumFromChunkNum(relativeChunkY);
+
+        for(int i = 0; i < totalEntities; i++)
+        {
+            int xOffset = globalGameData.getRandom().nextInt(World.getChunkSize());
+            int yOffset = globalGameData.getRandom().nextInt(World.getChunkSize());
+            world.attemptSpawn(new Haunted_Skull_Entity(world,globalGameData,chunkX + xOffset,chunkY + yOffset,false),globalGameData);
+        }
+
+    }
     /**
      * This Method generates structures involved in ALL chunks, will be changed eventually to a managing class
      * @param globalGameData
@@ -112,10 +129,30 @@ public class Chunk {
     /*
     Adds the Blocks contained within the specified grid to the Array
      */
-    public ArrayList<EntityBase> getEntities() {
+
+
+    public ArrayList<EntityBase> getAllEntities() {
         return entities;
     }
 
+
+    public void updateChunk()
+    {
+        entities.removeAll(removeNextTick);
+        entities.addAll(addNextTick);
+        removeNextTick.clear();
+        addNextTick.clear();
+
+    }
+
+    public void removeEntity(EntityBase entity)
+    {
+        removeNextTick.add(entity);
+    }
+    public void addEntity(EntityBase entity)
+    {
+        addNextTick.add(entity);
+    }
 
     /**
      * Checks if a Structure exists at the X,Y Specified

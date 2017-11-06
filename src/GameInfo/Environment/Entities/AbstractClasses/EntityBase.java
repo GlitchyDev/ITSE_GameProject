@@ -4,7 +4,7 @@ import GameInfo.Environment.Chunk;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
+import GameInfo.WorldViewport;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
@@ -22,7 +22,6 @@ public abstract class EntityBase {
     protected long creationTime;
     protected int x;
     protected int y;
-    protected boolean isDamageable;
 
     public EntityBase(World world, GlobalGameData globalGameData, int x, int y)
     {
@@ -31,7 +30,6 @@ public abstract class EntityBase {
         this.x = x;
         this.y = y;
         creationTime = System.currentTimeMillis();
-        isDamageable = false;
     }
 
 
@@ -53,8 +51,8 @@ public abstract class EntityBase {
         }
         else
         {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
+            newChunk.removeEntity(this);
+            oldChunk.addEntity(this);
             x += relativeX;
             y += relativeY;
         }
@@ -72,8 +70,8 @@ public abstract class EntityBase {
         }
         else
         {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
             x = absoluteX;
             y = absoluteY;
         }
@@ -92,10 +90,6 @@ public abstract class EntityBase {
     public boolean advancedMoveRelative(int relativeX, int relativeY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
         Chunk newChunk = world.getChunkFromCordXY(x + relativeX, y + relativeY);
-        if (oldChunk != newChunk) {
-            newChunk.getEntities().add(this);
-            oldChunk.getEntities().remove(this);
-        }
         if (doCheckColisions) {
             if (doStructureEvents) {
                 if (newChunk.isStructureAtRelative(x + relativeX, y + relativeY)) {
@@ -118,6 +112,10 @@ public abstract class EntityBase {
                     return false;
                 }
             }
+        }
+        if (oldChunk != newChunk) {
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
         }
         if (doGenerateEnterEvent) {
             if (doStructureEvents) {
@@ -142,14 +140,68 @@ public abstract class EntityBase {
         return true;
     }
 
+
+    public boolean advancedMoveAbsolute(int absoluteX, int absoluteY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
+        Chunk oldChunk = world.getChunkFromCordXY(x, y);
+        Chunk newChunk = world.getChunkFromCordXY(absoluteX, absoluteY);
+        if (doCheckColisions) {
+            if (doStructureEvents) {
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    switch (newChunk.getStructureAtPos(absoluteX, absoluteY).checkCollision(absoluteX, absoluteY)) {
+                        case CAN_NOT_MOVE_DEFINITE:
+                            return false;
+                        case CHECK_BLOCK_COLLISIONS:
+                            if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                                return false;
+                            }
+                            break;
+                    }
+                } else {
+                    if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                    return false;
+                }
+            }
+        }
+        if (oldChunk != newChunk) {
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
+        }
+        if (doGenerateEnterEvent) {
+            if (doStructureEvents) {
+                //System.out.println("We should be finding shit!");
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    //System.out.println("We found shit!");
+                    newChunk.getStructureAtPos(absoluteX, absoluteY).enterEvent(absoluteX, absoluteY);
+                }
+            }
+            world.getBlockFromCords(x, y).exitBlock(this);
+        }
+        if (doGenerateExitEvent) {
+            if (doStructureEvents) {
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    newChunk.getStructureAtPos(absoluteX, absoluteY).exitEvent(absoluteX, absoluteY);
+                }
+            }
+            world.getBlockFromCords(absoluteX, absoluteY).enterBlock(this);
+        }
+        x = absoluteX;
+        y = absoluteY;
+        return true;
+    }
+
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
-        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+        gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
         if(useLight)
         {
             Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
             gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(world.getBlockFromCords(this.x,this.y).getPreviousLightLevel()));
-            gc.drawImage(shadow,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+            gc.drawImage(shadow,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
             gc.setGlobalAlpha(1.0);
 
         }
@@ -157,7 +209,7 @@ public abstract class EntityBase {
 
     public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
     {
-        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer,width,height  );
+        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + WorldViewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + WorldViewport.heightBuffer,width,height  );
     }
 
 
@@ -174,8 +226,9 @@ public abstract class EntityBase {
     public int getY(){return y;}
     public void setX(int x){this.x = x;}
     public void setY(int y){this.y = y;}
+
     public boolean isDamageable() {
-        return isDamageable;
+        return false;
     }
 
     public EntityType getEntityType() {

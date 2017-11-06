@@ -8,42 +8,32 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.Entities.Haunted_Skull_Entity;
 import GameInfo.Environment.Entities.SpriteTesterEntity;
-import GameInfo.Environment.Entities.TestDebugPathfindingEntity;
 import GameInfo.Environment.World;
-import com.sun.javafx.fxml.builder.JavaFXImageBuilder;
-import javafx.scene.Node;
+import GameStates.Enums.GameStateEnum;
+import GameStates.Enums.MainWorldMiniState;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
-import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import HardwareAdaptors.XBoxController;
-import sample.RenderingTest;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.SplittableRandom;
 
 /**
  * The "World of the Game", keepping track of the World, viewport, and the Client
  * Created by Robert on 8/28/2017.
  */
 public class TestWorldGameState extends GameStateBase {
-    private final WritablePixelFormat<IntBuffer> pixelFormat =
-            PixelFormat.getIntArgbPreInstance();
-
     private World world;
-    private Viewport viewport;
+    private WorldViewport viewport;
     private Client client;
-    private MediaPlayer backgroundMusic;
     private Stage primaryStage;
     private Canvas canvas;
+    private double stateStart;
+    private MainWorldMiniState state;
+    private final double fadeIn = 2.0;
+    private final double fadeOut = 2.0;
 
 
 
@@ -51,35 +41,52 @@ public class TestWorldGameState extends GameStateBase {
     {
         super(globalGameData);
         world = new World(globalGameData);
-        viewport = new Viewport(client,world,primaryStage,canvas);
+        viewport = new WorldViewport(client,world,primaryStage,canvas);
         this.primaryStage = primaryStage;
         this.canvas = canvas;
+        this.stateStart = System.currentTimeMillis();
+        state = MainWorldMiniState.ENTER;
 
     }
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
+        if(state == MainWorldMiniState.ENTER)
+        {
+            double progress = 1.0/fadeIn * ((System.currentTimeMillis() - stateStart)/1000.0);
+            if(progress > 1)
+            {
+                state = MainWorldMiniState.IDLE;
+                stateStart = System.currentTimeMillis();
+            }
+
+        }
+
         for(Player p : client.getPlayers())
         {
             p.getPlayerCharacter().tickEntity();
-            Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
-            for(BlockBase[] b : c.getBlockBaseList())
-            {
-                for(BlockBase block : b)
-                {
-                    block.tickBlock(world);
+
+
+            for(Chunk c: world.getChunksFromPosWithRadius(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY(),2)) {
+                //Chunk c = world.getChunkFromCordXY(p.getPlayerCharacter().getX(),p.getPlayerCharacter().getY());
+                for (BlockBase[] b : c.getBlockBaseList()) {
+                    for (BlockBase block : b) {
+                        block.tickBlock(world);
+                    }
                 }
+                c.updateChunk();
             }
-            for(EntityBase entity: c.getEntities())
-            {
-                if(entity.getEntityType() != EntityType.PLAYER)
-                {
-                    entity.tickEntity();
-                }
+            for (EntityBase e: world.getAllEntitiesBetweenPoints(p.getPlayerCharacter().getX() + 25,p.getPlayerCharacter().getY() + 25,p.getPlayerCharacter().getX() - 25,p.getPlayerCharacter().getY() - 25)) {
+                e.tickEntity();
             }
+
+
+
+
 
 
         }
+
 
     }
 
@@ -98,6 +105,9 @@ public class TestWorldGameState extends GameStateBase {
         Runtime instance = Runtime.getRuntime();
         double usedMemory = (instance.totalMemory() - instance.freeMemory()) / mb;
 
+
+        double passedSeconds = (System.currentTimeMillis() - stateStart)/1000.0;
+        TextRenderHelper.drawText(100,50,String.valueOf(passedSeconds),gc,globalGameData);
 
         gc.setFill(Color.BLUE);
         if(lastFPS <= 57)
@@ -133,16 +143,33 @@ public class TestWorldGameState extends GameStateBase {
             System.gc();
         }
 
+
+        if(state == MainWorldMiniState.ENTER)
+        {
+            double progress = 1.0 - 1.0/fadeIn * ((System.currentTimeMillis() - stateStart)/1000.0);
+            if(progress < 1)
+            {
+                gc.setGlobalAlpha(progress);
+                gc.setFill(Color.BLACK);
+                gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+                gc.setGlobalAlpha(1);
+            }
+
+        }
+
+        gc.drawImage(globalGameData.getSprite("TheEye"),200,100);
+
     }
 
     @Override
     public void enterState(GameStateEnum previousState) {
         System.out.println("Test World: Loading State");
 
+
+        /*
         if(globalGameData.getConnectedControllers().size() > 1)
         {
             System.out.println("Test World: Detected Multiple Controllers! Creating Multiple Player Objects!");
-
             int i = 0;
             ArrayList<Player> players = new ArrayList<>();
             for(XBoxController controller: globalGameData.getConnectedControllers())
@@ -152,46 +179,35 @@ public class TestWorldGameState extends GameStateBase {
                 i++;
                 players.add(p);
                 //world.getChunkFromChunkXY(0,0).getEntities().add(p.getPlayerCharacter());
-                world.attemptSpawn(p.getPlayerCharacter(),i+5,i+5,true,globalGameData);
-
-
+                world.attemptSpawn(p.getPlayerCharacter(),globalGameData);
             }
             client = new Client(players);
-
         }
         else
         {
             Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
             p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,5,5));
-            world.attemptSpawn(p1.getPlayerCharacter(),5,5,true,globalGameData);
+            world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
             //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
             client = new Client(p1);
         }
-
-        globalGameData.getConnectedPlayers().addAll(client.getPlayers());
-        viewport = new Viewport(client,world,primaryStage,canvas);
-
-
-        //TestDebugPathfindingEntity pathfindingDebug = new TestDebugPathfindingEntity(world,globalGameData,0,5);
-        //world.addEntityToWorld(pathfindingDebug);
-
-        Haunted_Skull_Entity skullEntity = new Haunted_Skull_Entity(world,globalGameData,7,7);
-        world.attemptSpawn(skullEntity,7,7,true,globalGameData);
-        //world.addEntityToWorld(skullEntity);
-
-        SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
-        world.attemptSpawn(test,3,3,true,globalGameData);
-        //world.addEntityToWorld(test);
-
-        globalGameData.playSound("CaveWaterDrops",true,0.2);
-        /*
-
-        Media sound = globalGameData.getSound("CaveWaterDrops");
-        backgroundMusic = new MediaPlayer(sound);
-        backgroundMusic.setOnEndOfMedia(() -> backgroundMusic.seek(Duration.ZERO));
-        backgroundMusic.play();
         */
 
+        Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
+        p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,globalGameData.getRandom().nextInt(500)-250,globalGameData.getRandom().nextInt(500)-250));
+        world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
+        //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
+        client = new Client(p1);
+
+
+        globalGameData.getConnectedPlayers().addAll(client.getPlayers());
+        viewport = new WorldViewport(client,world,primaryStage,canvas);
+
+        //SpriteTesterEntity test = new SpriteTesterEntity(world,globalGameData,3,3);
+        //.attemptSpawn(test,globalGameData);
+        globalGameData.playSound("CaveWaterDrops",true,0.2);
+
+        stateStart = System.currentTimeMillis();
 
     }
 
@@ -204,7 +220,7 @@ public class TestWorldGameState extends GameStateBase {
 
     }
 
-    public Viewport getViewport() {
+    public WorldViewport getViewport() {
         return viewport;
     }
 }

@@ -2,8 +2,7 @@ package GameInfo.Environment.Blocks;
 
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
-import GameInfo.GlobalGameData;
-import GameInfo.Viewport;
+import GameInfo.WorldViewport;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
@@ -113,10 +112,10 @@ public abstract class BlockBase {
         if(useLight)
         {
             if(previousLightLevel != 0) {
-                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+                gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
                 Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
                 gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(previousLightLevel));
-                gc.drawImage(shadow, (int) (x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer));
+                gc.drawImage(shadow, (int) (x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int) (y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer));
                 gc.setGlobalAlpha(1.0);
             }
             else
@@ -127,7 +126,7 @@ public abstract class BlockBase {
         }
         else
         {
-            gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + Viewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + Viewport.heightBuffer)  );
+            gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
 
         }
     }
@@ -135,6 +134,6 @@ public abstract class BlockBase {
 
     public void drawRectangleAtXY(GraphicsContext gc, double x, double y, int xOffset, int yOffset, double width, double height)
     {
-        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + Viewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + Viewport.heightBuffer,width,height  );
+        gc.fillRect((int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset) + WorldViewport.widthBuffer, (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset) + WorldViewport.heightBuffer,width,height  );
     }
 }

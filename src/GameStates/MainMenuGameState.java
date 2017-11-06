@@ -1,8 +1,9 @@
 package GameStates;
 
-import GameInfo.GameStateEnum;
+import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.MainMenuPhaseEnum;
+import GameStates.Enums.MainWorldMiniState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,7 +23,6 @@ public class MainMenuGameState extends GameStateBase {
         phaseEnum = MainMenuPhaseEnum.MMGPE_Constructor;
 
         controller = globalGameData.getConnectedControllers().get(0);
-
 
     }
 
@@ -51,6 +51,9 @@ public class MainMenuGameState extends GameStateBase {
                         break;
                     case WEST:
                         globalGameData.switchGameState(GameStateEnum.DebugControls);
+                        break;
+                    case EAST:
+                        globalGameData.switchGameState(GameStateEnum.TitleScreen);
                         break;
                 }
                 break;
@@ -85,6 +88,7 @@ public class MainMenuGameState extends GameStateBase {
                 gc.setFill(Color.BLUE);
                 gc.fillText("Press ^ for TestWorld", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 1);
                 gc.fillText("Press < for DebugControls", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 2);
+                gc.fillText("Press > for TitleScreen", canvas.getWidth()/3.0,canvas.getHeight()/6.0 * 2.5);
 
                 if(globalGameData.getConnectedControllers().get(0).getControllerType() == ControllerType.KeyboardController)
                 {
@@ -125,13 +129,11 @@ public class MainMenuGameState extends GameStateBase {
 
 
 
-
     }
 
 
     @Override
     public void enterState(GameStateEnum previousState) {
-
     }
 
     @Override

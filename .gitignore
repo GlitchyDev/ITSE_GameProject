@@ -54,3 +54,4 @@ fabric.properties
 *.class
 .idea/workspace.xml
 *.xml___jb_tmp___
+GameAssets/JarUUID.txt

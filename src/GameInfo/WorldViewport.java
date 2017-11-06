@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * - Center the Window on the Player/Players ( Local Multiplayer averages locations )
  * - Render the viewport to the Screen, Blocks, Entitys, and ALL!
  */
-public class Viewport {
+public class WorldViewport {
     private Client client;
     private World world;
     // Determines where the center of the screen
@@ -45,7 +45,7 @@ public class Viewport {
 
 
 
-    public Viewport(Client client, World world, Stage primaryStage, Canvas canvas)
+    public WorldViewport(Client client, World world, Stage primaryStage, Canvas canvas)
     {
         this.client = client;
         this.world = world;
@@ -120,7 +120,7 @@ public class Viewport {
 
 
     /**
-     * The Viewport will attempt to render all Blocks and entities within its grasp
+     * The WorldViewport will attempt to render all Blocks and entities within its grasp
      * - It will use its Width and Height to determine the relected "Culling" area
      *       - First it will determine which of the 9 chunks are currently visible ( Max 4 ) ( Min 1 )
      *       - It will visit the currently available chunks, and request blocks that fit within the Culling area
@@ -173,7 +173,7 @@ public class Viewport {
         // Debug Test Information
         gc.setFill(Color.BLUE);
         gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),350,10);
-        gc.fillText("Chunk: " + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + world.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
+        gc.fillText("Chunk: " + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
     }
 
 

@@ -17,6 +17,7 @@ public class Player {
     private String displayName;
     private UUID uuid;
     private EntityBase playerCharacter;
+    private String skinID;
 
     public Player(XBoxController controller,EntityBase playerCharacter)
     {
@@ -24,6 +25,27 @@ public class Player {
         uuid = UUID.randomUUID();
         displayName = uuid.toString().substring(0,3);
         this.playerCharacter = playerCharacter;
+        generateSkinID();
+    }
+
+    public void generateSkinID()
+    {
+        switch((int)(Math.random() * 20))
+        {
+            case 0:
+                skinID = "P1,Blue,P1";
+                break;
+            case 1:
+                skinID = "P1,Green,P1";
+                break;
+            case 2:
+                skinID = "P1,Red,P1";
+                break;
+            default:
+                skinID = "P1,P1,P1";
+                break;
+
+        }
     }
     public Player(XBoxController controller,EntityBase playerCharacter, UUID uuid, String displayName)
     {
@@ -51,7 +73,7 @@ public class Player {
 
     public String getSkinID()
     {
-        return "P1,P1,P1";
+        return skinID;
     }
 
     public String getDisplayName() {

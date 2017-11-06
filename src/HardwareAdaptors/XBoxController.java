@@ -123,6 +123,11 @@ public class XBoxController {
         return controllerType;
     }
 
+    public boolean isAnyThingPressed()
+    {
+        return getButtonA() || getButtonB() || getButtonX() || getButtonY() || getRightShoulder() || getRightShoulder() || getStart();
+    }
+
 
 
     public String toString()
@@ -161,5 +166,10 @@ public class XBoxController {
     public boolean isButtonPressed(double d)
     {
         return d==1;
+    }
+
+    public boolean isXBoxController()
+    {
+        return true;
     }
 }

@@ -71,12 +71,15 @@ public class WallFloorBlock extends BlockBase {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
                 drawSpriteAtXY(sprite, gc, x, y, 0, 0,false);
 
+
+                /*
                 if(entities.size() > 0) {
                     gc.setGlobalAlpha(0.1);
                     gc.setFill(Color.BLUE);
                     drawRectangleAtXY(gc, x, y, 0, 0, 40, 40);
                     gc.setGlobalAlpha(1.0);
                 }
+                */
                 recalculateLight();
 
             }

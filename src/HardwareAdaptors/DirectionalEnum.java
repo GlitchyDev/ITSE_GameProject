@@ -64,6 +64,7 @@ public enum DirectionalEnum {
         return DirectionalEnum.NORTH;
     }
 
+
     public static DirectionalEnum determineDirection(int x1, int y1, int x2, int y2)
     {
         double delta_x = x2 - x1;
