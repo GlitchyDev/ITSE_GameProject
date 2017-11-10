@@ -140,6 +140,60 @@ public abstract class EntityBase {
         return true;
     }
 
+
+    public boolean advancedMoveAbsolute(int absoluteX, int absoluteY, boolean doCheckColisions, boolean doStructureEvents, boolean doGenerateEnterEvent, boolean doGenerateExitEvent) {
+        Chunk oldChunk = world.getChunkFromCordXY(x, y);
+        Chunk newChunk = world.getChunkFromCordXY(absoluteX, absoluteY);
+        if (doCheckColisions) {
+            if (doStructureEvents) {
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    switch (newChunk.getStructureAtPos(absoluteX, absoluteY).checkCollision(absoluteX, absoluteY)) {
+                        case CAN_NOT_MOVE_DEFINITE:
+                            return false;
+                        case CHECK_BLOCK_COLLISIONS:
+                            if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                                return false;
+                            }
+                            break;
+                    }
+                } else {
+                    if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!(world.getBlockFromCords(absoluteX, absoluteY).checkCollision(world, this))) {
+                    return false;
+                }
+            }
+        }
+        if (oldChunk != newChunk) {
+            newChunk.addEntity(this);
+            oldChunk.removeEntity(this);
+        }
+        if (doGenerateEnterEvent) {
+            if (doStructureEvents) {
+                //System.out.println("We should be finding shit!");
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    //System.out.println("We found shit!");
+                    newChunk.getStructureAtPos(absoluteX, absoluteY).enterEvent(absoluteX, absoluteY);
+                }
+            }
+            world.getBlockFromCords(x, y).exitBlock(this);
+        }
+        if (doGenerateExitEvent) {
+            if (doStructureEvents) {
+                if (newChunk.isStructureAtRelative(absoluteX, absoluteY)) {
+                    newChunk.getStructureAtPos(absoluteX, absoluteY).exitEvent(absoluteX, absoluteY);
+                }
+            }
+            world.getBlockFromCords(absoluteX, absoluteY).enterBlock(this);
+        }
+        x = absoluteX;
+        y = absoluteY;
+        return true;
+    }
+
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
         gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );
