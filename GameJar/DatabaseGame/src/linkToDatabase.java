@@ -84,4 +84,29 @@ public class linkToDatabase {
 
     }
 
+    
+    public static String getTopPlayera() throws Exception{
+        String Playerscore = "";
+
+        URL oracle = new URL("http://www.classprojectfall.com/TopPlayers.php");
+        URLConnection conn = oracle.openConnection();
+
+        conn.setDoOutput(true);
+        PrintStream ps = new PrintStream(conn.getOutputStream());
+
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            Playerscore = inputLine;
+        }
+        in.close();
+        ps.close();
+
+        return Playerscore;
+
+    }
+
+
 }
