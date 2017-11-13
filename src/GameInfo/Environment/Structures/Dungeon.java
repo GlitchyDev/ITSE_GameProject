@@ -27,6 +27,7 @@ public class Dungeon extends StructureBase {
                 //draw walls every 4 blocks
                 if (x % 4 == 0 || y % 4 == 0) {
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_WALL);
+                    b.setSprite(globalGameData, "Brown_Test_Wall");
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
 
