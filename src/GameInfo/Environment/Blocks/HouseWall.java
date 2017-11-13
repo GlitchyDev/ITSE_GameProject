@@ -12,7 +12,7 @@ public class HouseWall extends BlockBase {
 
     public HouseWall(GlobalGameData globalGameData)
     {
-        sprite = globalGameData.getSprite("House_Wall");
+        sprite = globalGameData.getSprite("Test_Dungeon_Wall");
         blockType = BlockTypeEnum.HOUSE_WALL;
     }
 
