@@ -69,7 +69,7 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 0)
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
-                drawSpriteAtXY(sprite, gc, x, y, 0, 0,false);
+                drawSpriteAtXY(sprite, gc, x, y, 0, 0, true);
 
 
                 /*
@@ -87,7 +87,7 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 1) {
             if (blockType == BlockTypeEnum.TEST_WALL) {
 
-                drawSpriteAtXY(sprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3 + 2,false);
+                drawSpriteAtXY(sprite, gc, x, y, 0, -World.getScaledUpSquareSize() / 4 * 3 + 2,true);
                 recalculateLight();
             }
         }

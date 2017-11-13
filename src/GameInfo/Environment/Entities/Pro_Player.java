@@ -9,7 +9,6 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
 import GameStates.Enums.GameStateEnum;
-import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
 import RenderingHelpers.TextRenderHelper;
@@ -23,6 +22,8 @@ import HardwareAdaptors.XBoxController;
  * This class aims to
  * - Be the basic Player Character, Protagonist ( Shortened to Pro )
  * - Implement Controls for the Player
+ * - Implement Behaviors for the Player
+ * - Animate the player
  */
 public class Pro_Player extends DamageableEntityBase {
     // Controller Associations
@@ -30,38 +31,38 @@ public class Pro_Player extends DamageableEntityBase {
     private XBoxController controller;
 
     // Direction Helpers
+    // Cached Direction refers to the previous state of the controller
     private DirectionalEnum cachedDirection;
+    // Primary Direction refers to the last direction the player faced
     private DirectionalEnum primaryDirection;
 
     // State helpers
     private ProPlayerStateEnum entityState;
     private long stateStartTime;
 
-    // Movement Helpers
-    private final double holdDownTime = 0.1;
+    // Controller Movement Helpers
+    private final double holdDownTime = 0.01;
     private final double moveTime = 0.2;
 
     // Light Emissions
     private boolean lightButtonCache = false;
     private long lightChangeTime = 0;
     private int lightLevel = -2;
-    private final int maxLightLevel = 8;
+    private final int maxLightLevel = 10;
 
-
-
-    // Rendering Helpers
+    // Animation Helpers
     private ProPlayerEmotion emotion = ProPlayerEmotion.NONE;
     private long emotionStartTime = 0;
-
-    // Death helpers
-    private long deathStartTime = 0;
-
-
-
     private ProPlayerBodyState bodyState = ProPlayerBodyState.NONE;
     private String headType = "P1";
     private String bodyType = "P1";
     private String legType = "P1";
+
+    // Death helpers
+    private long deathStartTime = 0;
+    private final double deathTimeAnimationLength = 10;
+    private EntityType causerOfDeath = EntityType.DEBUG;
+
 
 
     public Pro_Player(World world, GlobalGameData globalGameData, Player player, int x, int y) {
@@ -82,7 +83,8 @@ public class Pro_Player extends DamageableEntityBase {
         bodyType = args[1];
         legType = args[2];
 
-        world.attemptSpawn(new Alsi_Entity(world,globalGameData,x,y,this),globalGameData);
+        // 1 ALSI per player
+
 
     }
 
@@ -96,23 +98,24 @@ public class Pro_Player extends DamageableEntityBase {
                 case IDLE:
                     break;
                 case ATTEMPTING_MOVE:
-                    boolean moveFailed = true;
+                    boolean moveSucceded = true;
                     if (System.currentTimeMillis() > stateStartTime + holdDownTime * 1000) {
                         switch (cachedDirection) {
                             case NORTH:
-                                moveFailed = advancedMoveRelative(0, 1, true, true, true, true);
+                                moveSucceded = advancedMoveRelative(0, 1, true, true, true, true);
                                 break;
                             case SOUTH:
-                                moveFailed = advancedMoveRelative(0, -1, true, true, true, true);
+                                moveSucceded = advancedMoveRelative(0, -1, true, true, true, true);
                                 break;
                             case EAST:
-                                moveFailed = advancedMoveRelative(-1, 0, true, true, true, true);
+                                moveSucceded = advancedMoveRelative(-1, 0, true, true, true, true);
                                 break;
                             case WEST:
-                                moveFailed = advancedMoveRelative(1, 0, true, true, true, true);
+                                moveSucceded = advancedMoveRelative(1, 0, true, true, true, true);
                                 break;
                         }
-                        if (moveFailed) {
+
+                        if (moveSucceded) {
                             entityState = ProPlayerStateEnum.MOVING;
                             stateStartTime = System.currentTimeMillis();
                         } else {
@@ -127,7 +130,7 @@ public class Pro_Player extends DamageableEntityBase {
                         stateStartTime = System.currentTimeMillis();
                     }
                     break;
-                case DAMAGED:
+                case DEAD:
                     break;
 
             }
@@ -172,15 +175,13 @@ public class Pro_Player extends DamageableEntityBase {
                     break;
             }
             // Do Emotion Logic
-
-
             int random = (int) (Math.random() * 300);
             if(emotion == ProPlayerEmotion.NONE) {
                 switch (random) {
                     case 0:
                         break;
                     case 1:
-                        emotion = ProPlayerEmotion.Blink_1;
+                        emotion = ProPlayerEmotion.BLINK_1;
                         emotionStartTime = System.currentTimeMillis();
                         break;
                 }
@@ -190,21 +191,21 @@ public class Pro_Player extends DamageableEntityBase {
                 double duration = (System.currentTimeMillis() - emotionStartTime)/1000.0;
                 switch(emotion)
                 {
-                    case Blink_1:
+                    case BLINK_1:
                         if(duration > 0.1)
                         {
-                            emotion = ProPlayerEmotion.Blink_2;
+                            emotion = ProPlayerEmotion.BLINK_2;
                             emotionStartTime = System.currentTimeMillis();
                         }
                         break;
-                    case Blink_2:
+                    case BLINK_2:
                         if(duration > 0.1)
                         {
-                            emotion = ProPlayerEmotion.Blink_3;
+                            emotion = ProPlayerEmotion.BLINK_3;
                             emotionStartTime = System.currentTimeMillis();
                         }
                         break;
-                    case Blink_3:
+                    case BLINK_3:
                         if(duration > 0.1)
                         {
                             emotion = ProPlayerEmotion.NONE;
@@ -218,13 +219,30 @@ public class Pro_Player extends DamageableEntityBase {
         else
         {
             double duration = (System.currentTimeMillis() - deathStartTime)/1000.0;
-            if(duration > 10)
+            if(causerOfDeath == EntityType.HAUNTED_SKULL)
             {
-                world.getChunkFromCordXY(x,y).removeEntity(this);
-                Haunted_Skull_Entity playerSkull = new Haunted_Skull_Entity(world,globalGameData,x,y,true);
-                world.getChunkFromCordXY(x,y).addEntity(playerSkull);
+                if(duration > deathTimeAnimationLength/2.0) {
+                    if(world.getChunkFromCordXY(x, y).getAllEntities().contains(this)) {
+                        world.getChunkFromCordXY(x, y).removeEntity(this);
+                        Haunted_Skull_Entity playerSkull = new Haunted_Skull_Entity(world, globalGameData, x, y, true);
+                        playerSkull.setCurrentDirection(primaryDirection);
+                        world.getChunkFromCordXY(x, y).addEntity(playerSkull);
+                    }
+                    if (duration > deathTimeAnimationLength)
+                    {
+                        globalGameData.switchGameState(GameStateEnum.TitleScreen);
+                    }
+                }
 
-                globalGameData.switchGameState(GameStateEnum.TitleScreen);
+            }
+            else {
+                if (duration > deathTimeAnimationLength) {
+                    world.getChunkFromCordXY(x, y).removeEntity(this);
+                    Haunted_Skull_Entity playerSkull = new Haunted_Skull_Entity(world, globalGameData, x, y, true);
+                    playerSkull.setCurrentDirection(primaryDirection);
+                    world.getChunkFromCordXY(x, y).addEntity(playerSkull);
+                    globalGameData.switchGameState(GameStateEnum.TitleScreen);
+                }
             }
             // Dead Player Logic
         }
@@ -234,6 +252,11 @@ public class Pro_Player extends DamageableEntityBase {
 
     }
 
+
+    /**
+     * Controls when a valid "Input" has been given, by calculating how long a button needs to be held down for before we consider it
+     * valid input
+     */
     public void buttonInput()
     {
         controller.poll();
@@ -274,7 +297,7 @@ public class Pro_Player extends DamageableEntityBase {
                 break;
             case MOVING:
                 break;
-            case DAMAGED: break;
+            case DEAD: break;
 
         }
         // Lighting
@@ -359,17 +382,35 @@ public class Pro_Player extends DamageableEntityBase {
                 case REALLY:
                     head += "_Really";
                     break;
-                case Blink_1:
+                case BLINK_1:
                     head += "_Really";
                     break;
-                case Blink_2:
+                case BLINK_2:
                     head += "_Eyes_Closed";
                     break;
-                case Blink_3:
+                case BLINK_3:
                     head += "_Really";
                     break;
+
                 case EYES_CLOSED:
                     head += "_Eyes_Closed";
+                    break;
+                case ALSI_Close_Eyes_1:
+                    head += "_Really";
+                    break;
+                case ALSI_Close_Eyes_2:
+                    head += "_Eyes_Closed";
+                    break;
+                case ALSI_TURN_LEFT:
+                    head += "_Look_Left";
+                    break;
+                case ALSI_TURN_RIGHT:
+                    head += "_Look_Right";
+                    break;
+                case ALSI_EVIL:
+                    head += "_Evil";
+                    break;
+
             }
             String body = bodyType + "_" + direction + "_Body";
             switch (bodyState) {
@@ -437,20 +478,43 @@ public class Pro_Player extends DamageableEntityBase {
 
     @Override
     public boolean takeDamage(DamageType damageType, int damageAmount) {
+        return true;
+    }
+
+    @Override
+    public boolean takeDamage(EntityBase attacker, DamageType damageType, int damageAmount) {
         currentHealth -= damageAmount;
         if(currentHealth <= 0)
         {
             isDead = true;
             deathStartTime = System.currentTimeMillis();
-            entityState = ProPlayerStateEnum.DAMAGED;
+            entityState = ProPlayerStateEnum.DEAD;
+            causerOfDeath = attacker.getEntityType();
+            globalGameData.stopSound("elecHumExtended");
         }
         return true;
     }
 
-    @Override
-    public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
-        this.takeDamage(damageType,damageAmount);
-        return true;
+    public ProPlayerBodyState getBodyState() {
+        return bodyState;
+    }
+    public long getDeathStartTime() {
+        return deathStartTime;
+    }
+    public EntityType getCauserOfDeath() { return causerOfDeath;}
+    public double getDeathTimeAnimationLength() { return deathStartTime;}
+    public DirectionalEnum getPrimaryDirection() {
+        return primaryDirection;
+    }
+
+    public void setPrimaryDirection(DirectionalEnum direction)
+    {
+        this.primaryDirection = direction;
+    }
+
+    public void setEmotion(ProPlayerEmotion emotion)
+    {
+        this.emotion = emotion;
     }
 
 

@@ -21,8 +21,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     private GlobalGameData globalGameData;
-    private boolean blinking = false;
-    private long lastBlinkStartTime = 0;
+    public static boolean blinking = false;
+    public static long lastBlinkStartTime = 0;
     private final String uuid = RenewJarUUID.getJarUUID();
     //private static boolean cache = false;
 
@@ -45,12 +45,13 @@ public class Main extends Application {
         canvas.setCache(true);
 
         primaryStage.setTitle("~Endless Day~");
-        primaryStage.setResizable(true);
 
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu,primaryStage,canvas);
         primaryStage.getIcons().add(globalGameData.getSprite("WindowIcon"));
 
         primaryStage.show();
+
+
 
         canvas.setOnMouseClicked(event -> {
             int random = (int)(Math.random()* 10);
@@ -62,7 +63,6 @@ public class Main extends Application {
                 }
             }
         });
-
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 if(!primaryStage.isIconified()) {
