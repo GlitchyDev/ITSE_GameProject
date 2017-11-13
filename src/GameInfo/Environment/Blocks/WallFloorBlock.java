@@ -69,7 +69,7 @@ public class WallFloorBlock extends BlockBase {
         if(renderLayer == 0)
         {
             if (blockType == BlockTypeEnum.TEST_FLOOR) {
-                drawSpriteAtXY(sprite, gc, x, y, 0, 0,true);
+                drawSpriteAtXY(sprite, gc, x, y, 0, 0, true);
 
 
                 /*

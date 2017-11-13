@@ -4,16 +4,11 @@ import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameInfo.Player;
-import Pathfinding.LineOfSightHelper;
-import Pathfinding.Position;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class SpriteTesterEntity extends EntityBase {
     private Player p;

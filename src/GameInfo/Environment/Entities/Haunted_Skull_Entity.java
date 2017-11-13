@@ -2,7 +2,6 @@ package GameInfo.Environment.Entities;
 
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.BlockTypeEnum;
-import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.DamageableEntityBase;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
@@ -11,7 +10,6 @@ import GameInfo.Environment.Entities.Enums.HauntedSkullStateEnum;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import HardwareAdaptors.DirectionalEnum;
-import Pathfinding.LineOfSightHelper;
 import Pathfinding.PathfindingHelper;
 import Pathfinding.Position;
 import RenderingHelpers.ImageRenderHelper;
@@ -78,7 +76,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     @Override
     public void tickEntity() {
-        if(currentTarget != null && currentTarget.isDead())
+        if(currentTarget != null && (currentTarget.isDead()))
         {
             stateStartTime = System.currentTimeMillis();
             currentState = HauntedSkullStateEnum.INACTIVE;
@@ -93,9 +91,9 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     EntityBase target = null;
                     for(EntityBase entity: possibleTargets)
                     {
-                        if(entity.getEntityType() == EntityType.PLAYER && entity.isDamageable() && !((DamageableEntityBase)entity).isDead())
+                        if(entity != null && entity.getEntityType() == EntityType.PLAYER && !((DamageableEntityBase)(entity)).isDead())
                         {
-                            if(target == null && canSeeEntity(entity)) {
+                            if(canSeeEntity(entity)) {
                                 target = entity;
                             }
                         }
@@ -106,7 +104,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
                         currentState = HauntedSkullStateEnum.ACTIVATE;
                         stateStartTime = System.currentTimeMillis();
-                        globalGameData.playSound("AlertSFX",false,0.2);
+                        globalGameData.playSound("menuSelectItem",false,0.15);
                     }
 
                 }
@@ -170,58 +168,16 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     public boolean canSeeEntity(EntityBase entity)
     {
-
-        if(entity == null)
-        {
-            lostReason = "NO TARGET";
-            return false;
-        }
-        int xMod = 0;
-        int yMod = 0;
-        switch(currentDirection)
-        {
-            case NORTH:
-                yMod = 1;
-                break;
-            case EAST:
-                xMod = -1;
-                break;
-            case SOUTH:
-                yMod = -1;
-                break;
-            case WEST:
-                xMod = 1;
-                break;
-        }
-
-        for(int i = 0; i < maxVisionRange; i++)
-        {
-            BlockBase b = world.getBlockFromCords(x + xMod*i,y + yMod*i);
-            if(!BlockTypeEnum.isOpaque(b.getBlockType()))
-            {
-                if(b.getPreviousLightLevel() > 0) {
-                    if (distanceFromEntity(entity) < maxPathFindingRange)
-                    {
-                        lastSeen = System.currentTimeMillis();
-                        lostReason = "CAN SEE LIGHT";
-                        return true;
-                    }
-                }
-            }
-        }
-
-        for(BlockBase[] row: world.getAllBlocksBetweenPoints(x-3,y-3,x+3,y+3))
+        for(BlockBase[] row: world.getAllBlocksBetweenPoints(x+2,y+2,x-2,y-2))
         {
             for(BlockBase block: row)
             {
                 if(block != null) {
-                    if (block.isCurrentlyLit()) {
-                        if (distanceFromEntity(entity) < maxPathFindingRange)
-                        {
-                            lastSeen = System.currentTimeMillis();
-                            lostReason = "LIGHT AROUND!";
-                            return true;
-                        }
+                    if (block.isCurrentlyLit() && BlockTypeEnum.isWalkable(block.getBlockType())) {
+                        lastSeen = System.currentTimeMillis();
+                        lostReason = "LIGHT AROUND!";
+                        return true;
+
                     }
                 }
             }
@@ -272,7 +228,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 }
             }
 
-            if(currentState == HauntedSkullStateEnum.NAVIGATE_TO_TARGET) {
+            if(currentState == HauntedSkullStateEnum.NAVIGATE_TO_TARGET ) {
                 switch (currentDirection) {
                 case NORTH:
                     drawSpriteAtXY(globalGameData.getSprite("Active_Backwards"), gc, x, y + 1, 5, 3, false);
@@ -326,6 +282,11 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     @Override
     public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
         return true;
+    }
+
+    public void setCurrentDirection(DirectionalEnum direction)
+    {
+        this.currentDirection = direction;
     }
 }
 
