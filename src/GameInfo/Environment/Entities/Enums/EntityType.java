@@ -5,7 +5,9 @@ package GameInfo.Environment.Entities.Enums;
  */
 public enum EntityType {
     DEBUG,
-    PLAYER,
     ROCK,
-    HAUNTED_SKULL
+    PLAYER,
+    ALSI,
+    HAUNTED_SKULL,
+    THE_FOG,
 }

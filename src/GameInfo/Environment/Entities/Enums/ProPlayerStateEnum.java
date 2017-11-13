@@ -4,6 +4,6 @@ public enum ProPlayerStateEnum {
     IDLE,
     ATTEMPTING_MOVE,
     MOVING,
-    DAMAGED,
+    DEAD,
 
 }

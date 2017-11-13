@@ -3,11 +3,9 @@ package GameStates;
 import GameInfo.*;
 import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Chunk;
+import GameInfo.Environment.Entities.*;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.EntityType;
-import GameInfo.Environment.Entities.Pro_Player;
-import GameInfo.Environment.Entities.Haunted_Skull_Entity;
-import GameInfo.Environment.Entities.SpriteTesterEntity;
 import GameInfo.Environment.World;
 import GameStates.Enums.GameStateEnum;
 import GameStates.Enums.MainWorldMiniState;
@@ -157,7 +155,7 @@ public class TestWorldGameState extends GameStateBase {
 
         }
 
-        gc.drawImage(globalGameData.getSprite("TheEye"),200,100);
+        //gc.drawImage(globalGameData.getSprite("TheEye"),200,100);
 
     }
 
@@ -194,10 +192,14 @@ public class TestWorldGameState extends GameStateBase {
         */
 
         Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
-        p1.setPlayerCharacter(new Pro_Player(world,globalGameData,p1,globalGameData.getRandom().nextInt(500)-250,globalGameData.getRandom().nextInt(500)-250));
+        final int width = 10;
+        Pro_Player player = new Pro_Player(world,globalGameData,p1,globalGameData.getRandom().nextInt(width)-width/2,globalGameData.getRandom().nextInt(width)-width/2);
+        p1.setPlayerCharacter(player);
         world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
-        //world.getChunkFromChunkXY(0,0).getEntities().add(p1.getPlayerCharacter());
         client = new Client(p1);
+
+        world.attemptSpawn(new Alsi_Entity(world,globalGameData,player.getX(),player.getY(),player),globalGameData);
+        world.attemptSpawn(new TheFog(world,globalGameData,player.getX()+2,player.getY(), player),globalGameData);
 
 
         globalGameData.getConnectedPlayers().addAll(client.getPlayers());
@@ -214,8 +216,15 @@ public class TestWorldGameState extends GameStateBase {
 
     @Override
     public void exitState(GameStateEnum lastState) {
-        client.getPlayers().get(0).getPlayerCharacter().setX(5);
-        client.getPlayers().get(0).getPlayerCharacter().setY(5);
+        int x = client.getPlayers().get(0).getPlayerCharacter().getX();
+        int y = client.getPlayers().get(0).getPlayerCharacter().getY();
+        for(EntityBase entity: world.getAllEntitiesBetweenPoints(x + 20, y + 20, x - 20, y - 20))
+        {
+            if(entity.getEntityType() != EntityType.HAUNTED_SKULL)
+            {
+                world.getChunkFromCordXY(entity.getX(),entity.getY()).removeEntity(entity);
+            }
+        }
         globalGameData.stopSound("CaveWaterDrops");
 
     }

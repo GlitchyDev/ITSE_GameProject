@@ -28,8 +28,8 @@ public class WorldViewport {
     private static int viewWidthX = 15;
     private static int viewHeightY = 15;
     // How many extra blocks/entities(by chunk) should be rendered outside of the viewport,
-    private int extraViewX = 5;
-    private int extraViewY = 5;
+    private int extraViewX = 10;
+    private int extraViewY = 10;
     // This affects how much "Smoothing" the screen has between movements, lower the more smoothing is done
     private double smoothingValueX = 0;
     private double smoothingValueY = 0;
