@@ -17,6 +17,41 @@ public class linkToDatabase {
 
     }
 
+    public static void updatScore (String uuid, int PlayerScore){
+
+        try{
+            URL url = new URL("http://www.classprojectfall.com/updateScore.php");
+            URLConnection conn = url.openConnection();
+
+            // activate the output
+            conn.setDoOutput(true);
+            PrintStream ps = new PrintStream(conn.getOutputStream());
+
+            // send your parameters to the php file
+            ps.print("&uuid=" + uuid);
+            ps.print("&PlayerScore=" + PlayerScore);
+
+            // w input stream to send the request
+            conn.getInputStream();
+
+            // to get respond
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String l = null;
+            while ((l=br.readLine())!=null) {
+                System.out.println(l);
+            }
+
+            br.close();
+            ps.close();
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+
     public static void insert (String uuid, String PlayerName, int PlayerScore){
 
     try{
