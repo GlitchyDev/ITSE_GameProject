@@ -85,6 +85,8 @@ public class Pro_Player extends DamageableEntityBase {
 
         // 1 ALSI per player
 
+        world.attemptSpawn(new ScoreItem(world,globalGameData,x,y+5),globalGameData);
+
 
     }
 
@@ -317,7 +319,7 @@ public class Pro_Player extends DamageableEntityBase {
                     if (bodyState == ProPlayerBodyState.NONE) {
                         bodyState = ProPlayerBodyState.LIGHT_ON;
                         lightChangeTime = System.currentTimeMillis();
-                        globalGameData.playSound("elecHumExtended",true);
+                        globalGameData.playSound("elecHumExtended",true,0.3);
                         globalGameData.playSound("flashLightOn",false);
                     }
                 }
@@ -490,7 +492,6 @@ public class Pro_Player extends DamageableEntityBase {
             deathStartTime = System.currentTimeMillis();
             entityState = ProPlayerStateEnum.DEAD;
             causerOfDeath = attacker.getEntityType();
-            globalGameData.stopSound("elecHumExtended");
         }
         return true;
     }

@@ -138,8 +138,9 @@ public class Alsi_Entity extends EntityBase {
                         drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
                     }
 
-                    if(progress < 5)
+                    if(progress < 5.0)
                     {
+
                         double dark = (progress) / 5.0;
                         gc.setGlobalAlpha(dark);
                         gc.setFill(Color.BLACK);
@@ -147,6 +148,10 @@ public class Alsi_Entity extends EntityBase {
                     }
                     else
                     {
+                        if(!globalGameData.isPlayingSound("DeathFallSound") && progress < 5.3)
+                        {
+                            globalGameData.playSound("DeathFallSound",false,0.3);
+                        }
                         double dark = 1 - (progress - 5.0) / 5.0;
                         gc.setGlobalAlpha(dark);
                         gc.setFill(Color.BLACK);

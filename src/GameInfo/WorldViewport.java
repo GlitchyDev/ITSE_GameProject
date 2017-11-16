@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import sample.DebugModeManager;
 
 import java.util.ArrayList;
 
@@ -170,10 +171,12 @@ public class WorldViewport {
         gc.setFill(Color.BLACK);
 
 
-        // Debug Test Information
-        gc.setFill(Color.BLUE);
-        gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(),350,10);
-        gc.fillText("Chunk: " + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()),350,20);
+        if(DebugModeManager.isDebugMode) {
+            // Debug Test Information
+            gc.setFill(Color.BLUE);
+            gc.fillText("Cord: " + client.getPlayers().get(0).getPlayerCharacter().getX() + ":" + client.getPlayers().get(0).getPlayerCharacter().getY(), 350, 10);
+            gc.fillText("Chunk: " + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getX()) + ":" + World.getChunkNumfromCordNum(client.getPlayers().get(0).getPlayerCharacter().getY()), 350, 20);
+        }
     }
 
 

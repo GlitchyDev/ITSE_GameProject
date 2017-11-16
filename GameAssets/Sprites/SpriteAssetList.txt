@@ -1,3 +1,16 @@
+/Alsi/Alsi_Back.png
+/Alsi/Alsi_Back_Blink_1.png
+/Alsi/Alsi_Back_Blink_2.png
+/Alsi/Alsi_Front.png
+/Alsi/Alsi_Front_Blink_1_.png
+/Alsi/Alsi_Front_Blink_2.png
+/Alsi/Alsi_Left.png
+/Alsi/Alsi_Left_Blink_1.png
+/Alsi/Alsi_Left_Blink_2.png
+/Alsi/Alsi_Right.png
+/Alsi/Alsi_Right_Blink_1.png
+/Alsi/Alsi_Right_Blink_2.png
+/Alsi/TheEye.png
 /P1Custom/P1_Back_Body.png
 /P1Custom/P1_Back_Body_Light_Away.png
 /P1Custom/P1_Back_Body_Light_Off.png
@@ -92,6 +105,23 @@
 /P2Custom/Red_Right_Body_Light_Away.png
 /P2Custom/Red_Right_Body_Light_Off.png
 /P2Custom/Red_Right_Body_Light_On.png
+/ScoreItems/ScoreItem (1).png
+/ScoreItems/ScoreItem (10).png
+/ScoreItems/ScoreItem (11).png
+/ScoreItems/ScoreItem (12).png
+/ScoreItems/ScoreItem (13).png
+/ScoreItems/ScoreItem (14).png
+/ScoreItems/ScoreItem (15).png
+/ScoreItems/ScoreItem (16).png
+/ScoreItems/ScoreItem (17).png
+/ScoreItems/ScoreItem (2).png
+/ScoreItems/ScoreItem (3).png
+/ScoreItems/ScoreItem (4).png
+/ScoreItems/ScoreItem (5).png
+/ScoreItems/ScoreItem (6).png
+/ScoreItems/ScoreItem (7).png
+/ScoreItems/ScoreItem (8).png
+/ScoreItems/ScoreItem (9).png
 /Skull_Entity/Active_Eyes_Backwards.png
 /Skull_Entity/Active_Eyes_Forward.png
 /Skull_Entity/Active_Eyes_Left.png
@@ -121,10 +151,13 @@
 /Skull_Entity/Skull_Right.png
 /Skull_Entity/Spine_Map.png
 /Skull_Entity/Spine_Part.png
+/Terrain/Brown_House_Wall.png
+/Terrain/Brown_Test_Wall.png
 /Terrain/House_Wall.png
 /Terrain/Test.png
 /Terrain/Test_Door_Closed.png
 /Terrain/Test_Door_Open.png
+/Terrain/Test_Dungeon_Wall.png
 /Terrain/Test_Floor.png
 /Terrain/Test_Floor_1.png
 /Terrain/Test_Floor_2.png
@@ -133,29 +166,12 @@
 /Terrain/Test_Floor_5.png
 /Terrain/Test_Floor_6.png
 /Terrain/Test_Wall.png
-/TestSprites/Alsi_Back.png
-/TestSprites/Alsi_Back_Blink_1.png
-/TestSprites/Alsi_Back_Blink_2.png
-/TestSprites/Alsi_Front.png
-/TestSprites/Alsi_Front_Blink_1_.png
-/TestSprites/Alsi_Front_Blink_2.png
-/TestSprites/Alsi_Left.png
-/TestSprites/Alsi_Left_Blink_1.png
-/TestSprites/Alsi_Left_Blink_2.png
-/TestSprites/Alsi_Right.png
-/TestSprites/Alsi_Right_Blink_1.png
-/TestSprites/Alsi_Right_Blink_2.png
-/TestSprites/Face_Static_1.png
-/TestSprites/Face_Static_2.png
-/TestSprites/Face_Static_3.png
-/TestSprites/Face_Static_4.png
 /TestSprites/Rock_Test.png
 /TestSprites/Standing_Mirror.png
-/TestSprites/TestEdgy.png
-/TestSprites/TestEdgy2.png
-/TestSprites/TestEdgy3.png
-/TestSprites/TestEdgy4.png
-/TestSprites/TheEye.png
+/TheFog/Face_Static_1.png
+/TheFog/Face_Static_2.png
+/TheFog/Face_Static_3.png
+/TheFog/Face_Static_4.png
 /UI/Alphabet.png
 /UI/Gear.png
 /UI/Icon.png

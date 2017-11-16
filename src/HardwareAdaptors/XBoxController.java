@@ -125,7 +125,7 @@ public class XBoxController {
 
     public boolean isAnyThingPressed()
     {
-        return getButtonA() || getButtonB() || getButtonX() || getButtonY() || getRightShoulder() || getRightShoulder() || getStart();
+        return getButtonA() || getButtonB() || getButtonX() || getButtonY() || getRightShoulder() || getRightShoulder() || getStart() || getDirectionalPad() != DirectionalEnum.NONE;
     }
 
 

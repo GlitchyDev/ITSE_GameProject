@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Enums.HauntedSkullStateEnum;
+import GameInfo.Environment.Entities.Enums.ProPlayerBodyState;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import HardwareAdaptors.DirectionalEnum;
@@ -34,7 +35,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private long stateStartTime;
 
     // Targeting and current direction
-    private DamageableEntityBase currentTarget;
+    private Pro_Player currentTarget;
     private DirectionalEnum currentDirection;
 
     // If it was previously a player
@@ -43,7 +44,9 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private long lastSeen;
     private final double averageRememberTime = 3.0;
 
-    private final double moveTime = 0.63;
+    // 0.63
+    private final double moveTime = 0.46;
+    private boolean lastPassedTurn = false;
 
     // The current Path
     private ArrayList<Position> currentPath;
@@ -100,7 +103,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     }
                     if(target != null)
                     {
-                        currentTarget = (DamageableEntityBase) target;
+                        currentTarget = (Pro_Player) target;
 
                         currentState = HauntedSkullStateEnum.ACTIVATE;
                         stateStartTime = System.currentTimeMillis();
@@ -141,8 +144,24 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     if(distanceFromEntity(currentTarget) > 1) {
                         currentPath = PathfindingHelper.findPathNonDiagnal(world, x, y, currentTarget.getX(), currentTarget.getY(),500);
                         if(currentPath != null && canSeeEntity(currentTarget)) {
-                            advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
-                            stateStartTime = System.currentTimeMillis();
+                            if(currentTarget.getBodyState() != ProPlayerBodyState.LIGHT_ON) {
+                                if(lastPassedTurn)
+                                {
+                                    advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+                                    stateStartTime = System.currentTimeMillis();
+                                    lastPassedTurn = false;
+                                }
+                                else
+                                {
+                                    lastPassedTurn = true;
+                                    stateStartTime = System.currentTimeMillis();
+                                }
+                            }
+                            else
+                            {
+                                advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+                                stateStartTime = System.currentTimeMillis();
+                            }
                         }
                         else
                         {
@@ -153,8 +172,17 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                     }
                     else
                     {
-                        currentTarget.takeDamage(this,DamageType.BLUNT,1);
+                        if(DirectionalEnum.determineDirection(this.x,this.y,currentTarget.getX(),currentTarget.getY()) == currentDirection)
+                        {
+                            currentTarget.takeDamage(this,DamageType.BLUNT,1);
+                        }
+                        else
+                        {
+                            currentDirection = DirectionalEnum.determineDirection(this.x,this.y,currentTarget.getX(),currentTarget.getY());
+                        }
+
                         stateStartTime = System.currentTimeMillis();
+
                     }
                 }
 

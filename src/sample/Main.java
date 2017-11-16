@@ -6,11 +6,13 @@ import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * This class is meant to
@@ -23,7 +25,10 @@ public class Main extends Application {
     private GlobalGameData globalGameData;
     public static boolean blinking = false;
     public static long lastBlinkStartTime = 0;
-    private final String uuid = RenewJarUUID.getJarUUID();
+    //private final String uuid = RenewJarUUID.getJarUUID();
+    private boolean shuttingDown = false;
+
+
     //private static boolean cache = false;
 
 
@@ -49,7 +54,7 @@ public class Main extends Application {
         globalGameData = new GlobalGameData(GameStateEnum.MainMenu,primaryStage,canvas);
         primaryStage.getIcons().add(globalGameData.getSprite("WindowIcon"));
 
-        primaryStage.show();
+        //primaryStage.show();
 
 
 
@@ -63,15 +68,20 @@ public class Main extends Application {
                 }
             }
         });
+        primaryStage.setOnCloseRequest(we -> shuttingDown = true);
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                if(!primaryStage.isIconified()) {
+                if(!primaryStage.isIconified() && !shuttingDown) {
                     globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).runLogic(canvas, gc);
                     globalGameData.getGameState(globalGameData.getCurrentGameState().toString()).render(canvas, gc);
                     doWindowBlink(primaryStage);
                 }
             }
         }.start();
+        if(shuttingDown)
+        {
+            globalGameData.closeAllSounds();
+        }
 
 
     }

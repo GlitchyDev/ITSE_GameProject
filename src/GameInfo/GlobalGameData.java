@@ -71,6 +71,7 @@ public class GlobalGameData {
         gameStates.put("TestWorld", new TestWorldGameState(this,primaryStage,canvas));
         gameStates.put("DebugControls", new DebugControlsGameState(this));
         gameStates.put("TitleScreen", new TitleScreenGameState(this));
+        gameStates.put("TutorialScreen", new TutorialGameState(this));
 
     }
 
@@ -398,6 +399,11 @@ public class GlobalGameData {
         MediaPlayer mediaPlayer = currentSounds.get(sound);
         mediaPlayer.setVolume(volume);
     }
+    public double getSoundVolume(String sound)
+    {
+        MediaPlayer mediaPlayer = currentSounds.get(sound);
+        return mediaPlayer.getVolume();
+    }
 
     public void stopSound(String sound)
     {
@@ -405,6 +411,19 @@ public class GlobalGameData {
         {
             currentSounds.get(sound).stop();
             currentSounds.remove(sound);
+        }
+    }
+
+    public boolean isPlayingSound(String sound)
+    {
+        return currentSounds.containsKey(sound);
+    }
+
+    public void closeAllSounds()
+    {
+        for(String sound: currentSounds.keySet())
+        {
+            stopSound(sound);
         }
     }
 
@@ -436,5 +455,9 @@ public class GlobalGameData {
 
     public ArrayList<Player> getConnectedPlayers() {
         return connectedPlayers;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

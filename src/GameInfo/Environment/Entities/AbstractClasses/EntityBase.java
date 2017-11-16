@@ -40,6 +40,7 @@ public abstract class EntityBase {
 
 
 
+
     public void moveRelative(int relativeX, int relativeY)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);

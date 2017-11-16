@@ -62,7 +62,7 @@ public class Chunk {
 
     public void spawnEntities(GlobalGameData globalGameData, World world, int relativeChunkX, int relativeChunkY)
     {
-        final int totalEntities = 0;
+        final int totalEntities = 150;
 
         final int chunkX = World.getPosNumFromChunkNum(relativeChunkX);
         final int chunkY = World.getPosNumFromChunkNum(relativeChunkY);

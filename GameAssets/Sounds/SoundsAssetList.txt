@@ -8,3 +8,5 @@
 /SoundEffects/flashLightOn.mp3
 /SoundEffects/menuSelectItem.mp3
 /SoundEffects/menuSwitchItem.mp3
+/SoundEffects/TheMessage.mp3
+/SoundEffects/TheStatic.mp3
