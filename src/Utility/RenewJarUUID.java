@@ -1,6 +1,4 @@
-package sample;
-
-import com.sun.org.apache.regexp.internal.RE;
+package Utility;
 
 import java.io.*;
 import java.util.Scanner;

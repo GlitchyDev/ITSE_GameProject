@@ -5,14 +5,13 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.GameStateEnum;
 import HardwareAdaptors.ControllerType;
-import HardwareAdaptors.DirectionalEnum;
 import HardwareAdaptors.XBoxController;
 import RenderingHelpers.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import sample.Main;
+import Utility.Main;
 
 import java.util.UUID;
 
@@ -134,11 +133,15 @@ public class TutorialGameState extends GameStateBase {
 
                 // Collect Items
                 TextRenderHelper.drawCenteredText(120, 95, "Collect for extra points", gc, globalGameData);
+                TextRenderHelper.drawCenteredText(120, 115, "And some health!", gc, globalGameData);
+
 
                 //TextRenderHelper.drawCenteredText(100, 95, "Collect for extra points", gc, globalGameData);
 
 
                 // Exit
+                TextRenderHelper.drawCenteredText(430, 550, "Remember to stay alive", gc, globalGameData);
+
                 TextRenderHelper.drawCenteredText(430, 570, " Press [Anything] to return to Menu", gc, globalGameData);
 
             }

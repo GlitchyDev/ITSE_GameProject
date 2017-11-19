@@ -1,4 +1,4 @@
-package sample;
+package Utility;
 
 public class DebugModeManager {
     public static boolean isDebugMode = false;

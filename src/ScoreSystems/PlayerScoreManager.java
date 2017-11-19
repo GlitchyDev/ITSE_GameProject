@@ -1,6 +1,9 @@
-package sample;
+package ScoreSystems;
+
+import java.util.UUID;
 
 public class PlayerScoreManager {
+    public static UUID uuid = UUID.randomUUID();
     private static Score topScore = new Score("*TopScore",0);
     private static Score currentScore = new Score("*CurrentScore",0);
 

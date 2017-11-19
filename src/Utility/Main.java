@@ -1,4 +1,4 @@
-package sample;
+package Utility;
 
 import GameInfo.Environment.World;
 import GameInfo.WorldViewport;
@@ -6,13 +6,11 @@ import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * This class is meant to

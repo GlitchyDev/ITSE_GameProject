@@ -1,4 +1,4 @@
-package sample;
+package ScoreSystems;
 
 public class Score implements Comparable<Score> {
     private String name;
