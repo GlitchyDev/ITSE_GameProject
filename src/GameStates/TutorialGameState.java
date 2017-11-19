@@ -5,24 +5,23 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.GameStateEnum;
 import HardwareAdaptors.ControllerType;
+import HardwareAdaptors.DirectionalEnum;
 import HardwareAdaptors.XBoxController;
-import RenderingHelpers.LightSpriteCreatorHelper;
-import RenderingHelpers.PlayerSkinCreator;
-import RenderingHelpers.RadiantLightProducer;
-import RenderingHelpers.TextRenderHelper;
+import RenderingHelpers.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import sample.Main;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class TutorialGameState extends GameStateBase {
     private final int[][] drawnMap = new int[][]{
-            {0,0,0,0,2,1,1,1,1,1,1,1,1,1,1},
-            {0,0,0,0,2,0,0,1,1,1,1,1,1,1,1},
-            {0,0,0,0,2,0,0,0,1,0,0,1,1,1,1},
-            {2,2,3,2,2,0,0,0,0,0,0,0,0,0,1},
+            {2,2,2,2,2,1,1,1,1,1,1,1,1,1,1},
+            {2,0,0,0,2,0,0,1,1,1,1,1,1,1,1},
+            {2,0,0,0,2,0,0,0,1,0,0,1,1,1,1},
+            {2,2,3,1,2,0,0,0,0,0,0,0,0,0,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
             {1,0,0,0,0,0,0,0,0,0,0,0,4,1,1},
             {1,1,0,0,0,0,0,0,0,0,4,4,4,4,1},
@@ -40,6 +39,9 @@ public class TutorialGameState extends GameStateBase {
     private long startTime = System.currentTimeMillis();
     private int currentLight = 4;
     private XBoxController controller;
+    private int currentImage = 0;
+    private boolean switchState = false;
+    private long clickTime = 0;
 
 
     public TutorialGameState(GlobalGameData globalGameData) {
@@ -74,48 +76,224 @@ public class TutorialGameState extends GameStateBase {
             }
             PlayerSkinCreator.generateSkin(uuid,globalGameData);
             controller = globalGameData.getConnectedControllers().get(0);
+            startTime = System.currentTimeMillis();
+            switchState = false;
+            clickTime = 0;
         }
     }
 
     @Override
     protected void doLogic(Canvas canvas, GraphicsContext gc) {
-
+        if(switchState)
+        {
+            if((System.currentTimeMillis() - clickTime)/1000.0 > 1.0)
+            {
+                globalGameData.switchGameState(GameStateEnum.TitleScreen);
+            }
+        }
+        else
+        {
+            controller.poll();
+            if(controller.isAnyThingPressed())
+            {
+                switchState = true;
+                clickTime = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
     protected void doRender(Canvas canvas, GraphicsContext gc) {
+
         RadiantLightProducer.produceLight(7,7,currentLight,blocks);
+        RadiantLightProducer.produceLight(1,1,3,blocks);
 
         for(int renderLayer = 0; renderLayer < 5; renderLayer++) {
             for (int y = 0; y < drawnMap[0].length; y++) {
                 for (int x = 0; x < drawnMap.length; x++) {
 
-                    blocks[y][x].renderBlock(canvas,gc,x,y,renderLayer);
+                    blocks[y][x].renderBlock(canvas, gc, x, y, renderLayer);
                 }
             }
-            if(renderLayer == 2) {
-                fakeDrawPlayer(gc, 0);
-
-
-                // Render Help Tip Light
-
+            if (renderLayer == 0) {
+                drawFakeItem(gc);
+            }
+            if (renderLayer == 2) {
+                drawFakePlayer(gc);
+                drawFakeEnemies(gc);
+            }
+            if (renderLayer == 3) {
                 if (controller.getControllerType() == ControllerType.XBoxController) {
-                    TextRenderHelper.drawCenteredText(300, 200, "Use [RT] to toggle light", gc, globalGameData);
+                    TextRenderHelper.drawCenteredText(300, 210, "Use [RT] to toggle light", gc, globalGameData);
                     TextRenderHelper.drawCenteredText(300, 310, "Use [Direction Pad] to move", gc, globalGameData);
 
+                } else {
+                    TextRenderHelper.drawCenteredText(300, 210, "Use [0] to toggle light", gc, globalGameData);
+                    TextRenderHelper.drawCenteredText(300, 310, "Use [Arrow Keys] to move", gc, globalGameData);
+                }
+
+                // Collect Items
+                TextRenderHelper.drawCenteredText(120, 95, "Collect for extra points", gc, globalGameData);
+
+                //TextRenderHelper.drawCenteredText(100, 95, "Collect for extra points", gc, globalGameData);
+
+
+                // Exit
+                TextRenderHelper.drawCenteredText(430, 570, " Press [Anything] to return to Menu", gc, globalGameData);
+
+            }
+        }
+
+
+        double duration = 0.0;
+        if(switchState)
+        {
+            duration = (System.currentTimeMillis() - clickTime)/1000.0;
+
+        }
+        else
+        {
+           duration = 1.0 - (System.currentTimeMillis() - startTime)/1000.0;
+        }
+        if(duration < 1.0)
+        {
+            gc.setFill(Color.BLACK);
+            gc.setGlobalAlpha(duration);
+            gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        }
+    }
+    public void drawFakeEnemies(GraphicsContext gc) {
+        int random = (int) (Math.random() * 10);
+        if (random == 0) {
+            currentImage = (int) (Math.random() * 4);
+        }
+        int xOffset = ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Face_Static_1"));
+        int yOffset = ImageRenderHelper.findCenterYMod(globalGameData.getSprite("Face_Static_1"));
+
+        gc.setGlobalAlpha(0.8);
+        switch (currentImage) {
+            case 0:
+                gc.drawImage(globalGameData.getSprite("Face_Static_1"), 8 * World.getScaledUpSquareSize() + xOffset, 10 * World.getScaledUpSquareSize() + yOffset);
+                break;
+            case 1:
+                gc.drawImage(globalGameData.getSprite("Face_Static_2"), 8 * World.getScaledUpSquareSize() + xOffset, 10 * World.getScaledUpSquareSize() + yOffset);
+                break;
+            case 2:
+                gc.drawImage(globalGameData.getSprite("Face_Static_3"), 8 * World.getScaledUpSquareSize() + xOffset, 10 * World.getScaledUpSquareSize() + yOffset);
+                break;
+            case 3:
+                gc.drawImage(globalGameData.getSprite("Face_Static_4"), 8 * World.getScaledUpSquareSize() + xOffset, 10 * World.getScaledUpSquareSize() + yOffset);
+                break;
+        }
+        gc.setGlobalAlpha(1.0);
+        xOffset = ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Active_Skull_Forward"));
+        yOffset = ImageRenderHelper.findCenterYMod(globalGameData.getSprite("Active_Skull_Forward"));
+
+
+        if (blocks[8][4].getPreviousLightLevel() > 3) {
+            gc.drawImage(globalGameData.getSprite("Active_Skull_Forward"), 8 * World.getScaledUpSquareSize() + xOffset, 4 * World.getScaledUpSquareSize() + yOffset);
+        }
+        else
+        {
+            gc.drawImage(globalGameData.getSprite("Skull_Forward"), 8 * World.getScaledUpSquareSize() + xOffset, 4 * World.getScaledUpSquareSize() + yOffset);
+        }
+        Image shadow1 = LightSpriteCreatorHelper.createShadow(globalGameData.getSprite("Active_Skull_Forward"));
+        gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(blocks[8][4].getPreviousLightLevel()));
+        gc.drawImage(shadow1,8 * World.getScaledUpSquareSize() + xOffset,4 * World.getScaledUpSquareSize() + yOffset);
+        gc.setGlobalAlpha(1.0);
+
+
+
+        xOffset = ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front"));
+        yOffset = ImageRenderHelper.findCenterYMod(globalGameData.getSprite("Alsi_Front"));
+
+
+
+        String direction = "Front";
+        double progress = (((System.currentTimeMillis()-startTime)/1000.0)% 1.5);
+        if(progress < 0.4)
+        {
+            direction = "Front";
+        }
+        else
+        {
+            if(progress < 0.8)
+            {
+                direction = "Left";
+            }
+            else
+            {
+                if(progress < 1.2)
+                {
+                    direction = "Back";
                 }
                 else
                 {
-                    TextRenderHelper.drawCenteredText(300, 200, "Use [0] to toggle light", gc, globalGameData);
-                    TextRenderHelper.drawCenteredText(300, 310, "Use [Arrow Keys] to move", gc, globalGameData);
-
-
+                    direction = "Right";
                 }
             }
         }
+        String eyes = "";
+        if (Main.blinking) {
+            double duration = (System.currentTimeMillis() - Main.lastBlinkStartTime) / 1000.0;
+            if (duration < 0.2) {
+                eyes = "_Blink_1";
+            } else {
+                if (duration < 0.4) {
+                    eyes = "_Blink_2";
+                } else {
+                    if (duration < 0.6) {
+                        eyes = "_Blink_1";
+                    }
+                }
+            }
+        }
+
+
+        for(int i = 0; i < 20; i++) {
+            int xOffset2 = (int) (Math.random() * 12);
+            xOffset2 = (int) (xOffset2 - 12.0 / 2.0);
+            int yOffset2 = (int) (Math.random() * 6);
+            yOffset2 = (int) (yOffset2 - 6.0 / 2.0);
+
+            if(blocks[5][5].getPreviousLightLevel() < 2) {
+                gc.setGlobalAlpha(0.02);
+                gc.drawImage(globalGameData.getSprite("Alsi_" + direction + eyes), 5 * World.getScaledUpSquareSize() + xOffset + xOffset2, 4 * World.getScaledUpSquareSize() + yOffset + yOffset2);
+                Image shadow2 = LightSpriteCreatorHelper.createShadow(globalGameData.getSprite("Alsi_Front"));
+                gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(blocks[5][5].getPreviousLightLevel()) * 0.02);
+                gc.drawImage(shadow2, 5 * World.getScaledUpSquareSize() + xOffset + xOffset2, 4 * World.getScaledUpSquareSize() + yOffset + yOffset2);
+                gc.setGlobalAlpha(1.0);
+            }
+        }
+
+
     }
 
-    public void fakeDrawPlayer(GraphicsContext gc, double xOffset)
+    public void drawFakeItem(GraphicsContext gc)
+    {
+        Image sprite1 = globalGameData.getSprite("ScoreItem_Pawn");
+
+
+        double xOffset = ImageRenderHelper.findCenterXMod(sprite1);
+        double yOffset = ImageRenderHelper.findCenterYMod(sprite1);
+        gc.drawImage(sprite1,2 * World.getScaledUpSquareSize() + xOffset,1 * World.getScaledUpSquareSize() + yOffset);
+        Image shadow1 = LightSpriteCreatorHelper.createShadow(sprite1);
+        gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(blocks[1][2].getPreviousLightLevel()));
+        gc.drawImage(shadow1,2 * World.getScaledUpSquareSize() + xOffset,1 * World.getScaledUpSquareSize() + yOffset);
+        gc.setGlobalAlpha(1.0);
+
+        Image sprite2 = globalGameData.getSprite("ScoreItem_Rock");
+        xOffset = ImageRenderHelper.findCenterXMod(sprite2);
+        yOffset = ImageRenderHelper.findCenterYMod(sprite2);
+        gc.drawImage(sprite2,3 * World.getScaledUpSquareSize() + xOffset,1 * World.getScaledUpSquareSize()  + yOffset);
+        Image shadow2 = LightSpriteCreatorHelper.createShadow(sprite2);
+        gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(blocks[2][2].getPreviousLightLevel()));
+        gc.drawImage(shadow2,3 * World.getScaledUpSquareSize() + xOffset,1 * World.getScaledUpSquareSize() + yOffset);
+        gc.setGlobalAlpha(1.0);
+
+    }
+
+    public void drawFakePlayer(GraphicsContext gc)
     {
         String direction = "Front";
         String head = "P1" + "_" + direction + "_Head";
@@ -177,15 +355,17 @@ public class TutorialGameState extends GameStateBase {
         }
 
         Image sprite = globalGameData.getSprite(uuid.toString() + "|" + head + "|" + body + "|" + leg);
-        gc.drawImage(sprite,7 * World.getScaledUpSquareSize() + (int)(xOffset),6 * World.getScaledUpSquareSize() - 10);
+        gc.drawImage(sprite,7 * World.getScaledUpSquareSize(),6 * World.getScaledUpSquareSize() - 10);
         Image shadow = LightSpriteCreatorHelper.createShadow(sprite);
         gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(currentLight));
-        gc.drawImage(shadow,7 * World.getScaledUpSquareSize() + (int)(xOffset),6 * World.getScaledUpSquareSize() - 10);
+        gc.drawImage(shadow,7 * World.getScaledUpSquareSize(),6 * World.getScaledUpSquareSize() - 10);
         gc.setGlobalAlpha(1.0);
     }
     @Override
     public void enterState(GameStateEnum previousState) {
         startTime = System.currentTimeMillis();
+        switchState = false;
+        clickTime = 0;
     }
 
     @Override

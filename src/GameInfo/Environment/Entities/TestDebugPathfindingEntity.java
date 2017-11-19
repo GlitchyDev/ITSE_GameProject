@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * - Note the issues in Pathfinding
  * - Improve Pathfinding
  */
-public class TestDebugPathfindingEntity extends DamageableEntityBase {
+public class TestDebugPathfindingEntity extends EntityBase {
     private Image sprite;
     private Pro_Player targetPlayer;
     private long lastUpdate;
@@ -35,15 +35,7 @@ public class TestDebugPathfindingEntity extends DamageableEntityBase {
         cacheNum = 0;
     }
 
-    @Override
-    public boolean takeDamage(DamageType damageType, int damageAmount) {
-        return true;
-    }
 
-    @Override
-    public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
-        return true;
-    }
 
     @Override
     public void tickEntity() {

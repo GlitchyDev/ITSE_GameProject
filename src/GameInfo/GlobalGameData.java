@@ -72,6 +72,9 @@ public class GlobalGameData {
         gameStates.put("DebugControls", new DebugControlsGameState(this));
         gameStates.put("TitleScreen", new TitleScreenGameState(this));
         gameStates.put("TutorialScreen", new TutorialGameState(this));
+        gameStates.put("CreditScreen", new CreditGameState(this));
+        gameStates.put("HighScoreScreen", new HighScoreState(this));
+        gameStates.put("SubmitScoreScreen",new ScoreSubmitGameState(this));
 
     }
 
@@ -142,6 +145,7 @@ public class GlobalGameData {
                                     writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
                                 }
                                 else {
+
                                     spriteAssets.put(sprite.getName().replace(".png", ""), ImageRenderHelper.resample(newSprite, 2, false));
                                     writer.println("/" + innerFolders.getName() + "/" + sprite.getName());
                                     System.out.println("    -" + sprite.getName().replace(".png", ""));
@@ -396,8 +400,10 @@ public class GlobalGameData {
 
     public void setSoundVolume(String sound,double volume)
     {
-        MediaPlayer mediaPlayer = currentSounds.get(sound);
-        mediaPlayer.setVolume(volume);
+        if(currentSounds.containsKey(sound)) {
+            MediaPlayer mediaPlayer = currentSounds.get(sound);
+            mediaPlayer.setVolume(volume);
+        }
     }
     public double getSoundVolume(String sound)
     {

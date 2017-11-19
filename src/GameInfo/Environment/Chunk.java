@@ -4,7 +4,6 @@ import GameInfo.Environment.Blocks.BlockBase;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Haunted_Skull_Entity;
-import GameInfo.Environment.Entities.TestRockEntity;
 import GameInfo.Environment.Structures.BasicHouse;
 import GameInfo.Environment.Structures.DirtBlobStructure;
 import GameInfo.Environment.Structures.StructureBase;
@@ -49,7 +48,6 @@ public class Chunk {
         }
 
         this.entities = new ArrayList<>();
-        this.entities.add(new TestRockEntity(world, globalGameData, World.getPosNumFromChunkNum(relativeChunkX),World.getPosNumFromChunkNum(relativeChunkY),globalGameData.getSprite("Standing_Mirror")));
 
         this.structures = new ArrayList<>();
         this.removeNextTick = new ArrayList<>();

@@ -105,23 +105,8 @@
 /P2Custom/Red_Right_Body_Light_Away.png
 /P2Custom/Red_Right_Body_Light_Off.png
 /P2Custom/Red_Right_Body_Light_On.png
-/ScoreItems/ScoreItem (1).png
-/ScoreItems/ScoreItem (10).png
-/ScoreItems/ScoreItem (11).png
-/ScoreItems/ScoreItem (12).png
-/ScoreItems/ScoreItem (13).png
-/ScoreItems/ScoreItem (14).png
-/ScoreItems/ScoreItem (15).png
-/ScoreItems/ScoreItem (16).png
-/ScoreItems/ScoreItem (17).png
-/ScoreItems/ScoreItem (2).png
-/ScoreItems/ScoreItem (3).png
-/ScoreItems/ScoreItem (4).png
-/ScoreItems/ScoreItem (5).png
-/ScoreItems/ScoreItem (6).png
-/ScoreItems/ScoreItem (7).png
-/ScoreItems/ScoreItem (8).png
-/ScoreItems/ScoreItem (9).png
+/ScoreItems/ScoreItem_Pawn.png
+/ScoreItems/ScoreItem_Rock.png
 /Skull_Entity/Active_Eyes_Backwards.png
 /Skull_Entity/Active_Eyes_Forward.png
 /Skull_Entity/Active_Eyes_Left.png
@@ -166,8 +151,13 @@
 /Terrain/Test_Floor_5.png
 /Terrain/Test_Floor_6.png
 /Terrain/Test_Wall.png
+/TestSprites/Abdu.png
+/TestSprites/Ben.png
+/TestSprites/Charlie.png
+/TestSprites/Robert.png
 /TestSprites/Rock_Test.png
 /TestSprites/Standing_Mirror.png
+/TestSprites/Tanner.png
 /TheFog/Face_Static_1.png
 /TheFog/Face_Static_2.png
 /TheFog/Face_Static_3.png

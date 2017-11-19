@@ -34,6 +34,15 @@ public abstract class DamageableEntityBase extends EntityBase {
      * @return If the damage "Succeeded"
      */
     public abstract boolean takeDamage(DamageType damageType, int damageAmount);
+
+    /**
+     * Heal the Entity, no causer specified
+     * @param damageType The type of Healing Dealt
+     * @param healingAmount The amount of Healing Dealt
+     * @return If the Healing "Succeeded"
+     */
+    public abstract boolean takeHealing(DamageType damageType, int healingAmount);
+
     /**
      * Deal damage to the Entity, no causer specified
      * @param damageType The type of damage Dealt

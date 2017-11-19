@@ -8,6 +8,8 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.GameStateEnum;
 import GameStates.Enums.TitleSceenMiniState;
+import HardwareAdaptors.DirectionalEnum;
+import HardwareAdaptors.XBoxController;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
 import RenderingHelpers.RadiantLightProducer;
@@ -33,6 +35,11 @@ public class TitleScreenGameState extends GameStateBase {
     private final UUID uuid = UUID.randomUUID();
     private TitleSceenMiniState state;
 
+    private XBoxController controller;
+    private DirectionalEnum cacheDirection = DirectionalEnum.NONE;
+    private long lastCursorMove = 0;
+    private int cursurNum = 0;
+
 
     public TitleScreenGameState(GlobalGameData globalGameData) {
         super(globalGameData);
@@ -40,6 +47,7 @@ public class TitleScreenGameState extends GameStateBase {
         stateStartTime = 0;
         lastMoveTime = 0;
         state = TitleSceenMiniState.TS_LOADING;
+        controller = globalGameData.getConnectedControllers().get(0);
     }
 
     @Override
@@ -62,19 +70,57 @@ public class TitleScreenGameState extends GameStateBase {
                 double progress = 1.0/buttonLoadTime * ((System.currentTimeMillis() - stateStartTime)/1000.0);
                 if(progress > 1)
                 {
-                    globalGameData.getConnectedControllers().get(0).poll();
-                    if(globalGameData.getConnectedControllers().get(0).isAnyThingPressed())
+                    controller.poll();
+                    if(controller.getDirectionalPad() != cacheDirection)
                     {
-                        state = TitleSceenMiniState.TS_CLICK;
-                        stateStartTime = System.currentTimeMillis();
+                        cacheDirection = controller.getDirectionalPad();
+                        switch(cacheDirection)
+                        {
+                            case NORTH:
+                                if(cursurNum != 0)
+                                {
+                                    lastCursorMove = System.currentTimeMillis();
+                                    cursurNum--;
+                                    globalGameData.playSound("menuSwitchItem",false,0.1);
+                                }
+                                else
+                                {
+                                    lastCursorMove = System.currentTimeMillis();
+                                    cursurNum = 4;
+                                    globalGameData.playSound("menuSwitchItem",false,0.1);
+                                }
+                                break;
+                            case SOUTH:
+                                if(cursurNum != 4)
+                                {
+                                    lastCursorMove = System.currentTimeMillis();
+                                    globalGameData.playSound("menuSwitchItem",false,0.1);
+                                    cursurNum++;
+                                }
+                                else
+                                {
+                                    lastCursorMove = System.currentTimeMillis();
+                                    cursurNum = 0;
+                                    globalGameData.playSound("menuSwitchItem",false,0.1);
+                                }
+                                break;
+                            case EAST:
+                            case WEST:
+                                state = TitleSceenMiniState.TS_Exit;
+                                stateStartTime = System.currentTimeMillis();
+                                globalGameData.playSound("menuSelectItem",false,0.1);
+
+                                break;
+
+                        }
                     }
                 }
 
                 break;
-            case TS_CLICK:
+            case TS_Exit:
                 if(System.currentTimeMillis() > (stateStartTime + exitLength*1000))
                 {
-                    globalGameData.switchGameState(GameStateEnum.TestWorld);
+                    menuSelect();
                 }
                 break;
         }
@@ -98,6 +144,28 @@ public class TitleScreenGameState extends GameStateBase {
         RadiantLightProducer.produceLight(viewportBufer+7,viewportBufer+7,5,blocks);
     }
 
+    public void menuSelect()
+    {
+        switch(cursurNum)
+        {
+            case 0:
+                globalGameData.switchGameState(GameStateEnum.TestWorld);
+                break;
+            case 1:
+                globalGameData.switchGameState(GameStateEnum.TutorialScreen);
+                break;
+            case 2:
+                globalGameData.switchGameState(GameStateEnum.CreditScreen);
+                break;
+            case 3:
+                globalGameData.switchGameState(GameStateEnum.HighScoreScreen);
+                break;
+            case 4:
+                globalGameData.switchGameState(GameStateEnum.SubmitScoreScreen);
+                break;
+        }
+    }
+
     @Override
     protected void doRender(Canvas canvas, GraphicsContext gc) {
 
@@ -116,9 +184,6 @@ public class TitleScreenGameState extends GameStateBase {
             }
         }
 
-
-        gc.setFill(Color.BLUE);
-        gc.fillText("" + System.currentTimeMillis(),50,50);
 
 
         int offset = (int)(canvas.getWidth()/2 - globalGameData.getSprite("TitleIcon").getWidth()/2);
@@ -140,7 +205,7 @@ public class TitleScreenGameState extends GameStateBase {
         gc.setGlobalAlpha(1.0);
 
 
-        if(state == TitleSceenMiniState.TS_IDLE || state == TitleSceenMiniState.TS_CLICK) {
+        if(state == TitleSceenMiniState.TS_IDLE || state == TitleSceenMiniState.TS_Exit) {
             double progress = 0;
             if(state == TitleSceenMiniState.TS_IDLE) {
                 progress = 1.0 / exitLength * ((System.currentTimeMillis() - stateStartTime) / 1000.0);
@@ -153,11 +218,64 @@ public class TitleScreenGameState extends GameStateBase {
             if(progress < 1) {
                 gc.setGlobalAlpha(progress);
             }
-            if ((int) (System.currentTimeMillis() / 1000.0) % 2 == 0) {
-                TextRenderHelper.drawText(265, 400, "Continue? <", gc, globalGameData);
+            String cursor = "<<";
+            if ((int) ((System.currentTimeMillis() - lastCursorMove) / 1000.0) % 2 == 0) {
+                cursor = " <";
             } else {
-                TextRenderHelper.drawText(265, 400, "Continue?  <", gc, globalGameData);
+                cursor = "  <";
             }
+            if(state == TitleSceenMiniState.TS_Exit)
+            {
+                cursor = "<";
+            }
+
+            int buffer = 10;
+            if(cursurNum == 0)
+            {
+                TextRenderHelper.drawText(265, 400, "Continue?" + cursor, gc, globalGameData);
+            }
+            else
+            {
+                TextRenderHelper.drawText(265, 400, "Continue?", gc, globalGameData);
+            }
+
+            if(cursurNum == 1)
+            {
+                TextRenderHelper.drawText(265, 415 + buffer, "Tutorial" + cursor, gc, globalGameData);
+            }
+            else
+            {
+                TextRenderHelper.drawText(265, 415 + buffer, "Tutorial", gc, globalGameData);
+            }
+
+            if(cursurNum == 2)
+            {
+                TextRenderHelper.drawText(265, 430 + buffer * 2, "Credits" + cursor, gc, globalGameData);
+            }
+            else
+            {
+                TextRenderHelper.drawText(265, 430 + buffer * 2, "Credits", gc, globalGameData);
+            }
+            if(cursurNum == 3)
+            {
+                TextRenderHelper.drawText(265,445 + buffer * 3, "HighScores" + cursor, gc, globalGameData);
+            }
+            else
+            {
+                TextRenderHelper.drawText(265, 445 + buffer * 3, "HighScores", gc, globalGameData);
+            }
+            if(cursurNum == 4)
+            {
+                TextRenderHelper.drawText(265,460 + buffer * 4, "Exit?" + cursor, gc, globalGameData);
+            }
+            else
+            {
+                TextRenderHelper.drawText(265, 460 + buffer * 4, "Exit?", gc, globalGameData);
+            }
+
+
+
+
             gc.setGlobalAlpha(1.0);
         }
 
@@ -175,14 +293,16 @@ public class TitleScreenGameState extends GameStateBase {
         }
 
 
-        if(state == TitleSceenMiniState.TS_CLICK)
+        if(state == TitleSceenMiniState.TS_Exit)
         {
             double progress = 1.0/exitLength * ((System.currentTimeMillis() - stateStartTime)/1000.0);
             if(progress < 0)
             {
                 progress = 1;
             }
-            globalGameData.setSoundVolume("MainTheme",1-progress);
+            if(cursurNum == 0) {
+                globalGameData.setSoundVolume("MainTheme", 1 - progress);
+            }
             gc.setGlobalAlpha(progress);
             gc.setFill(Color.BLACK);
             gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
@@ -194,7 +314,9 @@ public class TitleScreenGameState extends GameStateBase {
     @Override
     public void enterState(GameStateEnum previousState) {
         PlayerSkinCreator.generateSkin(uuid, globalGameData);
-        globalGameData.playSound("MainTheme",true);
+        if(previousState == GameStateEnum.TestWorld || previousState == GameStateEnum.MainMenu) {
+            globalGameData.playSound("MainTheme", true);
+        }
         for(int x = 0; x < viewportSize + viewportBufer*2; x++)
         {
             for(int y = 0; y < viewportSize + viewportBufer*2; y++)
@@ -209,7 +331,9 @@ public class TitleScreenGameState extends GameStateBase {
 
     @Override
     public void exitState(GameStateEnum newState) {
-        globalGameData.stopSound("MainTheme");
+        if(newState == GameStateEnum.TestWorld) {
+            globalGameData.stopSound("MainTheme");
+        }
         blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];
         stateStartTime = 0;
         lastMoveTime = 0;

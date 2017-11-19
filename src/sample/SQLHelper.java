@@ -9,45 +9,49 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class SQLHelper {
-    public static void main(String [] args) throws Exception{
 
-       // insert(4788721,"KSU50", 5050);
+    public static void main(String[] args)
+    {
 
+        updatScore("DEV",1);
+        try {
+            System.out.println(getScore("DEV"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        ScoreManager.getTopScores();
-        int i = 0;
-        for(Score score: ScoreManager.getTopScores())
-        {
-            if(i < 10)
-            {
-                System.out.println((i+1) + "# " + score);
+    }
+
+    public static void deletePlayer (String uuid){
+
+        try{
+            URL url = new URL("http://www.classprojectfall.com/updateScore.php");
+            URLConnection conn = url.openConnection();
+
+            // activate the output
+            conn.setDoOutput(true);
+            PrintStream ps = new PrintStream(conn.getOutputStream());
+
+            // send your parameters to the php file
+            ps.print("&uuid=" + uuid);
+
+            // w input stream to send the request
+            conn.getInputStream();
+
+            // to get respond
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String l = null;
+            while ((l=br.readLine())!=null) {
+                System.out.println(l);
             }
-            i++;
+
+            br.close();
+            ps.close();
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        System.out.println();
-        ScoreManager.logScore("AAA",5);
-        i = 0;
-        for(Score score: ScoreManager.getTopScores())
-        {
-            if(i < 10)
-            {
-                System.out.println((i+1) + "# " + score);
-            }
-            i++;
-        }
-        System.out.println();
-        ScoreManager.logScore("AAA",5000000);
-        i = 0;
-        for(Score score: ScoreManager.getTopScores())
-        {
-            if(i < 10)
-            {
-                System.out.println((i+1) + "# " + score);
-            }
-            i++;
-        }
-        ScoreManager.submitScore("AAA",999999999);
-        System.out.println(getScore("AAA"));
 
     }
 
@@ -73,7 +77,7 @@ public class SQLHelper {
 
         // send your parameters to the php file
         ps.print("&uuid=" + uuid);
-        ps.print("&PlayerScore=" + PlayerScore);
+        ps.print("&PlayerScoreManager=" + PlayerScore);
 
         // w input stream to send the request
         conn.getInputStream();
@@ -108,7 +112,7 @@ public class SQLHelper {
 
             // send your parameters to the php file
             ps.print("&uuid=" + uuid);
-            ps.print("&PlayerScore=" + PlayerScore);
+            ps.print("&PlayerScoreManager=" + PlayerScore);
 
             // w input stream to send the request
             conn.getInputStream();
@@ -131,30 +135,63 @@ public class SQLHelper {
     }
 
 
-    public static String getScore(String uuid) throws Exception{
+
+    public static String getScore(String uuid){
          String Playerscore = "";
 
-        URL oracle = new URL("http://www.classprojectfall.com/getDataNew.php");
-        URLConnection conn = oracle.openConnection();
+        URL oracle = null;
+        try {
+            oracle = new URL("http://www.classprojectfall.com/getDataNew.php");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        URLConnection conn = null;
+        try {
+            conn = oracle.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         conn.setDoOutput(true);
-        PrintStream ps = new PrintStream(conn.getOutputStream());
+        PrintStream ps = null;
+        try {
+            ps = new PrintStream(conn.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // send your parameters to the php file
         ps.print("&uuid=" + uuid);
 
         // w input stream to send the request
-        conn.getInputStream();
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-           // System.out.println(inputLine);
-            Playerscore = inputLine;
+        try {
+            conn.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        in.close();
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String inputLine;
+        try {
+            while ((inputLine = in.readLine()) != null) {
+               // System.out.println(inputLine);
+                Playerscore = inputLine;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ps.close();
 
         return Playerscore;
@@ -162,23 +199,51 @@ public class SQLHelper {
     }
 
     
-    public static String getTopPlayers() throws Exception{
+    public static String getTopPlayers(){
         String Playerscore = "";
 
-        URL oracle = new URL("http://www.classprojectfall.com/TopPlayers.php");
-        URLConnection conn = oracle.openConnection();
+        URL oracle = null;
+        try {
+            oracle = new URL("http://www.classprojectfall.com/TopPlayers.php");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        URLConnection conn = null;
+        try {
+            conn = oracle.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         conn.setDoOutput(true);
-        PrintStream ps = new PrintStream(conn.getOutputStream());
+        PrintStream ps = null;
+        try {
+            ps = new PrintStream(conn.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            Playerscore = inputLine;
+        try {
+            while ((inputLine = in.readLine()) != null) {
+                Playerscore = inputLine;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        in.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ps.close();
 
         return Playerscore;

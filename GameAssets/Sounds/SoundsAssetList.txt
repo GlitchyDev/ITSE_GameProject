@@ -1,11 +1,16 @@
 /BackgroundMusic/CaveWaterDrops.mp3
 /BackgroundMusic/MainTheme.mp3
 /SoundEffects/AlertSFX.mp3
+/SoundEffects/bonerattlelong.mp3
+/SoundEffects/bonerattleshort.mp3
+/SoundEffects/bonestrike.mp3
+/SoundEffects/bonestrike2.mp3
 /SoundEffects/DeathFallSound.mp3
 /SoundEffects/elecHum.mp3
 /SoundEffects/elecHumExtended.mp3
 /SoundEffects/flashLightOff.mp3
 /SoundEffects/flashLightOn.mp3
+/SoundEffects/itemCollect.mp3
 /SoundEffects/menuSelectItem.mp3
 /SoundEffects/menuSwitchItem.mp3
 /SoundEffects/TheMessage.mp3

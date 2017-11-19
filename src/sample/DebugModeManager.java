@@ -10,7 +10,7 @@ public class DebugModeManager {
     }
     public static boolean computerDebugModeDefault()
     {
-        return true;
+        return false;
     }
 
 }

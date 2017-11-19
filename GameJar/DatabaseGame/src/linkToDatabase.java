@@ -62,7 +62,7 @@ public class linkToDatabase {
 
             // send your parameters to the php file
             ps.print("&uuid=" + uuid);
-            ps.print("&PlayerScore=" + PlayerScore);
+            ps.print("&PlayerScoreManager=" + PlayerScore);
 
             // w input stream to send the request
             conn.getInputStream();
@@ -97,7 +97,7 @@ public class linkToDatabase {
 
         // send your parameters to the php file
         ps.print("&uuid=" + uuid);
-        ps.print("&PlayerScore=" + PlayerScore);
+        ps.print("&PlayerScoreManager=" + PlayerScore);
 
         // w input stream to send the request
         conn.getInputStream();

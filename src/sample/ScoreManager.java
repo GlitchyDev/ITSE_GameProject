@@ -5,25 +5,14 @@ import java.util.Arrays;
 
 public class ScoreManager {
     private static ArrayList<Score> topScores = new ArrayList<>();
-    private static Score currentPlayerScore = new Score("AAA",0);
 
 
-    /**
-     * Whenever the player "Loses" this method is run to check if
-     * - A. Their top score increased
-     * - B. If they made the Top 10
-     * @param name
-     * @param score
-     */
-    public static void logScore(String name, int score)
+
+    public static void updateScores()
     {
-        if(currentPlayerScore.getScore() < score)
-        {
-            topScores.remove(currentPlayerScore);
-            currentPlayerScore = new Score(name,score);
-            topScores.add(currentPlayerScore);
-            Arrays.sort(new ArrayList[]{topScores});
-        }
+
+        Arrays.sort(new ArrayList[]{topScores});
+
     }
 
     /**
@@ -75,7 +64,8 @@ public class ScoreManager {
                     Score highScore = new Score(name,score);
                     topScores.add(highScore);
                 }
-                topScores.add(currentPlayerScore);
+                topScores.add(PlayerScoreManager.getTopScore());
+                topScores.add(PlayerScoreManager.getCurrentScore());
             } catch (Exception e) {
                 e.printStackTrace();
             }

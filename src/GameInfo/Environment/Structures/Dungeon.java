@@ -4,6 +4,7 @@
 
 package GameInfo.Environment.Structures;
 import GameInfo.Environment.Blocks.*;
+import GameInfo.Environment.Entities.ScoreItem_Entity;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.paint.Color;
@@ -37,6 +38,11 @@ public class Dungeon extends StructureBase {
                         affectedBlocks.add(b2);
                     }
                 } else { //fill interior with floors (3x3 rooms)
+                    int random = globalGameData.getRandom().nextInt(60);
+                    if(random == 0)
+                    {
+                        world.attemptSpawn(new ScoreItem_Entity(world,globalGameData,structureX+x,structureY+y),globalGameData);
+                    }
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
@@ -108,8 +114,7 @@ public class Dungeon extends StructureBase {
 
             case 3:
                 //nothing
-                DebugBlock d = new DebugBlock(); //temporary, for testing
-                d.setColor(Color.BLUE);
+                WallFloorBlock d = new WallFloorBlock(globalGameData,BlockTypeEnum.TEST_FLOOR); //temporary, for testing
                 world.setBlockFromCords(structureX + 11, structureY + 11, d);
                 affectedBlocks.add(d);
                 break;

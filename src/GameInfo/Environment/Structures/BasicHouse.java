@@ -4,6 +4,7 @@ import GameInfo.Environment.Blocks.BlockTypeEnum;
 import GameInfo.Environment.Blocks.HouseWall;
 import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.Blocks.DoorBlock;
+import GameInfo.Environment.Entities.ScoreItem_Entity;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 
@@ -69,6 +70,13 @@ public class BasicHouse extends StructureBase {
                     WallFloorBlock b = new WallFloorBlock(globalGameData, BlockTypeEnum.TEST_FLOOR);
                     world.setBlockFromCords(structureX + x, structureY + y, b);
                     affectedBlocks.add(b);
+
+                    int random = globalGameData.getRandom().nextInt(100);
+                    if(random == 0)
+                    {
+                        world.attemptSpawn(new ScoreItem_Entity(world,globalGameData,structureX+x,structureY+y),globalGameData);
+                    }
+
                 }
             }
         }

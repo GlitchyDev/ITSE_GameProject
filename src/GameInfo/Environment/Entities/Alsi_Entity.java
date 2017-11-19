@@ -14,6 +14,7 @@ import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sample.Main;
 
 
 /**
@@ -42,10 +43,6 @@ public class Alsi_Entity extends EntityBase {
 
     @Override
     public void tickEntity() {
-        if(lastRelocate == 0)
-        {
-            world.getBlockFromCords(x,y).exitBlock(this);
-        }
 
         if(!target.isDead()) {
             // Decrease Distance & Attack
@@ -66,7 +63,6 @@ public class Alsi_Entity extends EntityBase {
                 int xOffset = (int) (Math.cos(angle) * distance);
                 int yOffset = (int) (Math.sin(angle) * distance);
                 moveAbsolute(target.getX() + xOffset, target.getY() + yOffset);
-                System.out.println("Moved " + xOffset + " " + yOffset + " Distance " + distance);
                 lastRelocate = System.currentTimeMillis();
             }
         }
@@ -80,18 +76,35 @@ public class Alsi_Entity extends EntityBase {
         if(!target.isDead())
         {
             gc.setGlobalAlpha(0.02);
-            for(int i = 0; i < 10; i++)
-            {
-                int xOffset = (int)(Math.random() * staticXWiggle);
-                xOffset = xOffset - staticXWiggle/2;
-                int yOffset = (int)(Math.random() * staticYWiggle);
-                yOffset = yOffset - staticYWiggle/2;
-                drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+            for(int i = 0; i < 10; i++) {
+                int xOffset = (int) (Math.random() * staticXWiggle);
+                xOffset = xOffset - staticXWiggle / 2;
+                int yOffset = (int) (Math.random() * staticYWiggle);
+                yOffset = yOffset - staticYWiggle / 2;
+                if (Main.blinking) {
+                    double duration = (System.currentTimeMillis() - Main.lastBlinkStartTime) / 1000.0;
+                    if (duration < 0.2) {
+                        drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_1"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                    } else {
+                        if (duration < 0.4) {
+                            drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_2"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+
+
+                        } else {
+                            if (duration < 0.6) {
+                                drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_1"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                            }
+                        }
+                    }
+                }
+                else {
+                    drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                }
             }
+
         }
-        else
-        {
-            if(target.getCauserOfDeath() == EntityType.ALSI) {
+        else {
+            if (target.getCauserOfDeath() == EntityType.ALSI) {
                 moveAbsolute(target.getX(), target.getY());
                 gc.setGlobalAlpha(0.02);
                 double progress = (System.currentTimeMillis() - target.getDeathStartTime()) / 1000.0;
@@ -100,7 +113,24 @@ public class Alsi_Entity extends EntityBase {
                     xOffset = (int) (xOffset - staticXWiggle / 2 * (1 + progress));
                     int yOffset = (int) (Math.random() * staticYWiggle * (1 + progress));
                     yOffset = (int) (yOffset - staticYWiggle / 2 * (1 + progress));
-                    drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                    if (Main.blinking) {
+                        double duration = (System.currentTimeMillis() - Main.lastBlinkStartTime) / 1000.0;
+                        if (duration < 0.2) {
+                            drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_1"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                        } else {
+                            if (duration < 0.4) {
+                                drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_2"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+
+
+                            } else {
+                                if (duration < 0.6) {
+                                    drawSpriteAtXY(globalGameData.getSprite("Alsi_Front_Blink_1"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                                }
+                            }
+                        }
+                    } else {
+                        drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
+                    }
                 }
 
                 if (progress > 3.0 && progress < 6.5) {

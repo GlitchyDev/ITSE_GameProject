@@ -85,7 +85,7 @@ public class Pro_Player extends DamageableEntityBase {
 
         // 1 ALSI per player
 
-        world.attemptSpawn(new ScoreItem(world,globalGameData,x,y+5),globalGameData);
+        world.attemptSpawn(new ScoreItem_Entity(world,globalGameData,x,y+5),globalGameData);
 
 
     }
@@ -484,6 +484,12 @@ public class Pro_Player extends DamageableEntityBase {
     }
 
     @Override
+    public boolean takeHealing(DamageType damageType, int healingAmount) {
+        currentHealth += healingAmount;
+        return false;
+    }
+
+    @Override
     public boolean takeDamage(EntityBase attacker, DamageType damageType, int damageAmount) {
         currentHealth -= damageAmount;
         if(currentHealth <= 0)
@@ -507,12 +513,14 @@ public class Pro_Player extends DamageableEntityBase {
     public DirectionalEnum getPrimaryDirection() {
         return primaryDirection;
     }
-
     public void setPrimaryDirection(DirectionalEnum direction)
     {
         this.primaryDirection = direction;
     }
-
+    public int getHealth()
+    {
+        return currentHealth;
+    }
     public void setEmotion(ProPlayerEmotion emotion)
     {
         this.emotion = emotion;

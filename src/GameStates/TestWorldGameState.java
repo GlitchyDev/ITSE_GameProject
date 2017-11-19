@@ -15,6 +15,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sample.DebugModeManager;
+import sample.PlayerScoreManager;
+import sample.ScoreManager;
 
 /**
  * The "World of the Game", keepping track of the World, viewport, and the Client
@@ -30,6 +32,7 @@ public class TestWorldGameState extends GameStateBase {
     private MainWorldMiniState state;
     private final double fadeIn = 2.0;
 
+    private long lastMinuteIncrease = 0;
 
 
     public TestWorldGameState(GlobalGameData globalGameData, Stage primaryStage, Canvas canvas)
@@ -55,6 +58,12 @@ public class TestWorldGameState extends GameStateBase {
                 stateStart = System.currentTimeMillis();
             }
 
+        }
+
+        if(System.currentTimeMillis() > lastMinuteIncrease + 1000.0 && !((Pro_Player)client.getPlayers().get(0).getPlayerCharacter()).isDead())
+        {
+            lastMinuteIncrease = System.currentTimeMillis();
+            PlayerScoreManager.addToScore(1);
         }
 
         for(Player p : client.getPlayers())
@@ -85,8 +94,8 @@ public class TestWorldGameState extends GameStateBase {
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
         gc.setGlobalAlpha(1.0);
 
-        double passedSeconds = (System.currentTimeMillis() - stateStart)/1000.0;
-        TextRenderHelper.drawText(100,50,String.valueOf(passedSeconds),gc,globalGameData);
+        //double passedSeconds = (System.currentTimeMillis() - stateStart)/1000.0;
+        TextRenderHelper.drawCenteredText(300,50,String.valueOf("Score" + PlayerScoreManager.getCurrentScore()),gc,globalGameData);
 
 
         if(DebugModeManager.isDebugMode) {
@@ -158,6 +167,9 @@ public class TestWorldGameState extends GameStateBase {
         globalGameData.playSound("CaveWaterDrops",true,0.2);
 
         stateStart = System.currentTimeMillis();
+        lastMinuteIncrease = System.currentTimeMillis();
+
+        PlayerScoreManager.resetScore();
 
     }
 

@@ -29,7 +29,7 @@ import java.util.ArrayList;
  *
  * RENAME at earliest convinience
  */
-public class Haunted_Skull_Entity extends DamageableEntityBase {
+public class Haunted_Skull_Entity extends EntityBase {
     // State Manager
     private HauntedSkullStateEnum currentState;
     private long stateStartTime;
@@ -45,7 +45,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     private final double averageRememberTime = 3.0;
 
     // 0.63
-    private final double moveTime = 0.46;
+    private final double moveTime = 0.38;
     private boolean lastPassedTurn = false;
 
     // The current Path
@@ -53,12 +53,6 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     // How long it takes to activate
     private final double activateStateLength = 0.3;
-    // The Max it should be able to see in a direction
-    private final int maxPathFindingRange = 5;
-    private final int maxVisionRange = 5;
-
-
-    private String lostReason = "";
 
 
     public Haunted_Skull_Entity(World world, GlobalGameData globalGameData, int x, int y, boolean wasPlayer) {
@@ -107,7 +101,14 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
                         currentState = HauntedSkullStateEnum.ACTIVATE;
                         stateStartTime = System.currentTimeMillis();
-                        globalGameData.playSound("menuSelectItem",false,0.15);
+
+                        if(Math.random() > 0.5) {
+                            globalGameData.playSound("bonestrike", false, 0.5);
+                        }
+                        else
+                        {
+                            globalGameData.playSound("bonestrike2", false, 0.5);
+                        }
                     }
 
                 }
@@ -160,6 +161,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                             else
                             {
                                 advancedMoveRelative(currentPath.get(0).getX() - x, currentPath.get(0).getY() - y, true, true, true, true);
+
                                 stateStartTime = System.currentTimeMillis();
                             }
                         }
@@ -203,7 +205,6 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
                 if(block != null) {
                     if (block.isCurrentlyLit() && BlockTypeEnum.isWalkable(block.getBlockType())) {
                         lastSeen = System.currentTimeMillis();
-                        lostReason = "LIGHT AROUND!";
                         return true;
 
                     }
@@ -213,7 +214,6 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
         if(System.currentTimeMillis() < lastSeen + averageRememberTime * 1000.0)
         {
-            lostReason = "REMEMBER";
             return true;
         }
         else
@@ -226,7 +226,6 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
     public void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer) {
         gc.setGlobalAlpha(1.0);
         gc.setFill(Color.BLUE);
-        TextRenderHelper.drawText(50,30,"Can see " + canSeeEntity(currentTarget) + " " + lostReason,gc,globalGameData);
 
         String modifier = "";
         if(wasPlayer)
@@ -302,15 +301,7 @@ public class Haunted_Skull_Entity extends DamageableEntityBase {
 
     }
 
-    @Override
-    public boolean takeDamage(DamageType damageType, int damageAmount) {
-        return true;
-    }
 
-    @Override
-    public boolean takeDamage(EntityBase causer, DamageType damageType, int damageAmount) {
-        return true;
-    }
 
     public void setCurrentDirection(DirectionalEnum direction)
     {

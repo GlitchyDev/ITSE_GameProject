@@ -8,5 +8,8 @@ public enum GameStateEnum {
     TitleScreen,
     DebugControls,
     TestWorld,
-    TutorialScreen
+    TutorialScreen,
+    CreditScreen,
+    HighScoreScreen,
+    SubmitScoreScreen,
 }
