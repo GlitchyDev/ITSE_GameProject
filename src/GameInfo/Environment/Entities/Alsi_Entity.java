@@ -1,12 +1,10 @@
 package GameInfo.Environment.Entities;
 
-import GameInfo.Environment.Blocks.DebugBlock;
 import GameInfo.Environment.Entities.AbstractClasses.EntityBase;
 import GameInfo.Environment.Entities.Enums.DamageType;
 import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.Entities.Enums.ProPlayerBodyState;
 import GameInfo.Environment.Entities.Enums.ProPlayerEmotion;
-import GameInfo.Environment.Entities.Pro_Player;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import HardwareAdaptors.DirectionalEnum;
@@ -14,7 +12,7 @@ import RenderingHelpers.ImageRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import sample.Main;
+import Utility.Main;
 
 
 /**

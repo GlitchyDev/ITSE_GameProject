@@ -16,8 +16,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import sample.PlayerScoreManager;
-import sample.ScoreManager;
+import ScoreSystems.PlayerScoreManager;
+import ScoreSystems.ScoreManager;
 
 import java.util.UUID;
 

@@ -7,7 +7,6 @@ import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.GameStateEnum;
-import HardwareAdaptors.DirectionalEnum;
 import HardwareAdaptors.XBoxController;
 import RenderingHelpers.LightSpriteCreatorHelper;
 import RenderingHelpers.PlayerSkinCreator;
@@ -17,9 +16,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import sample.ScoreManager;
+import ScoreSystems.ScoreManager;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class CreditGameState extends GameStateBase {

@@ -1,17 +1,15 @@
 package GameStates;
 
-import GameInfo.WorldViewport;
 import GameStates.Enums.GameStateEnum;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.MainMenuPhaseEnum;
-import GameStates.Enums.MainWorldMiniState;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import HardwareAdaptors.ControllerType;
 import HardwareAdaptors.XBoxController;
-import sample.DebugModeManager;
+import Utility.DebugModeManager;
 
 public class MainMenuGameState extends GameStateBase {
     // Phases within a State report "MiniStates" that don't require a seperate State

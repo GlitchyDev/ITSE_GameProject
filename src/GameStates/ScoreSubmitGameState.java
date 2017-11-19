@@ -7,7 +7,6 @@ import GameInfo.Environment.Blocks.WallFloorBlock;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import GameStates.Enums.GameStateEnum;
-import GameStates.Enums.TitleSceenMiniState;
 import HardwareAdaptors.DirectionalEnum;
 import HardwareAdaptors.XBoxController;
 import RenderingHelpers.LightSpriteCreatorHelper;
@@ -18,8 +17,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import sample.PlayerScoreManager;
-import sample.ScoreManager;
+import ScoreSystems.PlayerScoreManager;
+import ScoreSystems.ScoreManager;
 
 import java.util.UUID;
 
@@ -66,18 +65,21 @@ public class ScoreSubmitGameState extends GameStateBase {
                         if (letter1 > 'Z') {
                             letter1 = 'A';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 2) {
                         letter2++;
                         if (letter2 > 'Z') {
                             letter2 = 'A';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 3) {
                         letter3++;
                         if (letter3 > 'Z') {
                             letter3 = 'A';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 4) {
                         String name = String.valueOf(letter1 + letter2 + letter3);
@@ -94,23 +96,27 @@ public class ScoreSubmitGameState extends GameStateBase {
                         if (letter1 < 'A') {
                             letter1 = 'Z';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 2) {
                         letter2--;
                         if (letter2 < 'A') {
                             letter2 = 'Z';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 3) {
                         letter3--;
                         if (letter3 < 'A') {
                             letter3 = 'Z';
                         }
+                        globalGameData.playSound("menuSwitchItem",false,0.1);
                     }
                     if (cursorNum == 4) {
                         String name = String.valueOf(letter1 + letter2 + letter3);
                         ScoreManager.submitScore(name, PlayerScoreManager.getTopScore().getScore());
                         globalGameData.getPrimaryStage().close();
+
                     }
                     break;
                 case EAST:
@@ -118,12 +124,15 @@ public class ScoreSubmitGameState extends GameStateBase {
                     if (cursorNum > 4) {
                         cursorNum = 0;
                     }
+                    globalGameData.playSound("menuSwitchItem",false,0.1);
                     break;
                 case WEST:
                     cursorNum--;
                     if (cursorNum < 0) {
                         cursorNum = 4;
                     }
+                    globalGameData.playSound("menuSwitchItem",false,0.1);
+
                     break;
             }
         }

@@ -14,9 +14,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import sample.DebugModeManager;
-import sample.PlayerScoreManager;
-import sample.ScoreManager;
+import Utility.DebugModeManager;
+import ScoreSystems.PlayerScoreManager;
 
 /**
  * The "World of the Game", keepping track of the World, viewport, and the Client
