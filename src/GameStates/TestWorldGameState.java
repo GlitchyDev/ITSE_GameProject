@@ -94,7 +94,7 @@ public class TestWorldGameState extends GameStateBase {
         gc.setGlobalAlpha(1.0);
 
         //double passedSeconds = (System.currentTimeMillis() - stateStart)/1000.0;
-        TextRenderHelper.drawCenteredText(300,50,String.valueOf("Score" + PlayerScoreManager.getCurrentScore().getScore()),gc,globalGameData);
+        TextRenderHelper.drawCenteredText(300,50,String.valueOf("Score: " + PlayerScoreManager.getCurrentScore().getScore()),gc,globalGameData);
 
 
         if(DebugModeManager.isDebugMode) {

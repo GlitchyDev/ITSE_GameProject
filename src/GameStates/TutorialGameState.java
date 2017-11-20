@@ -136,6 +136,12 @@ public class TutorialGameState extends GameStateBase {
                 TextRenderHelper.drawCenteredText(120, 115, "And some health!", gc, globalGameData);
 
 
+
+                TextRenderHelper.drawText(350, 95, "The Alsi hates light", gc, globalGameData);
+                TextRenderHelper.drawText(350, 115, "The Skulls love it", gc, globalGameData);
+                TextRenderHelper.drawText(350, 135, "When you hear the music, run", gc, globalGameData);
+
+
                 //TextRenderHelper.drawCenteredText(100, 95, "Collect for extra points", gc, globalGameData);
 
 

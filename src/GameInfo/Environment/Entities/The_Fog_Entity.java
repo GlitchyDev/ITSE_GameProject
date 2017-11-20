@@ -7,6 +7,7 @@ import GameInfo.Environment.Entities.Enums.EntityType;
 import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import RenderingHelpers.ImageRenderHelper;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -165,6 +166,8 @@ public class The_Fog_Entity extends EntityBase {
                     imageRandom = (int) (Math.random() * 4) + 1;
                     gc.drawImage(globalGameData.getSprite("Static_" + imageRandom), 0, 0);
 
+                    gc.setGlobalAlpha(progress);
+                    TextRenderHelper.drawCenteredText(300,500,"You got to go faster to escape the pain",gc,globalGameData);
                     gc.setGlobalAlpha(1.0);
                 }
             }

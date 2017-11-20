@@ -255,20 +255,20 @@ public class ScoreSubmitGameState extends GameStateBase {
         TextRenderHelper.drawCenteredText(300,120,String.valueOf("Your Top Score " + PlayerScoreManager.getTopScore().getScore()),gc,globalGameData);
 
 
-        double duration = 1.0 - (System.currentTimeMillis() - startTime)/1000.0;
+        double duration = (System.currentTimeMillis() - this.startTime)/1000.0;
 
         if(duration < 1.0)
         {
             gc.setFill(Color.BLACK);
             gc.setGlobalAlpha(duration);
             gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+            System.out.println(duration);
         }
         gc.setGlobalAlpha(1.0);
     }
 
     @Override
     public void enterState(GameStateEnum previousState) {
-        startTime = System.currentTimeMillis();
         PlayerSkinCreator.generateSkin(uuid, globalGameData);
         if(previousState == GameStateEnum.TestWorld || previousState == GameStateEnum.MainMenu) {
             globalGameData.playSound("MainTheme", true);
@@ -286,6 +286,8 @@ public class ScoreSubmitGameState extends GameStateBase {
 
         PlayerScoreManager.updateScores();
         ScoreManager.updateScores();
+        startTime = System.currentTimeMillis();
+
     }
 
 

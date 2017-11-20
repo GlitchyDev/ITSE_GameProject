@@ -9,6 +9,7 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import HardwareAdaptors.DirectionalEnum;
 import RenderingHelpers.ImageRenderHelper;
+import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -129,6 +130,14 @@ public class Alsi_Entity extends EntityBase {
                     } else {
                         drawSpriteAtXY(globalGameData.getSprite("Alsi_Front"), gc, x, y, ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Alsi_Front")) + xOffset, yOffset, false);
                     }
+                    if(progress < 5.0) {
+                        TextRenderHelper.drawCenteredText(300 + (int) (xOffset - progress / 5.0 * xOffset), 500 + (int) (yOffset - progress / 5.0 * yOffset), "Blind it before it blinds you", gc, globalGameData);
+                    }
+                    else
+                    {
+                        TextRenderHelper.drawCenteredText(300 + (int) (xOffset/20.0), 500 + (int) (yOffset/20.0), "Blind it before it blinds you", gc, globalGameData);
+
+                    }
                 }
 
                 if (progress > 3.0 && progress < 6.5) {
@@ -173,6 +182,7 @@ public class Alsi_Entity extends EntityBase {
                         gc.setGlobalAlpha(dark);
                         gc.setFill(Color.BLACK);
                         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+
                     }
                     else
                     {
@@ -184,6 +194,8 @@ public class Alsi_Entity extends EntityBase {
                         gc.setGlobalAlpha(dark);
                         gc.setFill(Color.BLACK);
                         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+                        gc.setGlobalAlpha(1.0-dark);
+                        TextRenderHelper.drawCenteredText(300,500,"They get excited by the light",gc,globalGameData);
                     }
                 }
                 else

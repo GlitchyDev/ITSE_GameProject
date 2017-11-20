@@ -73,7 +73,7 @@ public class GlobalGameData {
         gameStates.put("TitleScreen", new TitleScreenGameState(this));
         gameStates.put("TutorialScreen", new TutorialGameState(this));
         gameStates.put("CreditScreen", new CreditGameState(this));
-        gameStates.put("HighScoreScreen", new HighScoreState(this));
+        gameStates.put("HighScoreScreen", new BetterHighScoreState(this));
         gameStates.put("SubmitScoreScreen",new ScoreSubmitGameState(this));
 
     }
