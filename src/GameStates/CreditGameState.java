@@ -108,7 +108,7 @@ public class CreditGameState extends GameStateBase {
 
 
 
-        int offset = 210;
+        int offset = 160;
         gc.setGlobalAlpha(1.0);
         double progress = (System.currentTimeMillis() - startTime)/1000.0;
 
@@ -130,15 +130,15 @@ public class CreditGameState extends GameStateBase {
         gc.setGlobalAlpha(1.0);
 
         xOffset = (int)(Math.sin(Math.PI * progress + Math.PI/5.0*1) * 10.0);
-        TextRenderHelper.drawText(50 + offset + xOffset,80,"Framework Developer",gc,globalGameData);
+        TextRenderHelper.drawText(50 + offset + xOffset,80,"Robert: Framework Developer",gc,globalGameData);
         xOffset = (int)(Math.sin(Math.PI * progress + Math.PI/5.0*2) * 10.0);
-        TextRenderHelper.drawText(50 + offset + xOffset,180,"Dungeon Developer, Cat Herder",gc,globalGameData);
+        TextRenderHelper.drawText(50 + offset + xOffset,180,"Charlie: Dungeon Developer, Cat Herder",gc,globalGameData);
         xOffset = (int)(Math.sin(Math.PI * progress + Math.PI/5.0*3) * 10.0);
-        TextRenderHelper.drawText(50 + offset + xOffset,280,"Sound God",gc,globalGameData);
+        TextRenderHelper.drawText(50 + offset + xOffset,280,"Ben: Sound God",gc,globalGameData);
         xOffset = (int)(Math.sin(Math.PI * progress + Math.PI/5.0*4) * 10.0);
-        TextRenderHelper.drawText(50 + offset + xOffset,380,"SQL translator",gc,globalGameData);
+        TextRenderHelper.drawText(50 + offset + xOffset,380,"Abdullah: SQL translator",gc,globalGameData);
         xOffset = (int)(Math.sin(Math.PI * progress + Math.PI/5.0*5) * 10.0);
-        TextRenderHelper.drawText(50 + offset + + xOffset,480,"Sprite Systems",gc,globalGameData);
+        TextRenderHelper.drawText(50 + offset + + xOffset,480,"Tanner: Sprite Systems",gc,globalGameData);
 
 
 
