@@ -150,7 +150,7 @@ public class TestWorldGameState extends GameStateBase {
     public void enterState(GameStateEnum previousState) {
         System.out.println("Test World: Loading State");
         Player p1 = new Player(globalGameData.getConnectedControllers().get(0),null);
-        final int width = 10;
+        final int width = 10000;
         Pro_Player player = new Pro_Player(world,globalGameData,p1,globalGameData.getRandom().nextInt(width)-width/2,globalGameData.getRandom().nextInt(width)-width/2);
         p1.setPlayerCharacter(player);
         world.attemptSpawn(p1.getPlayerCharacter(),globalGameData);
