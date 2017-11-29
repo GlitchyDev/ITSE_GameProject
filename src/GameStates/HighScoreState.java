@@ -39,6 +39,10 @@ public class HighScoreState extends GameStateBase {
     private int viewportBufer = 5;
 
 
+    /**
+     * A Score that shows the Players High Scores
+     * @param globalGameData
+     */
     public HighScoreState(GlobalGameData globalGameData) {
         super(globalGameData);
         blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];

@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 
 /**
  * This Class is designed to
- * - Demonstrate adding custom Block Types to the game!
+ * - Demonstrate adding custom Block Types to the game, and serve as a marker for incorrect terrain generation
  */
 public class DebugBlock extends BlockBase {
     private Color c;

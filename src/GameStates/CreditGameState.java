@@ -38,6 +38,10 @@ public class CreditGameState extends GameStateBase {
     private int viewportBufer = 5;
 
 
+    /**
+     * Show the Games credits
+     * @param globalGameData
+     */
     public CreditGameState(GlobalGameData globalGameData) {
         super(globalGameData);
         blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];

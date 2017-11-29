@@ -8,6 +8,10 @@ import GameInfo.Environment.World;
 import GameInfo.GlobalGameData;
 import javafx.scene.paint.Color;
 
+
+/**
+ * A structure that spawns Dirt blocks to break up the sameness of the world
+ */
 public class DirtBlobStructure extends StructureBase {
 
 

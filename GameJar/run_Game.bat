@@ -1,2 +1,2 @@
-java -jar Game.jar
+java -jar ITSE_Game_Project.jar
 pause

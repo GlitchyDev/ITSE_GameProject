@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 
 /**
  * Created by Robert on 8/27/2017.
- * An EntityBase within the World, thats not a block
+ * An EntityBase within the World, thats not a block. Used as the bare core for all enemy and player types
  */
 public abstract class EntityBase {
     protected World world;
@@ -33,14 +33,27 @@ public abstract class EntityBase {
     }
 
 
-
+    /**
+     * All tick logic for the entity is overriden here
+     */
     public abstract void tickEntity();
 
+    /**
+     * All Rendering Logic for the entity is done here
+     * @param canvas
+     * @param gc
+     * @param x
+     * @param y
+     * @param renderLayer
+     */
     public abstract void renderEntity(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
 
 
-
-
+    /**
+     * Forces the entity to move X,Y in relative to itself
+     * @param relativeX
+     * @param relativeY
+     */
     public void moveRelative(int relativeX, int relativeY)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
@@ -60,6 +73,11 @@ public abstract class EntityBase {
 
     }
 
+    /**
+     * Forces the entity to move to these exact cords
+     * @param absoluteX
+     * @param absoluteY
+     */
     public void moveAbsolute(int absoluteX, int absoluteY)
     {
         Chunk oldChunk = world.getChunkFromCordXY(x, y);
@@ -79,7 +97,7 @@ public abstract class EntityBase {
     }
 
     /**
-     *
+     * A Advanced move relative that simulates movement events and allows customization of colisions
      * @param relativeX
      * @param relativeY
      * @param doCheckColisions
@@ -142,6 +160,16 @@ public abstract class EntityBase {
     }
 
 
+    /**
+     * A Utility method that auto
+     * @param sprite
+     * @param gc
+     * @param x
+     * @param y
+     * @param xOffset
+     * @param yOffset
+     * @param useLight
+     */
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
         gc.drawImage(sprite,(int)(x * World.getScaledUpSquareSize() + 0.5 + xOffset + WorldViewport.widthBuffer), (int)(y * World.getScaledUpSquareSize() + 0.5 + yOffset + WorldViewport.heightBuffer)  );

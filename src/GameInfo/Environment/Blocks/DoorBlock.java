@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-/* Created by Charlie on 2017-09-29
+/** Created by Charlie on 2017-09-29
  * This class implements a door block which starts closed by default,
  * but opens if the player moves toward it. Currently, the door can only face down.
  */
@@ -69,7 +69,7 @@ public class DoorBlock extends BlockBase {
             blockType = BlockTypeEnum.DOOR_OPEN;
             return false;
         } else {
-            return true;
+            return entities.size() == 0;
         }
     }
 

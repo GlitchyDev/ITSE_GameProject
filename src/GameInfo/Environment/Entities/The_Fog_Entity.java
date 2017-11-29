@@ -11,6 +11,10 @@ import RenderingHelpers.TextRenderHelper;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+
+/**
+ * A Enemy that forces the player move along
+ */
 public class The_Fog_Entity extends EntityBase {
     private int currentImage = 0;
     private Pro_Player currentTarget;

@@ -13,6 +13,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import ScoreSystems.PlayerScoreManager;
 
+/**
+ * A Entity that adds to the players score when Players approach them
+ */
 public class ScoreItem_Entity extends EntityBase {
     private Image sprite;
     private long startTime = -1;

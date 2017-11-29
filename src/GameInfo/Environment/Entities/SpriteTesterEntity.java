@@ -10,6 +10,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+/**
+ * A Sprite Tester used to test the skin System
+ */
 public class SpriteTesterEntity extends EntityBase {
     private Player p;
 

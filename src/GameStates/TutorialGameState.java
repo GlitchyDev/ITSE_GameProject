@@ -137,9 +137,9 @@ public class TutorialGameState extends GameStateBase {
 
 
 
-                TextRenderHelper.drawText(350, 95, "The Alsi hates light", gc, globalGameData);
-                TextRenderHelper.drawText(350, 115, "The Skulls love it", gc, globalGameData);
-                TextRenderHelper.drawText(350, 135, "When you hear the music, run", gc, globalGameData);
+                TextRenderHelper.drawText(350, 15, "The Alsi hates light", gc, globalGameData);
+                TextRenderHelper.drawText(350, 35, "The Skulls love the light", gc, globalGameData);
+                TextRenderHelper.drawText(350, 55, "When you hear the music, run", gc, globalGameData);
 
 
                 //TextRenderHelper.drawCenteredText(100, 95, "Collect for extra points", gc, globalGameData);
@@ -179,6 +179,8 @@ public class TutorialGameState extends GameStateBase {
         int xOffset = ImageRenderHelper.findCenterXMod(globalGameData.getSprite("Face_Static_1"));
         int yOffset = ImageRenderHelper.findCenterYMod(globalGameData.getSprite("Face_Static_1"));
 
+
+        TextRenderHelper.drawCenteredText((int)(8 * World.getScaledUpSquareSize() + xOffset + 60), (int)(10 * World.getScaledUpSquareSize() + yOffset), "The Fog",gc,globalGameData);
         gc.setGlobalAlpha(0.8);
         switch (currentImage) {
             case 0:
@@ -210,6 +212,8 @@ public class TutorialGameState extends GameStateBase {
         gc.setGlobalAlpha(RadiantLightProducer.determineDarkness(blocks[8][4].getPreviousLightLevel()));
         gc.drawImage(shadow1,8 * World.getScaledUpSquareSize() + xOffset,4 * World.getScaledUpSquareSize() + yOffset);
         gc.setGlobalAlpha(1.0);
+        TextRenderHelper.drawCenteredText((int)(8 * World.getScaledUpSquareSize() + xOffset + 20), (int)(4 * World.getScaledUpSquareSize() + yOffset - 20), "Haunted Skull",gc,globalGameData);
+
 
 
 
@@ -274,6 +278,8 @@ public class TutorialGameState extends GameStateBase {
                 gc.setGlobalAlpha(1.0);
             }
         }
+        TextRenderHelper.drawCenteredText((int)(5 * World.getScaledUpSquareSize() + xOffset + 13), (int)(4 * World.getScaledUpSquareSize() + yOffset - 10), "Alsi",gc,globalGameData);
+
 
 
     }

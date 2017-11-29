@@ -11,6 +11,9 @@ import HardwareAdaptors.ControllerType;
 import HardwareAdaptors.XBoxController;
 import Utility.DebugModeManager;
 
+/**
+ * The state that shows the Main Menu's options
+ */
 public class MainMenuGameState extends GameStateBase {
     // Phases within a State report "MiniStates" that don't require a seperate State
     private long phaseStartTime;

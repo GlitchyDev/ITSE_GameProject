@@ -7,6 +7,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+/**
+ * A Slightly higher wall used for houses, to distinguish from regular generating walls
+ */
 public class HouseWall extends BlockBase {
     private Image sprite;
 

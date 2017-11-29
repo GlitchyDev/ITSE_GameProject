@@ -83,9 +83,6 @@ public class Pro_Player extends DamageableEntityBase {
         bodyType = args[1];
         legType = args[2];
 
-        // 1 ALSI per player
-
-        world.attemptSpawn(new ScoreItem_Entity(world,globalGameData,x,y+5),globalGameData);
 
 
     }

@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
  * The purpose of this class is
  * - Provide underlying flow and logic of all Block objects in the game
  * - Serve as a common base for all Block extensions
+ * - Serve as a physical manifestation of the terrain
  */
 public abstract class BlockBase {
     protected BlockTypeEnum blockType;
@@ -26,17 +27,32 @@ public abstract class BlockBase {
 
     public BlockBase()
     {
-
         blockType = BlockTypeEnum.TEST_FLOOR;
         currentLightLevel = 0;
         previousLightLevel = 0;
         isCurrentlyLit = false;
 
     }
+
+    /**
+     * Any logic needed to be preformed on the block is done here
+     * @param world
+     */
     public abstract void tickBlock(World world);
 
+    /**
+     * All Rendering for the Block is called here
+     * @param canvas
+     * @param gc
+     * @param x
+     * @param y
+     * @param renderLayer
+     */
     public abstract void renderBlock(Canvas canvas, GraphicsContext gc, double x, double y, int renderLayer);
 
+    /**
+     * Recalculates the light for this block, setting back to default for a light source to modify
+     */
     public void recalculateLight()
     {
         previousLightLevel = currentLightLevel;
@@ -72,11 +88,6 @@ public abstract class BlockBase {
         return blockType;
     }
 
-    public void setBlockType(BlockTypeEnum blockType) {
-        this.blockType = blockType;
-    }
-
-
     public void setCurrentlyLit(boolean currentlyLit) {
         isCurrentlyLit = currentlyLit;
     }
@@ -101,12 +112,16 @@ public abstract class BlockBase {
         return previousLightLevel;
     }
 
-    public void setPreviousLightLevel(int previousLightLevel)
-    {
-        this.previousLightLevel = previousLightLevel;
-    }
-
-
+    /**
+     * A utility method that allows for blocks to properly draw, regardless of sprite size and in line with the Viewport Smoothing
+     * @param sprite
+     * @param gc
+     * @param x
+     * @param y
+     * @param xOffset
+     * @param yOffset
+     * @param useLight
+     */
     public void drawSpriteAtXY(Image sprite, GraphicsContext gc, double x, double y, double xOffset, double yOffset, boolean useLight)
     {
         if(useLight)

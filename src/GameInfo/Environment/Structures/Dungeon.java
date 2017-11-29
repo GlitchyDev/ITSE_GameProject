@@ -11,6 +11,10 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+
+/**
+ * Dungeons that can be built into the world, big blocks of mazes that generates goods
+ */
 public class Dungeon extends StructureBase {
 
 

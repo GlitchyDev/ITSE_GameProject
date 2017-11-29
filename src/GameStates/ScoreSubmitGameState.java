@@ -41,6 +41,10 @@ public class ScoreSubmitGameState extends GameStateBase {
     private int viewportBufer = 5;
 
 
+    /**
+     * Score Submission into SQL
+     * @param globalGameData
+     */
     public ScoreSubmitGameState(GlobalGameData globalGameData) {
         super(globalGameData);
         blocks = new BlockBase[viewportSize + viewportBufer*2][viewportSize + viewportBufer*2];
@@ -260,7 +264,7 @@ public class ScoreSubmitGameState extends GameStateBase {
         if(duration < 1.0)
         {
             gc.setFill(Color.BLACK);
-            gc.setGlobalAlpha(duration);
+            gc.setGlobalAlpha(1.0 - duration);
             gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
             System.out.println(duration);
         }

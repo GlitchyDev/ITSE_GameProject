@@ -196,6 +196,11 @@ public class Haunted_Skull_Entity extends EntityBase {
 
     }
 
+    /**
+     * Can the HauntedSkull see the player?
+     * @param entity
+     * @return
+     */
     public boolean canSeeEntity(EntityBase entity)
     {
         for(BlockBase[] row: world.getAllBlocksBetweenPoints(x+2,y+2,x-2,y-2))
