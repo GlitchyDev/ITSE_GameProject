@@ -2,7 +2,7 @@
 
 Hello!
 
-This is our final project for Intro to Software Engineering in November 2015.
+This is our final project for Intro to Software Engineering in November 2016.
 We decided to have fun with it and build a video game, a 2D infinitely generating multiplayer dungeon crawler!
 
 Here is our team:
